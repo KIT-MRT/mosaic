@@ -49,7 +49,7 @@ class PDMClosedBehavior(Behavior):
         )
 
         return Command(
-            name=self.name,
+            name=self.name(),
             trajectory=trajectory,
         )
 
@@ -70,7 +70,7 @@ class PDMClosedBehavior(Behavior):
         Custom getstate to fix pickling since this is a class that inherits from a C++ object
         """
         state = self.__dict__.copy()
-        state["name"] = self.name
+        state["name"] = self.name()
         return state
 
     def __setstate__(self, state: dict[str, object]) -> None:
@@ -79,4 +79,5 @@ class PDMClosedBehavior(Behavior):
         """
         name = cast(str, state["name"])
         super().__init__(name)
+        _ = state.pop("name", None)
         self.__dict__.update(state)
