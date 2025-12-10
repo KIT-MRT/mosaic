@@ -1,19 +1,5 @@
-# (Optional) Increase notebook width for all embedded cells to display properly
-from IPython.core.display import HTML, display
-
-display(HTML("<style>.output_result { max-width:100% !important; }</style>"))
-display(HTML("<style>.container { width:100% !important; }</style>"))
-import inspect
-
-from nuplan.planning.script.builders.model_builder import build_torch_module_wrapper
-
-print(">>> TYPE:", type(build_torch_module_wrapper))
-print(">>> PATH:", inspect.getfile(build_torch_module_wrapper))
-# Complete improved trajectory evaluator with normalized metrics
-
 # Enhanced trajectory evaluation module
 import math
-import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Type, cast
@@ -21,12 +7,8 @@ from typing import Dict, List, Optional, Tuple, Type, cast
 # Safe matplotlib setup for container environment
 import matplotlib
 import numpy as np
-from arbitration_graphs import Behavior, PriorityArbitrator
-from behavior_arbitration_nuplan.common.command import Command
 from behavior_arbitration_nuplan.common.environment_model import EnvironmentModel
-from behavior_arbitration_nuplan.common.utils.time_conversion import to_timedelta
 from hydra.utils import instantiate
-from nuplan.planning.script.builders.model_builder import build_torch_module_wrapper
 from nuplan.planning.simulation.observation.observation_type import (
     DetectionsTracks,
     Observation,
@@ -39,23 +21,15 @@ from nuplan.planning.simulation.planner.abstract_planner import (
 from nuplan.planning.simulation.trajectory.abstract_trajectory import AbstractTrajectory
 from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
 from omegaconf import OmegaConf
-from tuplan_garage.planning.simulation.planner.pdm_planner.pdm_open_planner import (
-    PDMOpenPlanner,
-)
 
 matplotlib.use("Agg")  # Use non-interactive backend to prevent crashes
-import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 
 # Disable interactive mode to prevent display issues
 plt.ioff()
 
-print("Matplotlib configured for container environment (non-interactive mode)")
-print("Trajectory evaluation will use safe logging and optional image generation")
 
 # ========================= Trajectory Evaluation Module =========================
-
-
 @dataclass
 class VehicleState:
     """Ego vehicle state"""
