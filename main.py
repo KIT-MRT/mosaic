@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from arbitrator_pdm.ego_agent import EgoAgent
+from arbitration_pdm.ego_agent import EgoAgent
 
 print("Improved normalized trajectory evaluation system loaded successfully!")
 print("Configured with proper metric normalization and weighted scoring")

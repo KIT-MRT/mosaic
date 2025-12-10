@@ -3,7 +3,7 @@ requires = ["setuptools>=42"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "arbitration-pdm"
+name = "arbitration_pdm"
 version = "0.1.0"
 description = "Arbitration Graphs meet PDM trajectory planning"
 authors = [
