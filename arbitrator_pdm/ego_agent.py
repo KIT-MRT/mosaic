@@ -1,5 +1,6 @@
 from typing import List, Optional, Type, cast
 
+from common.types import SurroundingObject, TrajectoryScore, VehicleState
 from hydra.utils import instantiate
 from nuplan.planning.simulation.observation.observation_type import (
     DetectionsTracks,
@@ -14,8 +15,7 @@ from nuplan.planning.simulation.trajectory.abstract_trajectory import AbstractTr
 from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
 from omegaconf import OmegaConf
 
-from common.types import SurroundingObject, TrajectoryScore, VehicleState
-from trajectory_evaluator import ImprovedTrajectoryEvaluator
+from arbitrator_pdm.trajectory_evaluator import ImprovedTrajectoryEvaluator
 
 
 class EgoAgent(AbstractPlanner):
