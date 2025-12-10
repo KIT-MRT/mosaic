@@ -5,7 +5,7 @@ from ego_agent import EgoAgent
 print("Improved normalized trajectory evaluation system loaded successfully!")
 print("Configured with proper metric normalization and weighted scoring")
 print("All metrics will be distributed uniformly between 0.000 and 100.000")
-print("Usage: planner = EgoAgent(enable_video=True, detailed_logging=True)")
+print("Usage: planner = EgoAgent(detailed_logging=False)")
 import hydra
 
 # Location of paths with all simulation configs

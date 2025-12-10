@@ -29,7 +29,6 @@ class EgoAgent(AbstractPlanner):
     def __init__(
         self,
         parameters: Optional[Parameters] = None,
-        enable_video: bool = True,
         detailed_logging: bool = False,
     ) -> None:
         if parameters is None:
@@ -70,7 +69,6 @@ class EgoAgent(AbstractPlanner):
         self.detailed_logging = detailed_logging
 
         print("EgoAgent initialized with improved normalized evaluator")
-        print(f"Video generation: {'Enabled' if enable_video else 'Disabled'}")
         print(f"Detailed logging: {'Enabled' if detailed_logging else 'Disabled'}")
 
     def initialize(self, initialization: PlannerInitialization) -> None:
@@ -236,7 +234,6 @@ class EgoAgent(AbstractPlanner):
             f"DEBUG MAIN: detailed2 type: {type(detailed2)}, keys: {list(detailed2.keys()) if detailed2 else 'None'}"
         )
 
-        # Enhanced logging
         self._log_detailed_decision(
             score1,
             score2,
@@ -245,19 +242,6 @@ class EgoAgent(AbstractPlanner):
             ego_state,
             surrounding_objects,
         )
-
-        # # Activate selected planner
-        # if selected_index == 0:
-        #     self.open.set_invocation_condition(True)
-        #     self.close.set_invocation_condition(False)
-        # else:
-        #     self.open.set_invocation_condition(False)
-        #     self.close.set_invocation_condition(True)
-
-        # # Return final trajectory
-        # final_trajectory = self.root_arbitrator.get_command(to_timedelta(current_time))
-
-        # return final_trajectory
 
         if selected_index == 0:
             return trajectory1
@@ -268,9 +252,6 @@ class EgoAgent(AbstractPlanner):
         """Finalize evaluation and generate outputs"""
         print("\nFinalizing Trajectory Evaluation")
         print(f"Total frames evaluated: {self.trajectory_evaluator.evaluation_count}")
-
-        # Save score data
-        self.video_generator.save_score_data_csv()
 
         # Print summary statistics
         if self.trajectory_evaluator.score_history:
