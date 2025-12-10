@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=42"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "arbitration-pdm"
+version = "0.1.0"
+description = "Arbitration Graphs meet PDM trajectory planning"
+authors = [
+    {name = "Marlon Steiner", email = "marlon.steiner@kit.edu" },
+    {name = "Nick Le Large", email = "nick.lelarge@kit.edu"}
+]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "arbitration_graphs >=1.0.0",
+    "nuplan-devkit",
+    "tuplan-garage",
+]
+
