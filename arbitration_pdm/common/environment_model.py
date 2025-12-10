@@ -1,11 +1,6 @@
-from dataclasses import dataclass
 from datetime import timedelta
 from typing import Optional
 
-from behavior_arbitration_nuplan.common.utils.time_conversion import to_timedelta
-from behavior_arbitration_nuplan.observation.constant_velocity_agents import (
-    ConstantVelocityAgents,
-)
 from nuplan.common.actor_state.state_representation import (
     StateSE2,
 )
@@ -21,6 +16,8 @@ from nuplan.planning.simulation.planner.abstract_planner import (
 from nuplan.planning.simulation.simulation_time_controller.simulation_iteration import (
     SimulationIteration,
 )
+
+from arbitration_pdm.common.utils.time_conversion import to_timedelta
 
 
 class EnvironmentModel:
