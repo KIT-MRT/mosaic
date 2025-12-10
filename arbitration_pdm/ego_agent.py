@@ -1,6 +1,5 @@
-from typing import List, Optional, Type, cast
+from typing import List, Optional, Type
 
-from hydra.utils import instantiate
 from nuplan.planning.simulation.observation.observation_type import (
     DetectionsTracks,
     Observation,
@@ -12,12 +11,15 @@ from nuplan.planning.simulation.planner.abstract_planner import (
 )
 from nuplan.planning.simulation.trajectory.abstract_trajectory import AbstractTrajectory
 from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
-from omegaconf import OmegaConf
 
 from arbitration_pdm.behavior.pdm_closed import PDMClosedBehavior
 from arbitration_pdm.behavior.pdm_open import PDMOpenBehavior
 from arbitration_pdm.common.environment_model import EnvironmentModel
-from arbitration_pdm.common.types import SurroundingObject, TrajectoryScore, VehicleState
+from arbitration_pdm.common.types import (
+    SurroundingObject,
+    TrajectoryScore,
+    VehicleState,
+)
 from arbitration_pdm.trajectory_evaluator import ImprovedTrajectoryEvaluator
 
 
