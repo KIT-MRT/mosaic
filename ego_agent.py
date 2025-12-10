@@ -1,6 +1,5 @@
 from typing import List, Optional, Type, cast
 
-from behavior_arbitration_nuplan.common.environment_model import EnvironmentModel
 from hydra.utils import instantiate
 from nuplan.planning.simulation.observation.observation_type import (
     DetectionsTracks,
@@ -36,9 +35,6 @@ class EgoAgent(AbstractPlanner):
         if parameters is None:
             parameters = EgoAgent.Parameters()
         self.parameters: EgoAgent.Parameters = parameters
-        self.environment_model: EnvironmentModel = EnvironmentModel(
-            EnvironmentModel.Parameters(self.parameters.trajectory_sampling)
-        )
 
         # 🔧 修复：直接实例化规划器，不使用包装器
         print("🔄 Initializing Open Planner...")
@@ -80,7 +76,6 @@ class EgoAgent(AbstractPlanner):
     def initialize(self, initialization: PlannerInitialization) -> None:
         """🔧 修复：正确初始化规划器，不访问.planner属性"""
         super().initialize(initialization)
-        self.environment_model.initialize(initialization)
 
         print("🔄 Initializing planners...")
 
@@ -217,13 +212,6 @@ class EgoAgent(AbstractPlanner):
     def compute_planner_trajectory(
         self, current_input: PlannerInput
     ) -> AbstractTrajectory:
-        self.environment_model.update(current_input)
-        # current_time = self.environment_model.current_time_point()
-
-        # # Force both planners to compute trajectories
-        # self.open.set_invocation_condition(False)
-        # self.close.set_invocation_condition(False)
-
         # Generate trajectories
         trajectory1 = self.open.compute_planner_trajectory(current_input)
         trajectory2 = self.close.compute_planner_trajectory(current_input)
