@@ -1045,8 +1045,8 @@ class SafeVideoGenerator:
     """Safe video generation for container environments"""
 
     def __init__(
-        self, output_dir="/workspace/nuplan-devkit/visualizations", enable_images=True
-    ):
+        self, output_dir="../experiments/visualizations", enable_images=True
+    ):  # TODO: Hardcoded path
         self.output_dir = Path(output_dir)
         self.enable_images = enable_images
         self.frame_count = 0
@@ -2405,7 +2405,7 @@ class EgoAgent(AbstractPlanner):
         print("🔄 Initializing Open Planner...")
         try:
             open_planner_cfg = OmegaConf.load(
-                "/workspace/tuplan_garage/tuplan_garage/planning/script/config/simulation/planner/pdm_open_planner.yaml"
+                "../tuplan_garage/tuplan_garage/planning/script/config/simulation/planner/pdm_open_planner.yaml"  # TODO: Hardcoded path
             )
             self.open = cast(
                 AbstractPlanner, instantiate(open_planner_cfg.pdm_open_planner)
@@ -2419,7 +2419,7 @@ class EgoAgent(AbstractPlanner):
         print("🔄 Initializing Closed Planner...")
         try:
             close_planner_cfg = OmegaConf.load(
-                "/workspace/tuplan_garage/tuplan_garage/planning/script/config/simulation/planner/pdm_closed_planner.yaml"
+                "../tuplan_garage/tuplan_garage/planning/script/config/simulation/planner/pdm_closed_planner.yaml"  # TODO: Hardcoded path
             )
             self.close = cast(
                 AbstractPlanner, instantiate(close_planner_cfg.pdm_closed_planner)
@@ -2698,11 +2698,13 @@ print("Usage: planner = EgoAgent(enable_video=True, detailed_logging=True)")
 import hydra
 
 # Location of paths with all simulation configs
-CONFIG_PATH = "../nuplan/planning/script/config/simulation"
+CONFIG_PATH = (
+    "../nuplan-devkit/nuplan/planning/script/config/simulation"  # TODO: Hardcoded path
+)
 CONFIG_NAME = "default_simulation"
 
 # Create a temporary directory to store the simulation artifacts
-SAVE_DIR = "/workspace/nuplan-devkit"
+SAVE_DIR = "../experiments"  # TODO: Hardcoded path
 
 # Select simulation parameters
 CHALLENGE = "closed_loop_reactive_agents"  # [open_loop_boxes, closed_loop_nonreactive_agents, closed_loop_reactive_agents]
@@ -2743,7 +2745,9 @@ simulation_folder = cfg.output_dir
 print(f"Simulation results are saved in: {simulation_folder}")
 
 # Location of paths with all nuBoard configs
-CONFIG_PATH = "../nuplan/planning/script/config/nuboard"
+CONFIG_PATH = (
+    "../nuplan-devkit/nuplan/planning/script/config/nuboard"  # TODO: Hardcoded path
+)
 CONFIG_NAME = "default_nuboard"
 
 # Initialize configuration management system
@@ -2755,7 +2759,7 @@ cfg = hydra.compose(
     config_name=CONFIG_NAME,
     overrides=[
         "scenario_builder=nuplan_mini",  # set the database (same as simulation) used to fetch data for visualization
-        f"simulation_path=/workspace/nuplan-devkit/planner_tutorial/planner_tutorial",  # nuboard file path, if left empty the user can open the file inside nuBoard
+        f"simulation_path=../experiments/planner_tutorial/planner_tutorial",  # nuboard file path, if left empty the user can open the file inside nuBoard # TODO: Hardcoded path
     ],
 )
 from pathlib import Path
@@ -2767,7 +2771,9 @@ from nuplan.planning.metrics.aggregator.weighted_average_metric_aggregator impor
 from nuplan.planning.metrics.metric_dataframe import MetricStatisticsDataFrame
 
 # Step 1: 设置仿真输出目录
-output_dir = Path("/workspace/nuplan-devkit/planner_tutorial/planner_tutorial")
+output_dir = Path(
+    "../experiments/planner_tutorial/planner_tutorial"
+)  # TODO: Hardcoded path
 
 # Step 2: 加载所有 .parquet 指标为 dataframe 封装。NuPlan 在跑 run_simulation() 时，会在 metrics/ 目录下输出若干 .parquet 文件。
 # 每个文件代表一个 metric 的结果（比如 ego_expert_l2_error.parquet）；
