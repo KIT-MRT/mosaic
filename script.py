@@ -117,7 +117,7 @@ class ImprovedTrajectoryEvaluator:
         self.weights = {
             "safety": 0.5,  # 50% - Safety is most important
             "comfort": 0.25,  # 25% - Comfort
-            "efficiency": 0.25,  # 25% - Efficiency
+            "efficiency": 0.0,  # 25% - Efficiency
         }
 
         print(
