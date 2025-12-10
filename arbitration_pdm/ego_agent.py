@@ -1,6 +1,5 @@
 from typing import List, Optional, Type, cast
 
-from common.types import SurroundingObject, TrajectoryScore, VehicleState
 from hydra.utils import instantiate
 from nuplan.planning.simulation.observation.observation_type import (
     DetectionsTracks,
@@ -15,7 +14,11 @@ from nuplan.planning.simulation.trajectory.abstract_trajectory import AbstractTr
 from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
 from omegaconf import OmegaConf
 
-from arbitrator_pdm.trajectory_evaluator import ImprovedTrajectoryEvaluator
+from arbitration_pdm.behavior.pdm_closed import PDMClosedBehavior
+from arbitration_pdm.behavior.pdm_open import PDMOpenBehavior
+from arbitration_pdm.common.environment_model import EnvironmentModel
+from arbitration_pdm.common.types import SurroundingObject, TrajectoryScore, VehicleState
+from arbitration_pdm.trajectory_evaluator import ImprovedTrajectoryEvaluator
 
 
 class EgoAgent(AbstractPlanner):
@@ -35,74 +38,23 @@ class EgoAgent(AbstractPlanner):
             parameters = EgoAgent.Parameters()
         self.parameters: EgoAgent.Parameters = parameters
 
-        # 🔧 修复：直接实例化规划器，不使用包装器
-        print("🔄 Initializing Open Planner...")
-        try:
-            open_planner_cfg = OmegaConf.load(
-                "../tuplan_garage/tuplan_garage/planning/script/config/simulation/planner/pdm_open_planner.yaml"  # TODO: Hardcoded path
-            )
-            self.open = cast(
-                AbstractPlanner, instantiate(open_planner_cfg.pdm_open_planner)
-            )
-            print("✅ Open Planner initialized successfully")
-        except Exception as e:
-            print(f"❌ Open Planner initialization failed: {e}")
-            # 创建一个简单的备用规划器
-            self.open = None
+        self.environment_model = EnvironmentModel()
 
-        print("🔄 Initializing Closed Planner...")
-        try:
-            close_planner_cfg = OmegaConf.load(
-                "../tuplan_garage/tuplan_garage/planning/script/config/simulation/planner/pdm_closed_planner.yaml"  # TODO: Hardcoded path
-            )
-            self.close = cast(
-                AbstractPlanner, instantiate(close_planner_cfg.pdm_closed_planner)
-            )
-            print("✅ Closed Planner initialized successfully")
-        except Exception as e:
-            print(f"❌ Closed Planner initialization failed: {e}")
-            # 创建一个简单的备用规划器
-            self.close = None
+        self.pdm_closed_behavior = PDMClosedBehavior()
+        self.pdm_open_behavior = PDMOpenBehavior()
 
-        # Use improved evaluator
         self.trajectory_evaluator = ImprovedTrajectoryEvaluator()
         self.detailed_logging = detailed_logging
 
-        print("EgoAgent initialized with improved normalized evaluator")
+        print("EgoAgent initialized")
         print(f"Detailed logging: {'Enabled' if detailed_logging else 'Disabled'}")
 
     def initialize(self, initialization: PlannerInitialization) -> None:
-        """🔧 修复：正确初始化规划器，不访问.planner属性"""
         super().initialize(initialization)
 
-        print("🔄 Initializing planners...")
-
-        # 初始化Open Planner
-        if self.open is not None:
-            try:
-                self.open.initialize(initialization)
-                print("✅ Open planner initialized successfully")
-            except Exception as e:
-                print(f"❌ Open planner initialization failed: {e}")
-                self.open = None
-
-        # 初始化Closed Planner
-        if self.close is not None:
-            try:
-                self.close.initialize(initialization)
-                print("✅ Closed planner initialized successfully")
-            except Exception as e:
-                print(f"❌ Closed planner initialization failed: {e}")
-                self.close = None
-
-        # 检查至少有一个规划器可用
-        if self.open is None and self.close is None:
-            raise RuntimeError("❌ Both planners failed to initialize!")
-
-        print(
-            f"✅ EgoAgent initialization complete. Available planners: "
-            f"Open={'✓' if self.open else '✗'} Closed={'✓' if self.close else '✗'}"
-        )
+        self.environment_model.initialize(initialization)
+        self.pdm_closed_behavior.initialize(self.environment_model)
+        self.pdm_open_behavior.initialize(self.environment_model)
 
     def name(self) -> str:
         return self.__class__.__name__
@@ -210,9 +162,15 @@ class EgoAgent(AbstractPlanner):
     def compute_planner_trajectory(
         self, current_input: PlannerInput
     ) -> AbstractTrajectory:
+        self.environment_model.update(current_input)
+
         # Generate trajectories
-        trajectory1 = self.open.compute_planner_trajectory(current_input)
-        trajectory2 = self.close.compute_planner_trajectory(current_input)
+        trajectory1 = self.pdm_open_behavior.get_command(
+            self.environment_model.current_time_delta, self.environment_model
+        ).trajectory
+        trajectory2 = self.pdm_closed_behavior.get_command(
+            self.environment_model.current_time_delta, self.environment_model
+        ).trajectory
 
         # Extract evaluation data
         ego_state, surrounding_objects = self._extract_nuplan_data(current_input)
