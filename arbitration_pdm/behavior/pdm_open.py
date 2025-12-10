@@ -1,7 +1,7 @@
-from datetime import timedelta
 from importlib import resources
 
 from arbitration_graphs import Behavior
+from arbitration_graphs.typing import Time
 from hydra.utils import instantiate
 from nuplan.planning.simulation.planner.abstract_planner import (
     AbstractPlanner,
@@ -41,9 +41,7 @@ class PDMOpenBehavior(Behavior):
         self.planner.initialize(environment_model.planner_initialization)
 
     @override
-    def get_command(
-        self, time: timedelta, environment_model: EnvironmentModel
-    ) -> Command:
+    def get_command(self, time: Time, environment_model: EnvironmentModel) -> Command:
         trajectory: AbstractTrajectory = self.planner.compute_planner_trajectory(
             environment_model.planner_input
         )
@@ -54,11 +52,15 @@ class PDMOpenBehavior(Behavior):
         )
 
     @override
-    def check_invocation_condition(self, time: timedelta) -> bool:
+    def check_invocation_condition(
+        self, time: Time, environment_model: EnvironmentModel
+    ) -> bool:
         return True
 
     @override
-    def check_commitment_condition(self, time: timedelta) -> bool:
+    def check_commitment_condition(
+        self, time: Time, environment_model: EnvironmentModel
+    ) -> bool:
         return False
 
     def __getstate__(self) -> dict[str, object]:
