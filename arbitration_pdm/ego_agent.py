@@ -1,5 +1,6 @@
 from typing import List, Optional, Type
 
+from arbitration_graphs import CostArbitrator
 from nuplan.planning.simulation.observation.observation_type import (
     DetectionsTracks,
     Observation,
@@ -20,7 +21,9 @@ from arbitration_pdm.common.types import (
     TrajectoryScore,
     VehicleState,
 )
+from arbitration_pdm.cost_estimator import TrajectoryCostEstimator
 from arbitration_pdm.trajectory_evaluator import ImprovedTrajectoryEvaluator
+from arbitration_pdm.verifier import TrajectoryVerifier
 
 
 class EgoAgent(AbstractPlanner):
@@ -41,15 +44,34 @@ class EgoAgent(AbstractPlanner):
         self.parameters: EgoAgent.Parameters = parameters
 
         self.environment_model = EnvironmentModel()
-
-        self.pdm_closed_behavior = PDMClosedBehavior()
-        self.pdm_open_behavior = PDMOpenBehavior()
+        self.initialize_arbitration_graph()
 
         self.trajectory_evaluator = ImprovedTrajectoryEvaluator()
         self.detailed_logging = detailed_logging
 
         print("EgoAgent initialized")
         print(f"Detailed logging: {'Enabled' if detailed_logging else 'Disabled'}")
+
+    def initialize_arbitration_graph(self) -> None:
+        self.pdm_closed_behavior = PDMClosedBehavior()
+        self.pdm_open_behavior = PDMOpenBehavior()
+
+        self.verifier = TrajectoryVerifier()
+        self.cost_estimator = TrajectoryCostEstimator()
+        self.cost_arbitrator = CostArbitrator(
+            name="CostArbitrator", verifier=self.verifier
+        )
+
+        self.cost_arbitrator.add_option(
+            self.pdm_closed_behavior,
+            CostArbitrator.Option.Flags.NO_FLAGS,
+            self.cost_estimator,
+        )
+        self.cost_arbitrator.add_option(
+            self.pdm_open_behavior,
+            CostArbitrator.Option.Flags.NO_FLAGS,
+            self.cost_estimator,
+        )
 
     def initialize(self, initialization: PlannerInitialization) -> None:
         super().initialize(initialization)
@@ -166,6 +188,11 @@ class EgoAgent(AbstractPlanner):
     ) -> AbstractTrajectory:
         self.environment_model.update(current_input)
 
+        current_time = self.environment_model.current_time_delta
+        command = self.cost_arbitrator.get_command(current_time, self.environment_model)
+
+        return command.trajectory
+
         # Generate trajectories
         trajectory1 = self.pdm_open_behavior.get_command(
             self.environment_model.current_time_delta, self.environment_model
@@ -222,15 +249,23 @@ class EgoAgent(AbstractPlanner):
                     f"  {metric.capitalize()}: mean={stat['mean']:.1f} std={stat['std']:.1f} range=[{stat['min']:.1f}, {stat['max']:.1f}]"
                 )
 
-    def __getstate__(self):
-        state = self.__dict__.copy()
-        return state
-
-    def __setstate__(self, state):
-        self.__dict__.update(state)
-
     def __del__(self):
         try:
             self.finalize_evaluation()
         except:
             pass
+
+    def __getstate__(self) -> dict[str, object]:
+        """
+        Custom getstate to avoid pickling the arbitration graph (C++ object).
+        """
+        state = self.__dict__.copy()
+        state["cost_arbitrator"] = None
+        return state
+
+    def __setstate__(self, state: dict[str, object]) -> None:
+        """
+        Custom setstate to re-initialize the arbitration graph
+        """
+        self.__dict__.update(state)
+        self.initialize_arbitration_graph()

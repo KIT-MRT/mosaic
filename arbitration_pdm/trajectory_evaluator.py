@@ -3,7 +3,11 @@ from typing import Dict, List, Tuple
 
 import numpy as np
 
-from arbitration_pdm.common.types import SurroundingObject, TrajectoryScore, VehicleState
+from arbitration_pdm.common.types import (
+    SurroundingObject,
+    TrajectoryScore,
+    VehicleState,
+)
 
 
 class ImprovedTrajectoryEvaluator:
