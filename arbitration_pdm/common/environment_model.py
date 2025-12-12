@@ -1,8 +1,10 @@
+from dataclasses import dataclass
 from datetime import timedelta
 from typing import List, Optional
 
 from nuplan.common.actor_state.state_representation import (
     StateSE2,
+    TimeDuration,
 )
 from nuplan.common.maps.abstract_map import AbstractMap
 from nuplan.common.maps.maps_datatypes import TrafficLightStatusData
@@ -16,13 +18,22 @@ from nuplan.planning.simulation.planner.abstract_planner import (
 from nuplan.planning.simulation.simulation_time_controller.simulation_iteration import (
     SimulationIteration,
 )
+from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
 
-from arbitration_pdm.common.types import SurroundingObject, VehicleState
 from arbitration_pdm.common.utils.time_conversion import to_timedelta
+from arbitration_pdm.observation.constant_velocity_agents import (
+    ConstantVelocityAgents,
+)
 
 
 class EnvironmentModel:
-    def __init__(self) -> None:
+    @dataclass
+    class Parameters:
+        prediction_trajectory_sampling: TrajectorySampling
+
+    def __init__(self, parameters: Parameters) -> None:
+        self.parameters: EnvironmentModel.Parameters = parameters
+
         self._route_roadblock_ids: Optional[list[str]] = None
         self._mission_goal: Optional[StateSE2] = None
         self._map_api: Optional[AbstractMap] = None
@@ -30,6 +41,10 @@ class EnvironmentModel:
         self._iteration: Optional[SimulationIteration] = None
         self._history: Optional[SimulationHistoryBuffer] = None
         self._traffic_light_data: Optional[list[TrafficLightStatusData]] = None
+
+        self._constant_velocity_agents: ConstantVelocityAgents = ConstantVelocityAgents(
+            trajectory_sampling=self.parameters.prediction_trajectory_sampling,
+        )
 
     def initialize(self, planner_initialization: PlannerInitialization) -> None:
         self._route_roadblock_ids = planner_initialization.route_roadblock_ids
@@ -40,6 +55,20 @@ class EnvironmentModel:
         self._iteration = planner_input.iteration
         self._history = planner_input.history
         self._traffic_light_data = planner_input.traffic_light_data
+
+        step_time = TimeDuration.from_s(
+            self.parameters.prediction_trajectory_sampling.step_time
+        )
+        next_iteration = SimulationIteration(
+            time_point=self._iteration.time_point + step_time,
+            index=self._iteration.index + 1,
+        )
+
+        self._constant_velocity_agents.update_observation(
+            iteration=self._iteration,
+            next_iteration=next_iteration,
+            history=self._history,
+        )
 
     @property
     def planner_initialization(self) -> PlannerInitialization:
@@ -102,60 +131,8 @@ class EnvironmentModel:
         return self._history.ego_states[-1]
 
     @property
-    def custom_vehicle_state(self) -> VehicleState:
+    def agents(self):
         """
-        TODO: Utilize nuPlan's VehicleState directly
-        TODO: Error handling instead of silent return
+        :return: The agents in the environment at the current time point.
         """
-
-        if self._history is None or not self._history.ego_states:
-            # Default fallback
-            return VehicleState(x=0.0, y=0.0, heading=0.0)
-
-        current_ego = self._history.ego_states[-1]
-
-        # Extract velocity if available
-        velocity = getattr(
-            current_ego.dynamic_car_state.rear_axle_velocity_2d,
-            "magnitude",
-            lambda: 0.0,
-        )()
-
-        return VehicleState(
-            x=current_ego.rear_axle.x,
-            y=current_ego.rear_axle.y,
-            heading=current_ego.rear_axle.heading,
-            velocity=velocity,
-        )
-
-    @property
-    def custom_objects(self) -> List[SurroundingObject]:
-        """
-        TODO: Utilize builtin nuPlan type
-        TODO: Error handling instead of silent return
-        """
-        surrounding_objects: List[SurroundingObject] = []
-
-        if self._history is None or not self._history.observations:
-            return surrounding_objects
-
-        latest_observation = self._history.observations[-1]
-
-        if not hasattr(latest_observation, "tracked_objects"):
-            return surrounding_objects
-
-        for tracked_obj in latest_observation.tracked_objects.tracked_objects:
-            surrounding_objects.append(
-                SurroundingObject(
-                    x=tracked_obj.center.x,
-                    y=tracked_obj.center.y,
-                    heading=tracked_obj.center.heading,
-                    length=tracked_obj.box.length,
-                    width=tracked_obj.box.width,
-                    object_type=getattr(
-                        tracked_obj.tracked_object_type, "name", "vehicle"
-                    ).lower(),
-                )
-            )
-
-        return surrounding_objects
+        return self._constant_velocity_agents.get_observation().tracked_objects.get_agents()

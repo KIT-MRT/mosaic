@@ -2,11 +2,11 @@ import math
 from typing import Dict, List, Tuple
 
 import numpy as np
+from nuplan.common.actor_state.agent import Agent, TrackedObjectType
+from nuplan.common.actor_state.ego_state import EgoState
 
 from arbitration_pdm.common.types import (
-    SurroundingObject,
     TrajectoryScore,
-    VehicleState,
 )
 
 
@@ -161,8 +161,8 @@ class ImprovedTrajectoryEvaluator:
 
     def _calculate_safety_score_normalized(
         self,
-        ego_state: VehicleState,
-        surrounding_objects: List[SurroundingObject],
+        ego_state: EgoState,
+        surrounding_objects: List[Agent],
         trajectory: List[Tuple[float, float]],
     ) -> Tuple[float, Dict]:
         """Calculate normalized safety score and return detailed components"""
@@ -184,12 +184,17 @@ class ImprovedTrajectoryEvaluator:
         distances = []
         for x, y in trajectory[:10]:  # Check first 10 points
             for obj in surrounding_objects:
-                dist = math.sqrt((x - obj.x) ** 2 + (y - obj.y) ** 2)
+                obj_x = obj.center.x
+                obj_y = obj.center.y
+                dist = math.sqrt((x - obj_x) ** 2 + (y - obj_y) ** 2)
                 distances.append(dist)
                 min_distance = min(min_distance, dist)
 
                 # Calculate critical encounters
-                critical_threshold = 8.0 + (ego_state.velocity or 0.0) * 0.3
+                critical_threshold = (
+                    8.0
+                    + (ego_state.dynamic_car_state.center_velocity_2d.x or 0.0) * 0.3
+                )
                 if dist < critical_threshold:
                     critical_encounters += 1
 
@@ -423,7 +428,7 @@ class ImprovedTrajectoryEvaluator:
         return np.clip(total_comfort, 0.0, 100.0), detailed
 
     def _calculate_efficiency_score_normalized(
-        self, ego_state: VehicleState, trajectory: List[Tuple[float, float]]
+        self, ego_state: EgoState, trajectory: List[Tuple[float, float]]
     ) -> Tuple[float, Dict]:
         """Calculate normalized efficiency score and return detailed components"""
         if len(trajectory) < 2:
@@ -438,15 +443,16 @@ class ImprovedTrajectoryEvaluator:
 
         # 1. Forward progress
         end_point = trajectory[-1]
-        dx = end_point[0] - ego_state.x
-        dy = end_point[1] - ego_state.y
+        dx = end_point[0] - ego_state.center.x
+        dy = end_point[1] - ego_state.center.y
 
         # Forward distance in ego coordinate frame
-        forward_progress = dx * math.cos(ego_state.heading) + dy * math.sin(
-            ego_state.heading
+        forward_progress = dx * math.cos(ego_state.center.heading) + dy * math.sin(
+            ego_state.center.heading
         )
         lateral_deviation = abs(
-            -dx * math.sin(ego_state.heading) + dy * math.cos(ego_state.heading)
+            -dx * math.sin(ego_state.center.heading)
+            + dy * math.cos(ego_state.center.heading)
         )
 
         # Update statistics
@@ -466,7 +472,7 @@ class ImprovedTrajectoryEvaluator:
         # 3. Goal alignment
         if straight_distance > 0.1:
             goal_direction = math.atan2(dy, dx)
-            heading_diff = abs(goal_direction - ego_state.heading)
+            heading_diff = abs(goal_direction - ego_state.center.heading)
             heading_diff = min(heading_diff, 2 * math.pi - heading_diff)
             goal_alignment = 1.0 - (heading_diff / math.pi)
         else:
@@ -478,9 +484,9 @@ class ImprovedTrajectoryEvaluator:
             p1, p2 = trajectory[i], trajectory[i + 1]
             seg_dx = p2[0] - p1[0]
             seg_dy = p2[1] - p1[1]
-            seg_progress = seg_dx * math.cos(ego_state.heading) + seg_dy * math.sin(
-                ego_state.heading
-            )
+            seg_progress = seg_dx * math.cos(
+                ego_state.center.heading
+            ) + seg_dy * math.sin(ego_state.center.heading)
             segment_progresses.append(seg_progress)
 
         progress_variance = (
@@ -554,8 +560,8 @@ class ImprovedTrajectoryEvaluator:
 
     def evaluate_trajectory_detailed(
         self,
-        ego_state: VehicleState,
-        surrounding_objects: List[SurroundingObject],
+        ego_state: EgoState,
+        surrounding_objects: List[Agent],
         trajectory: List[Tuple[float, float]],
     ) -> Tuple[TrajectoryScore, Dict]:
         """Evaluate trajectory using improved normalized assessment and return detailed scores"""
@@ -605,10 +611,6 @@ class ImprovedTrajectoryEvaluator:
 
         # Combine all detailed scores
         all_detailed = {**safety_detailed, **comfort_detailed, **efficiency_detailed}
-
-        # 调试信息：检查合并的详细分数
-        print(f"DEBUG EVAL: all_detailed keys: {list(all_detailed.keys())}")
-        print(f"DEBUG EVAL: sample values: {dict(list(all_detailed.items())[:5])}")
 
         # Collision detection
         collision_risk, collision_reason = self._check_collision_risk_simple(
@@ -664,8 +666,8 @@ class ImprovedTrajectoryEvaluator:
 
     def _check_collision_risk_simple(
         self,
-        ego_state: VehicleState,
-        surrounding_objects: List[SurroundingObject],
+        ego_state: EgoState,
+        surrounding_objects: List[Agent],
         trajectory: List[Tuple[float, float]],
     ) -> Tuple[bool, str]:
         """改进的碰撞风险检测：区分纵向和侧向距离，使用TTC判断纵向风险"""
@@ -674,45 +676,51 @@ class ImprovedTrajectoryEvaluator:
 
         for i, (x, y) in enumerate(trajectory[:8]):
             for obj in surrounding_objects:
+                obj_x = obj.center.x
+                obj_y = obj.center.y
+
                 # 计算到物体的总距离
-                total_distance = math.sqrt((x - obj.x) ** 2 + (y - obj.y) ** 2)
+                total_distance = math.sqrt((x - obj_x) ** 2 + (y - obj_y) ** 2)
 
                 # 如果距离很远，直接跳过
                 if total_distance > 50.0:
                     continue
 
                 # 计算相对于ego车当前朝向的纵向和侧向距离
-                dx = x - obj.x
-                dy = y - obj.y
+                dx = x - obj_x
+                dy = y - obj_y
 
                 # 使用ego车当前朝向计算纵向和侧向分量
-                longitudinal_dist = dx * math.cos(ego_state.heading) + dy * math.sin(
-                    ego_state.heading
-                )
+                longitudinal_dist = dx * math.cos(
+                    ego_state.center.heading
+                ) + dy * math.sin(ego_state.center.heading)
                 lateral_dist = abs(
-                    -dx * math.sin(ego_state.heading) + dy * math.cos(ego_state.heading)
+                    -dx * math.sin(ego_state.center.heading)
+                    + dy * math.cos(ego_state.center.heading)
                 )
 
                 # === 侧向安全检查（极度宽松）===
-                if "pedestrian" in obj.object_type.lower():
+                if obj.tracked_object_type == TrackedObjectType.PEDESTRIAN:
                     # 行人：侧向距离只要大于1米就认为安全
                     required_lateral = 1.0
                 else:
                     # 车辆：考虑车宽，但给予很大余量
-                    vehicle_width = max(ego_state.width, obj.width)
+                    vehicle_width = max(ego_state.car_footprint.width, obj.box.width)
                     required_lateral = vehicle_width * 0.6  # 只要0.6倍车宽的侧向间距
 
                 if lateral_dist < required_lateral:
                     return (
                         True,
-                        f"Point {i + 1}: {obj.object_type} lateral too close: {lateral_dist:.1f}m (need {required_lateral:.1f}m)",
+                        f"Point {i + 1}: {obj.tracked_object_type} lateral too close: {lateral_dist:.1f}m (need {required_lateral:.1f}m)",
                     )
 
                 # === 纵向安全检查（使用TTC和相对速度）===
                 # 只有当轨迹点在物体前方时才检查纵向碰撞风险
                 if longitudinal_dist > 0:  # ego在物体前方
                     # 估算相对速度（简化版本）
-                    ego_velocity = ego_state.velocity or 0.0
+                    ego_velocity = (
+                        ego_state.dynamic_car_state.center_velocity_2d.x or 0.0
+                    )
 
                     # 假设物体静止或慢速（保守估计）
                     # 在实际应用中，可以从tracking数据获取物体速度
@@ -726,45 +734,51 @@ class ImprovedTrajectoryEvaluator:
                         ttc = longitudinal_dist / relative_velocity
 
                         # 根据速度和对象类型设定TTC阈值
-                        if "pedestrian" in obj.object_type.lower():
+                        if obj.tracked_object_type == TrackedObjectType.PEDESTRIAN:
                             # 行人：给予更多反应时间
                             min_ttc = 3.0  # 3秒
                             min_distance = 5.0  # 最小5米距离
                         else:
                             # 车辆：标准反应时间
                             min_ttc = 2.5  # 2.5秒
-                            vehicle_length = max(ego_state.length, obj.length)
+                            vehicle_length = max(
+                                ego_state.car_footprint.length, obj.box.length
+                            )
                             min_distance = vehicle_length + 2.0  # 车长 + 2米缓冲
 
                         # 双重检查：TTC和最小距离
                         if ttc < min_ttc and longitudinal_dist < min_distance:
                             return (
                                 True,
-                                f"Point {i + 1}: {obj.object_type} TTC risk: {ttc:.1f}s (need {min_ttc:.1f}s), dist: {longitudinal_dist:.1f}m",
+                                f"Point {i + 1}: {obj.tracked_object_type} TTC risk: {ttc:.1f}s (need {min_ttc:.1f}s), dist: {longitudinal_dist:.1f}m",
                             )
 
                     else:  # 相对速度很小或负数，使用静态距离判断
-                        if "pedestrian" in obj.object_type.lower():
+                        if obj.tracked_object_type == TrackedObjectType.PEDESTRIAN:
                             min_static_dist = 3.0
                         else:
-                            vehicle_length = max(ego_state.length, obj.length)
+                            vehicle_length = max(
+                                ego_state.car_footprint.length, obj.box.length
+                            )
                             min_static_dist = vehicle_length * 0.8
 
                         if longitudinal_dist < min_static_dist:
                             return (
                                 True,
-                                f"Point {i + 1}: {obj.object_type} static longitudinal too close: {longitudinal_dist:.1f}m (need {min_static_dist:.1f}m)",
+                                f"Point {i + 1}: {obj.tracked_object_type} static longitudinal too close: {longitudinal_dist:.1f}m (need {min_static_dist:.1f}m)",
                             )
 
                 # === 极近距离紧急检查 ===
                 # 无论方向，如果总距离极小，都认为有风险
                 emergency_distance = (
-                    1.5 if "pedestrian" in obj.object_type.lower() else 2.5
+                    1.5
+                    if obj.tracked_object_type == TrackedObjectType.PEDESTRIAN
+                    else 2.5
                 )
                 if total_distance < emergency_distance:
                     return (
                         True,
-                        f"Point {i + 1}: {obj.object_type} emergency close: {total_distance:.1f}m (critical: {emergency_distance:.1f}m)",
+                        f"Point {i + 1}: {obj.tracked_object_type} emergency close: {total_distance:.1f}m (critical: {emergency_distance:.1f}m)",
                     )
 
         return False, ""
@@ -772,7 +786,7 @@ class ImprovedTrajectoryEvaluator:
     def _calculate_min_distance(
         self,
         trajectory: List[Tuple[float, float]],
-        surrounding_objects: List[SurroundingObject],
+        surrounding_objects: List[Agent],
     ) -> float:
         """Calculate minimum distance"""
         if not surrounding_objects or not trajectory:
@@ -781,7 +795,9 @@ class ImprovedTrajectoryEvaluator:
         min_dist = float("inf")
         for x, y in trajectory:
             for obj in surrounding_objects:
-                dist = math.sqrt((x - obj.x) ** 2 + (y - obj.y) ** 2)
+                obj_x = obj.center.x
+                obj_y = obj.center.y
+                dist = math.sqrt((x - obj_x) ** 2 + (y - obj_y) ** 2)
                 min_dist = min(min_dist, dist)
 
         return min_dist
@@ -825,17 +841,19 @@ class ImprovedTrajectoryEvaluator:
         return np.mean(curvatures) if curvatures else 0.0
 
     def _calculate_forward_progress(
-        self, ego_state: VehicleState, trajectory: List[Tuple[float, float]]
+        self, ego_state: EgoState, trajectory: List[Tuple[float, float]]
     ) -> float:
         """Calculate forward progress"""
         if len(trajectory) < 2:
             return 0.0
 
         end_point = trajectory[-1]
-        dx = end_point[0] - ego_state.x
-        dy = end_point[1] - ego_state.y
+        dx = end_point[0] - ego_state.center.x
+        dy = end_point[1] - ego_state.center.y
 
-        return dx * math.cos(ego_state.heading) + dy * math.sin(ego_state.heading)
+        return dx * math.cos(ego_state.center.heading) + dy * math.sin(
+            ego_state.center.heading
+        )
 
     def get_score_statistics(self) -> Dict:
         """Get score statistics"""
