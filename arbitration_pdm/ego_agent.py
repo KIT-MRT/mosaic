@@ -1,4 +1,4 @@
-from typing import Optional, Type
+from typing import Optional, cast, final
 
 from arbitration_graphs import CostArbitrator, PriorityArbitrator
 from nuplan.planning.simulation.observation.observation_type import (
@@ -12,16 +12,19 @@ from nuplan.planning.simulation.planner.abstract_planner import (
 )
 from nuplan.planning.simulation.trajectory.abstract_trajectory import AbstractTrajectory
 from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
+from typing_extensions import override
 
 from arbitration_pdm.behavior.emergency_stop_behavior import EmergencyStopBehavior
 from arbitration_pdm.behavior.pdm_closed import PDMClosedBehavior
 from arbitration_pdm.behavior.pdm_open import PDMOpenBehavior
+from arbitration_pdm.common.command import Command
 from arbitration_pdm.common.environment_model import EnvironmentModel
 from arbitration_pdm.cost_estimator import TrajectoryCostEstimator
 from arbitration_pdm.planner.emergency_stop_planner import EmergencyStopPlanner
 from arbitration_pdm.verifier import TrajectoryVerifier
 
 
+@final
 class EgoAgent(AbstractPlanner):
     """EgoAgent using improved evaluator"""
 
@@ -88,6 +91,7 @@ class EgoAgent(AbstractPlanner):
             self.emergency_stop_behavior, int(PriorityArbitrator.Option.Flags.FALLBACK)
         )
 
+    @override
     def initialize(self, initialization: PlannerInitialization) -> None:
         super().initialize(initialization)
 
@@ -95,19 +99,25 @@ class EgoAgent(AbstractPlanner):
         self.pdm_closed_behavior.initialize(self.environment_model)
         self.pdm_open_behavior.initialize(self.environment_model)
 
+    @override
     def name(self) -> str:
         return self.__class__.__name__
 
-    def observation_type(self) -> Type[Observation]:
+    @override
+    def observation_type(self) -> type[Observation]:
         return DetectionsTracks
 
+    @override
     def compute_planner_trajectory(
         self, current_input: PlannerInput
     ) -> AbstractTrajectory:
         self.environment_model.update(current_input)
 
         current_time = self.environment_model.current_time_delta
-        command = self.root_arbitrator.get_command(current_time, self.environment_model)
+        command = cast(
+            Command,
+            self.root_arbitrator.get_command(current_time, self.environment_model),
+        )
 
         return command.trajectory
 
