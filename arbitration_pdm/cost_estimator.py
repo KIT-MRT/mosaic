@@ -6,7 +6,6 @@ from typing_extensions import override
 
 from arbitration_pdm.common.command import Command
 from arbitration_pdm.common.environment_model import EnvironmentModel
-from arbitration_pdm.common.utils.trajectory_conversion import trajectory_to_points
 from arbitration_pdm.trajectory_evaluator import ImprovedTrajectoryEvaluator
 
 
@@ -31,12 +30,11 @@ class TrajectoryCostEstimator(CostEstimator):
 
         ego_state = environment_model.ego_state
         agents = environment_model.agents
-        traj_points = trajectory_to_points(command.trajectory)
 
         score, _details = self.trajectory_evaluator.evaluate_trajectory_detailed(
             ego_state=ego_state,
             surrounding_objects=agents,
-            trajectory=traj_points,
+            trajectory=command.ego_states(),
         )
 
         # TODO: Try replicating the original decision logic more closely
