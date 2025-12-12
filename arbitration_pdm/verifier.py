@@ -41,13 +41,13 @@ class TrajectoryVerifier(Verifier):
         environment_model: EnvironmentModel,
         command: Command,
     ) -> VerificationResult:
-        ego_state = environment_model.custom_vehicle_state
-        surrounding_objects = environment_model.custom_objects
+        ego_state = environment_model.ego_state
+        agents = environment_model.agents
         traj_points = trajectory_to_points(command.trajectory)
 
         score, _details = self.trajectory_evaluator.evaluate_trajectory_detailed(
             ego_state=ego_state,
-            surrounding_objects=surrounding_objects,
+            surrounding_objects=agents,
             trajectory=traj_points,
         )
 

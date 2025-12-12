@@ -1,29 +1,4 @@
 from dataclasses import dataclass
-from typing import Optional
-
-
-@dataclass
-class VehicleState:
-    """Ego vehicle state"""
-
-    x: float
-    y: float
-    heading: float  # radians
-    length: float = 4.5
-    width: float = 2.0
-    velocity: Optional[float] = None
-
-
-@dataclass
-class SurroundingObject:
-    """Surrounding object"""
-
-    x: float
-    y: float
-    heading: float
-    length: float
-    width: float
-    object_type: str = "vehicle"
 
 
 @dataclass

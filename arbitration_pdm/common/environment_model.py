@@ -20,7 +20,6 @@ from nuplan.planning.simulation.simulation_time_controller.simulation_iteration 
 )
 from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
 
-from arbitration_pdm.common.types import SurroundingObject, VehicleState
 from arbitration_pdm.common.utils.time_conversion import to_timedelta
 from arbitration_pdm.observation.constant_velocity_agents import (
     ConstantVelocityAgents,
@@ -137,62 +136,3 @@ class EnvironmentModel:
         :return: The agents in the environment at the current time point.
         """
         return self._constant_velocity_agents.get_observation().tracked_objects.get_agents()
-
-    @property
-    def custom_vehicle_state(self) -> VehicleState:
-        """
-        TODO: Utilize nuPlan's VehicleState directly
-        TODO: Error handling instead of silent return
-        """
-
-        if self._history is None or not self._history.ego_states:
-            # Default fallback
-            return VehicleState(x=0.0, y=0.0, heading=0.0)
-
-        current_ego = self._history.ego_states[-1]
-
-        # Extract velocity if available
-        velocity = getattr(
-            current_ego.dynamic_car_state.rear_axle_velocity_2d,
-            "magnitude",
-            lambda: 0.0,
-        )()
-
-        return VehicleState(
-            x=current_ego.rear_axle.x,
-            y=current_ego.rear_axle.y,
-            heading=current_ego.rear_axle.heading,
-            velocity=velocity,
-        )
-
-    @property
-    def custom_objects(self) -> List[SurroundingObject]:
-        """
-        TODO: Utilize builtin nuPlan type
-        TODO: Error handling instead of silent return
-        """
-        surrounding_objects: List[SurroundingObject] = []
-
-        if self._history is None or not self._history.observations:
-            return surrounding_objects
-
-        latest_observation = self._history.observations[-1]
-
-        if not hasattr(latest_observation, "tracked_objects"):
-            return surrounding_objects
-
-        for tracked_obj in latest_observation.tracked_objects.tracked_objects:
-            surrounding_objects.append(
-                SurroundingObject(
-                    x=tracked_obj.center.x,
-                    y=tracked_obj.center.y,
-                    heading=tracked_obj.center.heading,
-                    length=tracked_obj.box.length,
-                    width=tracked_obj.box.width,
-                    object_type=getattr(
-                        tracked_obj.tracked_object_type, "name", "vehicle"
-                    ).lower(),
-                )
-            )
-
-        return surrounding_objects
