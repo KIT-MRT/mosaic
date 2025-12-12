@@ -46,7 +46,9 @@ class EgoAgent(AbstractPlanner):
             parameters = EgoAgent.Parameters()
         self.parameters: EgoAgent.Parameters = parameters
 
-        self.environment_model = EnvironmentModel()
+        self.environment_model = EnvironmentModel(
+            EnvironmentModel.Parameters(self.parameters.trajectory_sampling)
+        )
         self.initialize_arbitration_graph()
 
         print("EgoAgent initialized")
