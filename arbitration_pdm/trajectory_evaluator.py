@@ -163,10 +163,10 @@ class ImprovedTrajectoryEvaluator:
         self,
         ego_state: EgoState,
         surrounding_objects: List[Agent],
-        trajectory: List[Tuple[float, float]],
+        trajectory: list[EgoState],
     ) -> Tuple[float, Dict]:
         """Calculate normalized safety score and return detailed components"""
-        if not surrounding_objects or not trajectory:
+        if not surrounding_objects:
             detailed = {
                 "collision_risk_score": 95.0,
                 "min_distance_score": 95.0,
@@ -182,7 +182,10 @@ class ImprovedTrajectoryEvaluator:
         critical_encounters = 0
 
         distances = []
-        for x, y in trajectory[:10]:  # Check first 10 points
+        for state in trajectory[:10]:  # Check first 10 points
+            x = state.center.x
+            y = state.center.y
+
             for obj in surrounding_objects:
                 obj_x = obj.center.x
                 obj_y = obj.center.y
@@ -302,7 +305,7 @@ class ImprovedTrajectoryEvaluator:
         return total_safety, detailed
 
     def _calculate_comfort_score_normalized(
-        self, trajectory: List[Tuple[float, float]]
+        self, trajectory: list[EgoState]
     ) -> Tuple[float, Dict]:
         """Calculate normalized comfort score and return detailed components"""
         if len(trajectory) < 3:
@@ -318,11 +321,16 @@ class ImprovedTrajectoryEvaluator:
         # 1. Calculate curvature
         curvatures = []
         for i in range(1, len(trajectory) - 1):
-            p1, p2, p3 = trajectory[i - 1], trajectory[i], trajectory[i + 1]
+            x1 = trajectory[i - 1].center.x
+            y1 = trajectory[i - 1].center.y
+            x2 = trajectory[i].center.x
+            y2 = trajectory[i].center.y
+            x3 = trajectory[i + 1].center.x
+            y3 = trajectory[i + 1].center.y
 
             # Vector method for curvature calculation
-            v1 = np.array([p2[0] - p1[0], p2[1] - p1[1]])
-            v2 = np.array([p3[0] - p2[0], p3[1] - p2[1]])
+            v1 = np.array([x2 - x1, y2 - y1])
+            v2 = np.array([x3 - x2, y3 - y2])
 
             v1_norm = np.linalg.norm(v1)
             v2_norm = np.linalg.norm(v2)
@@ -355,8 +363,12 @@ class ImprovedTrajectoryEvaluator:
         total_length = 0.0
         segment_lengths = []
         for i in range(len(trajectory) - 1):
-            p1, p2 = trajectory[i], trajectory[i + 1]
-            length = math.sqrt((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2)
+            x1 = trajectory[i].center.x
+            y1 = trajectory[i].center.y
+            x2 = trajectory[i + 1].center.x
+            y2 = trajectory[i + 1].center.y
+
+            length = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
             total_length += length
             segment_lengths.append(length)
 
@@ -428,7 +440,7 @@ class ImprovedTrajectoryEvaluator:
         return np.clip(total_comfort, 0.0, 100.0), detailed
 
     def _calculate_efficiency_score_normalized(
-        self, ego_state: EgoState, trajectory: List[Tuple[float, float]]
+        self, ego_state: EgoState, trajectory: list[EgoState]
     ) -> Tuple[float, Dict]:
         """Calculate normalized efficiency score and return detailed components"""
         if len(trajectory) < 2:
@@ -443,8 +455,8 @@ class ImprovedTrajectoryEvaluator:
 
         # 1. Forward progress
         end_point = trajectory[-1]
-        dx = end_point[0] - ego_state.center.x
-        dy = end_point[1] - ego_state.center.y
+        dx = end_point.center.x - ego_state.center.x
+        dy = end_point.center.y - ego_state.center.y
 
         # Forward distance in ego coordinate frame
         forward_progress = dx * math.cos(ego_state.center.heading) + dy * math.sin(
@@ -463,8 +475,11 @@ class ImprovedTrajectoryEvaluator:
         straight_distance = math.sqrt(dx**2 + dy**2)
         actual_length = 0.0
         for i in range(len(trajectory) - 1):
-            p1, p2 = trajectory[i], trajectory[i + 1]
-            actual_length += math.sqrt((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2)
+            x1 = trajectory[i].center.x
+            y1 = trajectory[i].center.y
+            x2 = trajectory[i + 1].center.x
+            y2 = trajectory[i + 1].center.y
+            actual_length += math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
         path_efficiency = straight_distance / max(actual_length, 0.1)
         self._update_metric_stats("path_efficiency", path_efficiency)
@@ -481,9 +496,13 @@ class ImprovedTrajectoryEvaluator:
         # 4. Progress consistency
         segment_progresses = []
         for i in range(len(trajectory) - 1):
-            p1, p2 = trajectory[i], trajectory[i + 1]
-            seg_dx = p2[0] - p1[0]
-            seg_dy = p2[1] - p1[1]
+            x1 = trajectory[i].center.x
+            y1 = trajectory[i].center.y
+            x2 = trajectory[i + 1].center.x
+            y2 = trajectory[i + 1].center.y
+            seg_dx = x2 - x1
+            seg_dy = y2 - y1
+
             seg_progress = seg_dx * math.cos(
                 ego_state.center.heading
             ) + seg_dy * math.sin(ego_state.center.heading)
@@ -562,41 +581,10 @@ class ImprovedTrajectoryEvaluator:
         self,
         ego_state: EgoState,
         surrounding_objects: List[Agent],
-        trajectory: List[Tuple[float, float]],
+        trajectory: list[EgoState],
     ) -> Tuple[TrajectoryScore, Dict]:
         """Evaluate trajectory using improved normalized assessment and return detailed scores"""
         self.evaluation_count += 1
-
-        if not trajectory:
-            empty_detailed = {
-                "collision_risk_score": 0.0,
-                "min_distance_score": 0.0,
-                "avg_distance_score": 0.0,
-                "encounter_score": 0.0,
-                "variance_score": 0.0,
-                "avg_curvature_score": 0.0,
-                "max_curvature_score": 0.0,
-                "curvature_var_score": 0.0,
-                "length_var_score": 0.0,
-                "length_score": 0.0,
-                "progress_score": 0.0,
-                "lateral_score": 0.0,
-                "efficiency_score": 0.0,
-                "alignment_score": 0.0,
-                "consistency_score": 0.0,
-            }
-            return TrajectoryScore(
-                safety_score=0.0,
-                comfort_score=0.0,
-                efficiency_score=0.0,
-                total_score=0.0,
-                min_distance=0.0,
-                collision_risk=True,
-                collision_reason="Empty trajectory",
-                trajectory_length=0.0,
-                curvature=0.0,
-                forward_progress=0.0,
-            ), empty_detailed
 
         # Calculate normalized main metrics with detailed components
         safety_score, safety_detailed = self._calculate_safety_score_normalized(
@@ -668,13 +656,16 @@ class ImprovedTrajectoryEvaluator:
         self,
         ego_state: EgoState,
         surrounding_objects: List[Agent],
-        trajectory: List[Tuple[float, float]],
+        trajectory: list[EgoState],
     ) -> Tuple[bool, str]:
         """改进的碰撞风险检测：区分纵向和侧向距离，使用TTC判断纵向风险"""
         if not surrounding_objects:
             return False, ""
 
-        for i, (x, y) in enumerate(trajectory[:8]):
+        for i, state in enumerate(trajectory[:8]):
+            x = state.center.x
+            y = state.center.y
+
             for obj in surrounding_objects:
                 obj_x = obj.center.x
                 obj_y = obj.center.y
@@ -785,15 +776,18 @@ class ImprovedTrajectoryEvaluator:
 
     def _calculate_min_distance(
         self,
-        trajectory: List[Tuple[float, float]],
+        trajectory: list[EgoState],
         surrounding_objects: List[Agent],
     ) -> float:
         """Calculate minimum distance"""
-        if not surrounding_objects or not trajectory:
+        if not surrounding_objects:
             return float("inf")
 
         min_dist = float("inf")
-        for x, y in trajectory:
+        for state in trajectory:
+            x = state.center.x
+            y = state.center.y
+
             for obj in surrounding_objects:
                 obj_x = obj.center.x
                 obj_y = obj.center.y
@@ -802,31 +796,37 @@ class ImprovedTrajectoryEvaluator:
 
         return min_dist
 
-    def _calculate_trajectory_length(
-        self, trajectory: List[Tuple[float, float]]
-    ) -> float:
+    def _calculate_trajectory_length(self, trajectory: list[EgoState]) -> float:
         """Calculate trajectory length"""
         if len(trajectory) < 2:
             return 0.0
 
         length = 0.0
         for i in range(len(trajectory) - 1):
-            p1, p2 = trajectory[i], trajectory[i + 1]
-            length += math.sqrt((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2)
+            x1 = trajectory[i].center.x
+            y1 = trajectory[i].center.y
+            x2 = trajectory[i + 1].center.x
+            y2 = trajectory[i + 1].center.y
+            length += math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
         return length
 
-    def _calculate_avg_curvature(self, trajectory: List[Tuple[float, float]]) -> float:
+    def _calculate_avg_curvature(self, trajectory: list[EgoState]) -> float:
         """Calculate average curvature"""
         if len(trajectory) < 3:
             return 0.0
 
         curvatures = []
         for i in range(1, len(trajectory) - 1):
-            p1, p2, p3 = trajectory[i - 1], trajectory[i], trajectory[i + 1]
+            x1 = trajectory[i - 1].center.x
+            y1 = trajectory[i - 1].center.y
+            x2 = trajectory[i].center.x
+            y2 = trajectory[i].center.y
+            x3 = trajectory[i + 1].center.x
+            y3 = trajectory[i + 1].center.y
 
-            v1 = np.array([p2[0] - p1[0], p2[1] - p1[1]])
-            v2 = np.array([p3[0] - p2[0], p3[1] - p2[1]])
+            v1 = np.array([x2 - x1, y2 - y1])
+            v2 = np.array([x3 - x2, y3 - y2])
 
             v1_norm = np.linalg.norm(v1)
             v2_norm = np.linalg.norm(v2)
@@ -841,15 +841,15 @@ class ImprovedTrajectoryEvaluator:
         return np.mean(curvatures) if curvatures else 0.0
 
     def _calculate_forward_progress(
-        self, ego_state: EgoState, trajectory: List[Tuple[float, float]]
+        self, ego_state: EgoState, trajectory: list[EgoState]
     ) -> float:
         """Calculate forward progress"""
         if len(trajectory) < 2:
             return 0.0
 
         end_point = trajectory[-1]
-        dx = end_point[0] - ego_state.center.x
-        dy = end_point[1] - ego_state.center.y
+        dx = end_point.center.x - ego_state.center.x
+        dy = end_point.center.y - ego_state.center.y
 
         return dx * math.cos(ego_state.center.heading) + dy * math.sin(
             ego_state.center.heading
