@@ -612,10 +612,6 @@ class ImprovedTrajectoryEvaluator:
         # Combine all detailed scores
         all_detailed = {**safety_detailed, **comfort_detailed, **efficiency_detailed}
 
-        # 调试信息：检查合并的详细分数
-        print(f"DEBUG EVAL: all_detailed keys: {list(all_detailed.keys())}")
-        print(f"DEBUG EVAL: sample values: {dict(list(all_detailed.items())[:5])}")
-
         # Collision detection
         collision_risk, collision_reason = self._check_collision_risk_simple(
             ego_state, surrounding_objects, trajectory
