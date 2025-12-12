@@ -3,7 +3,11 @@ from typing import Dict, List, Tuple
 
 import numpy as np
 
-from arbitration_pdm.common.types import SurroundingObject, TrajectoryScore, VehicleState
+from arbitration_pdm.common.types import (
+    SurroundingObject,
+    TrajectoryScore,
+    VehicleState,
+)
 
 
 class ImprovedTrajectoryEvaluator:
@@ -832,83 +836,6 @@ class ImprovedTrajectoryEvaluator:
         dy = end_point[1] - ego_state.y
 
         return dx * math.cos(ego_state.heading) + dy * math.sin(ego_state.heading)
-
-    def select_better_trajectory(
-        self,
-        ego_state: VehicleState,
-        surrounding_objects: List[SurroundingObject],
-        trajectory1: List[Tuple[float, float]],
-        trajectory2: List[Tuple[float, float]],
-    ) -> Tuple[int, str, TrajectoryScore, TrajectoryScore, Dict, Dict]:
-        """Select better trajectory and return detailed scores"""
-        score1, detailed1 = self.evaluate_trajectory_detailed(
-            ego_state, surrounding_objects, trajectory1
-        )
-        score2, detailed2 = self.evaluate_trajectory_detailed(
-            ego_state, surrounding_objects, trajectory2
-        )
-
-        # Priority decision making (保持原有逻辑)
-        selected_index = 0
-        decision_factors = []
-
-        # 1. Collision risk priority
-        if score1.collision_risk and not score2.collision_risk:
-            selected_index = 1
-            decision_factors.append("Avoid collision risk")
-        elif score2.collision_risk and not score1.collision_risk:
-            selected_index = 0
-            decision_factors.append("Avoid collision risk")
-        else:
-            # 2. Significant safety difference
-            safety_diff = abs(score2.safety_score - score1.safety_score)
-            if safety_diff > 15.0:
-                selected_index = 1 if score2.safety_score > score1.safety_score else 0
-                decision_factors.append(
-                    f"Significant safety difference: {safety_diff:.1f}"
-                )
-            else:
-                # 3. Total score comparison (with hysteresis)
-                total_diff = score2.total_score - score1.total_score
-                hysteresis = 2.0 if self.last_selected_index == 0 else -2.0
-
-                if total_diff > hysteresis:
-                    selected_index = 1
-                    decision_factors.append(f"Total score advantage: {total_diff:.1f}")
-                else:
-                    selected_index = 0
-                    decision_factors.append(
-                        f"Maintain selection (hysteresis: {hysteresis:.1f})"
-                    )
-
-        # Generate decision explanation
-        winner = "Open Planner" if selected_index == 0 else "Closed Planner"
-        winner_score = score1 if selected_index == 0 else score2
-        loser_score = score2 if selected_index == 0 else score1
-
-        reason_parts = [f"Selected {winner}"]
-        reason_parts.extend(decision_factors)
-        reason_parts.append(
-            f"Scores: {winner_score.total_score:.1f} vs {loser_score.total_score:.1f}"
-        )
-        reason_parts.append(
-            f"Weights: Safety{self.weights['safety']:.1%} Comfort{self.weights['comfort']:.1%} Efficiency{self.weights['efficiency']:.1%}"
-        )
-
-        if winner_score.collision_risk:
-            reason_parts.append(f"Warning Winner risk: {winner_score.collision_reason}")
-        if loser_score.collision_risk:
-            reason_parts.append(f"Error Loser risk: {loser_score.collision_reason}")
-
-        self.last_selected_index = selected_index
-        return (
-            selected_index,
-            " | ".join(reason_parts),
-            score1,
-            score2,
-            detailed1,
-            detailed2,
-        )
 
     def get_score_statistics(self) -> Dict:
         """Get score statistics"""
