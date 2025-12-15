@@ -183,8 +183,8 @@ class ImprovedTrajectoryEvaluator:
 
         distances = []
         for state in trajectory[:10]:  # Check first 10 points
-            x = state.center.x
-            y = state.center.y
+            x = state.rear_axle.x
+            y = state.rear_axle.y
 
             for obj in surrounding_objects:
                 obj_x = obj.center.x
@@ -196,7 +196,11 @@ class ImprovedTrajectoryEvaluator:
                 # Calculate critical encounters
                 critical_threshold = (
                     8.0
-                    + (ego_state.dynamic_car_state.center_velocity_2d.x or 0.0) * 0.3
+                    + (
+                        ego_state.dynamic_car_state.rear_axle_velocity_2d.magnitude()
+                        or 0.0
+                    )
+                    * 0.3
                 )
                 if dist < critical_threshold:
                     critical_encounters += 1
@@ -321,12 +325,12 @@ class ImprovedTrajectoryEvaluator:
         # 1. Calculate curvature
         curvatures = []
         for i in range(1, len(trajectory) - 1):
-            x1 = trajectory[i - 1].center.x
-            y1 = trajectory[i - 1].center.y
-            x2 = trajectory[i].center.x
-            y2 = trajectory[i].center.y
-            x3 = trajectory[i + 1].center.x
-            y3 = trajectory[i + 1].center.y
+            x1 = trajectory[i - 1].rear_axle.x
+            y1 = trajectory[i - 1].rear_axle.y
+            x2 = trajectory[i].rear_axle.x
+            y2 = trajectory[i].rear_axle.y
+            x3 = trajectory[i + 1].rear_axle.x
+            y3 = trajectory[i + 1].rear_axle.y
 
             # Vector method for curvature calculation
             v1 = np.array([x2 - x1, y2 - y1])
@@ -363,10 +367,10 @@ class ImprovedTrajectoryEvaluator:
         total_length = 0.0
         segment_lengths = []
         for i in range(len(trajectory) - 1):
-            x1 = trajectory[i].center.x
-            y1 = trajectory[i].center.y
-            x2 = trajectory[i + 1].center.x
-            y2 = trajectory[i + 1].center.y
+            x1 = trajectory[i].rear_axle.x
+            y1 = trajectory[i].rear_axle.y
+            x2 = trajectory[i + 1].rear_axle.x
+            y2 = trajectory[i + 1].rear_axle.y
 
             length = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
             total_length += length
@@ -455,16 +459,16 @@ class ImprovedTrajectoryEvaluator:
 
         # 1. Forward progress
         end_point = trajectory[-1]
-        dx = end_point.center.x - ego_state.center.x
-        dy = end_point.center.y - ego_state.center.y
+        dx = end_point.rear_axle.x - ego_state.rear_axle.x
+        dy = end_point.rear_axle.y - ego_state.rear_axle.y
 
         # Forward distance in ego coordinate frame
-        forward_progress = dx * math.cos(ego_state.center.heading) + dy * math.sin(
-            ego_state.center.heading
+        forward_progress = dx * math.cos(ego_state.rear_axle.heading) + dy * math.sin(
+            ego_state.rear_axle.heading
         )
         lateral_deviation = abs(
-            -dx * math.sin(ego_state.center.heading)
-            + dy * math.cos(ego_state.center.heading)
+            -dx * math.sin(ego_state.rear_axle.heading)
+            + dy * math.cos(ego_state.rear_axle.heading)
         )
 
         # Update statistics
@@ -475,10 +479,10 @@ class ImprovedTrajectoryEvaluator:
         straight_distance = math.sqrt(dx**2 + dy**2)
         actual_length = 0.0
         for i in range(len(trajectory) - 1):
-            x1 = trajectory[i].center.x
-            y1 = trajectory[i].center.y
-            x2 = trajectory[i + 1].center.x
-            y2 = trajectory[i + 1].center.y
+            x1 = trajectory[i].rear_axle.x
+            y1 = trajectory[i].rear_axle.y
+            x2 = trajectory[i + 1].rear_axle.x
+            y2 = trajectory[i + 1].rear_axle.y
             actual_length += math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
         path_efficiency = straight_distance / max(actual_length, 0.1)
@@ -487,7 +491,7 @@ class ImprovedTrajectoryEvaluator:
         # 3. Goal alignment
         if straight_distance > 0.1:
             goal_direction = math.atan2(dy, dx)
-            heading_diff = abs(goal_direction - ego_state.center.heading)
+            heading_diff = abs(goal_direction - ego_state.rear_axle.heading)
             heading_diff = min(heading_diff, 2 * math.pi - heading_diff)
             goal_alignment = 1.0 - (heading_diff / math.pi)
         else:
@@ -496,16 +500,16 @@ class ImprovedTrajectoryEvaluator:
         # 4. Progress consistency
         segment_progresses = []
         for i in range(len(trajectory) - 1):
-            x1 = trajectory[i].center.x
-            y1 = trajectory[i].center.y
-            x2 = trajectory[i + 1].center.x
-            y2 = trajectory[i + 1].center.y
+            x1 = trajectory[i].rear_axle.x
+            y1 = trajectory[i].rear_axle.y
+            x2 = trajectory[i + 1].rear_axle.x
+            y2 = trajectory[i + 1].rear_axle.y
             seg_dx = x2 - x1
             seg_dy = y2 - y1
 
             seg_progress = seg_dx * math.cos(
-                ego_state.center.heading
-            ) + seg_dy * math.sin(ego_state.center.heading)
+                ego_state.rear_axle.heading
+            ) + seg_dy * math.sin(ego_state.rear_axle.heading)
             segment_progresses.append(seg_progress)
 
         progress_variance = (
@@ -663,8 +667,8 @@ class ImprovedTrajectoryEvaluator:
             return False, ""
 
         for i, state in enumerate(trajectory[:8]):
-            x = state.center.x
-            y = state.center.y
+            x = state.rear_axle.x
+            y = state.rear_axle.y
 
             for obj in surrounding_objects:
                 obj_x = obj.center.x
@@ -683,11 +687,11 @@ class ImprovedTrajectoryEvaluator:
 
                 # 使用ego车当前朝向计算纵向和侧向分量
                 longitudinal_dist = dx * math.cos(
-                    ego_state.center.heading
-                ) + dy * math.sin(ego_state.center.heading)
+                    ego_state.rear_axle.heading
+                ) + dy * math.sin(ego_state.rear_axle.heading)
                 lateral_dist = abs(
-                    -dx * math.sin(ego_state.center.heading)
-                    + dy * math.cos(ego_state.center.heading)
+                    -dx * math.sin(ego_state.rear_axle.heading)
+                    + dy * math.cos(ego_state.rear_axle.heading)
                 )
 
                 # === 侧向安全检查（极度宽松）===
@@ -710,7 +714,8 @@ class ImprovedTrajectoryEvaluator:
                 if longitudinal_dist > 0:  # ego在物体前方
                     # 估算相对速度（简化版本）
                     ego_velocity = (
-                        ego_state.dynamic_car_state.center_velocity_2d.x or 0.0
+                        ego_state.dynamic_car_state.rear_axle_velocity_2d.magnitude()
+                        or 0.0
                     )
 
                     # 假设物体静止或慢速（保守估计）
@@ -785,8 +790,8 @@ class ImprovedTrajectoryEvaluator:
 
         min_dist = float("inf")
         for state in trajectory:
-            x = state.center.x
-            y = state.center.y
+            x = state.rear_axle.x
+            y = state.rear_axle.y
 
             for obj in surrounding_objects:
                 obj_x = obj.center.x
@@ -803,10 +808,10 @@ class ImprovedTrajectoryEvaluator:
 
         length = 0.0
         for i in range(len(trajectory) - 1):
-            x1 = trajectory[i].center.x
-            y1 = trajectory[i].center.y
-            x2 = trajectory[i + 1].center.x
-            y2 = trajectory[i + 1].center.y
+            x1 = trajectory[i].rear_axle.x
+            y1 = trajectory[i].rear_axle.y
+            x2 = trajectory[i + 1].rear_axle.x
+            y2 = trajectory[i + 1].rear_axle.y
             length += math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
         return length
@@ -818,12 +823,12 @@ class ImprovedTrajectoryEvaluator:
 
         curvatures = []
         for i in range(1, len(trajectory) - 1):
-            x1 = trajectory[i - 1].center.x
-            y1 = trajectory[i - 1].center.y
-            x2 = trajectory[i].center.x
-            y2 = trajectory[i].center.y
-            x3 = trajectory[i + 1].center.x
-            y3 = trajectory[i + 1].center.y
+            x1 = trajectory[i - 1].rear_axle.x
+            y1 = trajectory[i - 1].rear_axle.y
+            x2 = trajectory[i].rear_axle.x
+            y2 = trajectory[i].rear_axle.y
+            x3 = trajectory[i + 1].rear_axle.x
+            y3 = trajectory[i + 1].rear_axle.y
 
             v1 = np.array([x2 - x1, y2 - y1])
             v2 = np.array([x3 - x2, y3 - y2])
@@ -848,11 +853,11 @@ class ImprovedTrajectoryEvaluator:
             return 0.0
 
         end_point = trajectory[-1]
-        dx = end_point.center.x - ego_state.center.x
-        dy = end_point.center.y - ego_state.center.y
+        dx = end_point.rear_axle.x - ego_state.rear_axle.x
+        dy = end_point.rear_axle.y - ego_state.rear_axle.y
 
-        return dx * math.cos(ego_state.center.heading) + dy * math.sin(
-            ego_state.center.heading
+        return dx * math.cos(ego_state.rear_axle.heading) + dy * math.sin(
+            ego_state.rear_axle.heading
         )
 
     def get_score_statistics(self) -> Dict:
