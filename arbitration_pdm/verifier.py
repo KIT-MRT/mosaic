@@ -4,7 +4,6 @@ from typing_extensions import override
 
 from arbitration_pdm.common.command import Command
 from arbitration_pdm.common.environment_model import EnvironmentModel
-from arbitration_pdm.common.utils.trajectory_conversion import trajectory_to_points
 from arbitration_pdm.trajectory_evaluator import ImprovedTrajectoryEvaluator
 
 
@@ -41,14 +40,18 @@ class TrajectoryVerifier(Verifier):
         environment_model: EnvironmentModel,
         command: Command,
     ) -> VerificationResult:
+        if len(command.ego_states()) == 0:
+            return VerificationResult(
+                False, "Trajectory verification failed: Empty trajectory."
+            )
+
         ego_state = environment_model.ego_state
         agents = environment_model.agents
-        traj_points = trajectory_to_points(command.trajectory)
 
         score, _details = self.trajectory_evaluator.evaluate_trajectory_detailed(
             ego_state=ego_state,
             surrounding_objects=agents,
-            trajectory=traj_points,
+            trajectory=command.ego_states(),
         )
 
         print(f"Trajectory verification scores: {score}")
