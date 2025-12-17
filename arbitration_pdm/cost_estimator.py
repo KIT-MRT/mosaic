@@ -25,6 +25,14 @@ class TrajectoryCostEstimator(CostEstimator):
         command: Command,
         is_active: bool,
     ) -> float:
+        score = environment_model.scorer.score(command.trajectory)
+        # score should only contain an ndarray containing a single score since we are scoring a single trajectory
+        if score.shape != (1,):
+            raise ValueError(
+                f"Expected score shape (1,), got {score.shape} when scoring trajectory."
+            )
+        return -score[0]
+
         # TODO: Make configurable
         SWITCHING_PENALTY = 20.0
 
