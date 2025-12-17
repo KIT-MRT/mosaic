@@ -1,10 +1,9 @@
 from dataclasses import dataclass
 from datetime import timedelta
-from typing import List, Optional
+from typing import Optional
 
 from nuplan.common.actor_state.state_representation import (
     StateSE2,
-    TimeDuration,
 )
 from nuplan.common.maps.abstract_map import AbstractMap
 from nuplan.common.maps.maps_datatypes import TrafficLightStatusData
@@ -21,9 +20,6 @@ from nuplan.planning.simulation.simulation_time_controller.simulation_iteration 
 from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
 
 from arbitration_pdm.common.utils.time_conversion import to_timedelta
-from arbitration_pdm.observation.constant_velocity_agents import (
-    ConstantVelocityAgents,
-)
 from arbitration_pdm.pdm_scorer import PDMTrajectoryScorer
 
 
@@ -43,10 +39,6 @@ class EnvironmentModel:
         self._history: Optional[SimulationHistoryBuffer] = None
         self._traffic_light_data: Optional[list[TrafficLightStatusData]] = None
 
-        self._constant_velocity_agents: ConstantVelocityAgents = ConstantVelocityAgents(
-            trajectory_sampling=self.parameters.prediction_trajectory_sampling,
-        )
-
         self.scorer: Optional[PDMTrajectoryScorer] = None
 
     def initialize(self, planner_initialization: PlannerInitialization) -> None:
@@ -64,20 +56,6 @@ class EnvironmentModel:
         self._traffic_light_data = planner_input.traffic_light_data
 
         self.scorer.update(planner_input)
-
-        step_time = TimeDuration.from_s(
-            self.parameters.prediction_trajectory_sampling.step_time
-        )
-        next_iteration = SimulationIteration(
-            time_point=self._iteration.time_point + step_time,
-            index=self._iteration.index + 1,
-        )
-
-        self._constant_velocity_agents.update_observation(
-            iteration=self._iteration,
-            next_iteration=next_iteration,
-            history=self._history,
-        )
 
     @property
     def planner_initialization(self) -> PlannerInitialization:
@@ -138,10 +116,3 @@ class EnvironmentModel:
         if self._history is None or not self._history.ego_states:
             raise ValueError("History has not been initialized or is empty.")
         return self._history.ego_states[-1]
-
-    @property
-    def agents(self):
-        """
-        :return: The agents in the environment at the current time point.
-        """
-        return self._constant_velocity_agents.get_observation().tracked_objects.get_agents()
