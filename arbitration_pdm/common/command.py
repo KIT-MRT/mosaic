@@ -36,4 +36,14 @@ class Command:
         num = sampling.num_poses + 1  # include initial state
         time_points = [TimePoint(start_time.time_us + int(round(k * step_time_s * 1e6))) for k in range(num)]
 
+        # Clamp final time to trajectory end if off by <=1 microsecond (rounding artifacts).
+        if time_points[-1].time_us > self.trajectory.end_time.time_us:
+            if time_points[-1].time_us - self.trajectory.end_time.time_us <= 1:
+                time_points[-1] = TimePoint(self.trajectory.end_time.time_us)
+            else:
+                raise AssertionError(
+                    f"Command: trajectory time window {self.trajectory.start_time}..{self.trajectory.end_time} "
+                    f"does not contain required times for sampling {sampling}"
+                )
+
         return cast(list[EgoState], self.trajectory.get_state_at_times(time_points))

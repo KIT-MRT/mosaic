@@ -180,6 +180,19 @@ class PDMTrajectoryScorer:
                 for k in range(expected_len)
             ]
 
+            # If the final requested time is just slightly beyond trajectory end due to
+            # rounding/float artifacts, allow clamping to traj.end_time for <=1 microsecond.
+            last_tp_us = time_points[-1].time_us
+            traj_end_us = traj.end_time.time_us
+            if last_tp_us > traj_end_us:
+                if last_tp_us - traj_end_us <= 1:
+                    time_points[-1] = type(start_time)(traj_end_us)
+                else:
+                    raise AssertionError(
+                        f"PDMTrajectoryScorer: trajectory time window {traj.start_time}..{traj.end_time} "
+                        f"does not contain required times for proposal sampling {self._proposal_sampling}"
+                    )
+
             try:
                 ego_states = traj.get_state_at_times(time_points)
             except AssertionError as exc:
