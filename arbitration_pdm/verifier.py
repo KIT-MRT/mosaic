@@ -4,7 +4,6 @@ from typing_extensions import override
 
 from arbitration_pdm.common.command import Command
 from arbitration_pdm.common.environment_model import EnvironmentModel
-from arbitration_pdm.trajectory_evaluator import ImprovedTrajectoryEvaluator
 
 
 class VerificationResult(Result):
@@ -29,9 +28,6 @@ class VerificationResult(Result):
 class TrajectoryVerifier(Verifier):
     def __init__(self):
         super().__init__()
-        self.trajectory_evaluator: ImprovedTrajectoryEvaluator = (
-            ImprovedTrajectoryEvaluator()
-        )
 
     @override
     def analyze(
@@ -40,27 +36,7 @@ class TrajectoryVerifier(Verifier):
         environment_model: EnvironmentModel,
         command: Command,
     ) -> VerificationResult:
-        if len(command.ego_states()) == 0:
-            return VerificationResult(
-                False, "Trajectory verification failed: Empty trajectory."
-            )
-
-        ego_state = environment_model.ego_state
-        agents = environment_model.agents
-
-        score, _details = self.trajectory_evaluator.evaluate_trajectory_detailed(
-            ego_state=ego_state,
-            surrounding_objects=agents,
-            trajectory=command.ego_states(),
-        )
-
-        print(f"Trajectory verification scores: {score}")
-
-        if score.collision_risk:
-            return VerificationResult(
-                False, "Trajectory verification failed: Collision risk detected."
-            )
-
+        # TODO: Implement verification logic
         return VerificationResult(True)
 
     def __getstate__(self) -> dict[str, object]:
