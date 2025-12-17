@@ -21,15 +21,11 @@ class TrajectoryCostEstimator(CostEstimator):
         command: Command,
         is_active: bool,
     ) -> float:
-        print(
-            f"Estimating cost for {command.name} with a trajectory of length {len(command.ego_states())}"
-        )
         score = environment_model.scorer.score(command.trajectory)
         if score.shape != (1,):
             raise ValueError(
                 f"Expected score shape (1,), got {score.shape} when scoring trajectory."
             )
-        print(f"Raw PDM score: {score[0]}")
         return -score[0]
 
     def __getstate__(self) -> dict[str, object]:
