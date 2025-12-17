@@ -169,14 +169,28 @@ class PDMTrajectoryScorer:
         # convert each trajectory -> ego states -> state array
         states_list: List[npt.NDArray[np.float64]] = []
         for traj in trajectories_list:
-            # user guaranteed ability to extract sampled ego states
-            ego_states: List[EgoState] = traj.get_sampled_trajectory()
-
-            # ensure expected length
+            # Resample trajectory strictly to the proposal sampling using nuplan interpolation
+            step_time_s = self._proposal_sampling.step_time
             expected_len = self._proposal_sampling.num_poses + 1
+
+            # anchor sampling to the trajectory start time
+            start_time = traj.start_time
+            time_points = [
+                type(start_time)(start_time.time_us + int(round(k * step_time_s * 1e6)))
+                for k in range(expected_len)
+            ]
+
+            try:
+                ego_states = traj.get_state_at_times(time_points)
+            except AssertionError as exc:
+                raise AssertionError(
+                    f"PDMTrajectoryScorer: trajectory time window {traj.start_time}..{traj.end_time} "
+                    f"does not contain required times for proposal sampling {self._proposal_sampling}"
+                ) from exc
+
             if len(ego_states) != expected_len:
                 raise AssertionError(
-                    f"PDMTrajectoryScorer: trajectory length {len(ego_states)} does not match expected {expected_len}"  # noqa: E501
+                    f"PDMTrajectoryScorer: resampled trajectory length {len(ego_states)} does not match expected {expected_len}"
                 )
 
             state_array = ego_states_to_state_array(ego_states)
