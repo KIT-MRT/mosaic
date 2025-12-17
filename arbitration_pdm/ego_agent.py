@@ -30,7 +30,7 @@ class EgoAgent(AbstractPlanner):
 
     class Parameters:
         trajectory_sampling: TrajectorySampling = TrajectorySampling(
-            time_horizon=8.0, interval_length=0.2
+            time_horizon=8.0, interval_length=0.1
         )
         emergency_stop_behavior: EmergencyStopBehavior.Parameters = (
             EmergencyStopBehavior.Parameters(

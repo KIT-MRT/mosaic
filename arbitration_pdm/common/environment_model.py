@@ -26,7 +26,7 @@ from arbitration_pdm.pdm_scorer import PDMTrajectoryScorer
 class EnvironmentModel:
     @dataclass
     class Parameters:
-        prediction_trajectory_sampling: TrajectorySampling
+        trajectory_sampling: TrajectorySampling
 
     def __init__(self, parameters: Parameters) -> None:
         self.parameters: EnvironmentModel.Parameters = parameters
@@ -47,7 +47,7 @@ class EnvironmentModel:
         self._map_api = planner_initialization.map_api
 
         self.scorer = PDMTrajectoryScorer(
-            planner_initialization, self.parameters.prediction_trajectory_sampling
+            planner_initialization, self.parameters.trajectory_sampling
         )
 
     def update(self, planner_input: PlannerInput) -> None:
