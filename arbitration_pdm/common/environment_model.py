@@ -24,6 +24,7 @@ from arbitration_pdm.common.utils.time_conversion import to_timedelta
 from arbitration_pdm.observation.constant_velocity_agents import (
     ConstantVelocityAgents,
 )
+from arbitration_pdm.pdm_scorer import PDMTrajectoryScorer
 
 
 class EnvironmentModel:
@@ -46,15 +47,23 @@ class EnvironmentModel:
             trajectory_sampling=self.parameters.prediction_trajectory_sampling,
         )
 
+        self.scorer: Optional[PDMTrajectoryScorer] = None
+
     def initialize(self, planner_initialization: PlannerInitialization) -> None:
         self._route_roadblock_ids = planner_initialization.route_roadblock_ids
         self._mission_goal = planner_initialization.mission_goal
         self._map_api = planner_initialization.map_api
 
+        self.scorer = PDMTrajectoryScorer(
+            planner_initialization, self.parameters.prediction_trajectory_sampling
+        )
+
     def update(self, planner_input: PlannerInput) -> None:
         self._iteration = planner_input.iteration
         self._history = planner_input.history
         self._traffic_light_data = planner_input.traffic_light_data
+
+        self.scorer.update(planner_input)
 
         step_time = TimeDuration.from_s(
             self.parameters.prediction_trajectory_sampling.step_time
