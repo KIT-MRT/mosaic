@@ -182,6 +182,7 @@ class PDMTrajectoryScorer:
 
             # If the final requested time is just slightly beyond trajectory end due to
             # rounding/float artifacts, allow clamping to traj.end_time for <=1 microsecond.
+            # TODO: There has got to be a cleaner way of getting correctly sampled trajectories in nuplan.
             last_tp_us = time_points[-1].time_us
             traj_end_us = traj.end_time.time_us
             if last_tp_us > traj_end_us:
