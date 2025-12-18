@@ -35,6 +35,13 @@ class PDMOpenBehavior(Behavior):
         with cfg_path.open("r") as f:
             pdm_open_cfg = OmegaConf.load(f)
 
+        # Define PDM Open checkpoint path
+        pdm_open_cfg.pdm_open_planner.checkpoint_path = str(
+            resources.files("arbitration_pdm").parent
+            / "ckpt"
+            / "pdm_open_checkpoint.ckpt"
+        )
+
         self.planner = cast(AbstractPlanner, instantiate(pdm_open_cfg.pdm_open_planner))
 
     def initialize(self, environment_model: EnvironmentModel) -> None:
