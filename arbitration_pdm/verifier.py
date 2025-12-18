@@ -36,8 +36,10 @@ class TrajectoryVerifier(Verifier):
         environment_model: EnvironmentModel,
         command: Command,
     ) -> VerificationResult:
-        # TODO: Implement verification logic
-        return VerificationResult(True)
+        valid = environment_model.scorer.is_trajectory_valid(command.trajectory)
+        return VerificationResult(
+            valid, "" if valid else "Trajectory is invalid according to PDM criteria."
+        )
 
     def __getstate__(self) -> dict[str, object]:
         """

@@ -196,6 +196,72 @@ class PDMTrajectoryScorer:
 
         return scores
 
+    def is_trajectories_valid(
+        self,
+        trajectories: Union[InterpolatedTrajectory, List[InterpolatedTrajectory]],
+        *,
+        infraction: str = "collision",
+        time_to_infraction_threshold: float = 2.0,
+        max_ego_speed: float = 5.0,
+    ) -> npt.NDArray[np.bool_]:
+        """Validate one or multiple InterpolatedTrajectory objects.
+
+        Returns a boolean numpy array (or scalar) indicating whether each trajectory is safe.
+        """
+        if self._initial_ego_state is None:
+            raise AssertionError(
+                "PDMTrajectoryScorer: scorer.update(current_input) must be called before validation()"
+            )
+
+        if self._centerline is None and self._require_route:
+            raise AssertionError(
+                "PDMTrajectoryScorer: centerline not initialized; call update() after initialization with valid route"
+            )
+
+        if infraction not in ("collision", "ttc"):
+            raise AssertionError("infraction must be 'collision' or 'ttc'")
+
+        if isinstance(trajectories, InterpolatedTrajectory):
+            traj_list = [trajectories]
+        else:
+            traj_list = list(trajectories)
+
+        # Convert each trajectory to state array using the helper
+        states_list = [self._trajectory_to_state_array(traj) for traj in traj_list]
+
+        # Stack into shape (n, T, state_dim)
+        states = np.stack(states_list, axis=0)
+
+        # call score_proposals which populates time-to-infraction indices
+        _ = self._scorer.score_proposals(
+            states,
+            self._initial_ego_state,
+            self._observation,
+            self._centerline,
+            self._route_lane_dict,
+            self._drivable_area_map,
+            self._map_api,
+        )
+
+        results = np.ones(len(traj_list), dtype=bool)
+        ego_speed = self._initial_ego_state.dynamic_car_state.speed
+
+        for i in range(len(traj_list)):
+            if infraction == "ttc":
+                t = self._scorer.time_to_ttc_infraction(i)
+            else:
+                t = self._scorer.time_to_at_fault_collision(i)
+
+            results[i] = not (
+                t <= time_to_infraction_threshold and ego_speed <= max_ego_speed
+            )
+
+        return results[0] if len(results) == 1 else results
+
+    def is_trajectory_valid(self, trajectory: InterpolatedTrajectory, **kwargs) -> bool:
+        """Convenience wrapper returning a single boolean for a single trajectory."""
+        return bool(self.is_trajectories_valid(trajectory, **kwargs))
+
     # --- helper methods copied from AbstractPDMPlanner; minimal set ---
     def _get_discrete_centerline(
         self, current_lane, search_depth: int = 30
