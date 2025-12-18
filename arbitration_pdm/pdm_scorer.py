@@ -166,51 +166,12 @@ class PDMTrajectoryScorer:
         else:
             trajectories_list = list(trajectories)
 
-        # convert each trajectory -> ego states -> state array
-        states_list: List[npt.NDArray[np.float64]] = []
-        for traj in trajectories_list:
-            # Resample trajectory strictly to the proposal sampling using nuplan interpolation
-            step_time_s = self._proposal_sampling.step_time
-            expected_len = self._proposal_sampling.num_poses + 1
+        # Convert each trajectory to a (T, state_dim) array
+        states_list = [
+            self._trajectory_to_state_array(traj) for traj in trajectories_list
+        ]
 
-            # anchor sampling to the trajectory start time
-            start_time = traj.start_time
-            time_points = [
-                type(start_time)(start_time.time_us + int(round(k * step_time_s * 1e6)))
-                for k in range(expected_len)
-            ]
-
-            # If the final requested time is just slightly beyond trajectory end due to
-            # rounding/float artifacts, allow clamping to traj.end_time for <=1 microsecond.
-            # TODO: There has got to be a cleaner way of getting correctly sampled trajectories in nuplan.
-            last_tp_us = time_points[-1].time_us
-            traj_end_us = traj.end_time.time_us
-            if last_tp_us > traj_end_us:
-                if last_tp_us - traj_end_us <= 1:
-                    time_points[-1] = type(start_time)(traj_end_us)
-                else:
-                    raise AssertionError(
-                        f"PDMTrajectoryScorer: trajectory time window {traj.start_time}..{traj.end_time} "
-                        f"does not contain required times for proposal sampling {self._proposal_sampling}"
-                    )
-
-            try:
-                ego_states = traj.get_state_at_times(time_points)
-            except AssertionError as exc:
-                raise AssertionError(
-                    f"PDMTrajectoryScorer: trajectory time window {traj.start_time}..{traj.end_time} "
-                    f"does not contain required times for proposal sampling {self._proposal_sampling}"
-                ) from exc
-
-            if len(ego_states) != expected_len:
-                raise AssertionError(
-                    f"PDMTrajectoryScorer: resampled trajectory length {len(ego_states)} does not match expected {expected_len}"
-                )
-
-            state_array = ego_states_to_state_array(ego_states)
-            states_list.append(state_array)
-
-        # stack into shape (n, T, state_dim)
+        # Stack into shape (n, T, state_dim)
         states = np.stack(states_list, axis=0)
 
         if self._initial_ego_state is None:
@@ -325,3 +286,45 @@ class PDMTrajectoryScorer:
                 on_route_heading_errors.append(heading_error)
 
         return on_route_lanes, on_route_heading_errors
+
+    def _trajectory_to_state_array(
+        self, traj: InterpolatedTrajectory
+    ) -> npt.NDArray[np.float64]:
+        """Resample an InterpolatedTrajectory to proposal sampling and convert to state array."""
+        step_time_s = self._proposal_sampling.step_time
+        expected_len = self._proposal_sampling.num_poses + 1
+
+        # Anchor sampling to the trajectory start time
+        start_time = traj.start_time
+        time_points = [
+            type(start_time)(start_time.time_us + int(round(k * step_time_s * 1e6)))
+            for k in range(expected_len)
+        ]
+
+        # Allow ≤1µs clamping at the end due to rounding artifacts
+        last_tp_us = time_points[-1].time_us
+        traj_end_us = traj.end_time.time_us
+        if last_tp_us > traj_end_us:
+            if last_tp_us - traj_end_us <= 1:
+                time_points[-1] = type(start_time)(traj_end_us)
+            else:
+                raise AssertionError(
+                    f"PDMTrajectoryScorer: trajectory time window {traj.start_time}..{traj.end_time} "
+                    f"does not contain required times for proposal sampling {self._proposal_sampling}"
+                )
+
+        try:
+            ego_states = traj.get_state_at_times(time_points)
+        except AssertionError as exc:
+            raise AssertionError(
+                f"PDMTrajectoryScorer: trajectory time window {traj.start_time}..{traj.end_time} "
+                f"does not contain required times for proposal sampling {self._proposal_sampling}"
+            ) from exc
+
+        if len(ego_states) != expected_len:
+            raise AssertionError(
+                f"PDMTrajectoryScorer: resampled trajectory length {len(ego_states)} "
+                f"does not match expected {expected_len}"
+            )
+
+        return ego_states_to_state_array(ego_states)
