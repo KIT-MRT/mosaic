@@ -4,11 +4,10 @@ from pathlib import Path
 
 from arbitration_pdm.ego_agent import EgoAgent
 
-print("Improved normalized trajectory evaluation system loaded successfully!")
-print("Configured with proper metric normalization and weighted scoring")
-print("All metrics will be distributed uniformly between 0.000 and 100.000")
-print("Usage: planner = EgoAgent(detailed_logging=False)")
-import hydra
+import matplotlib
+
+# Prevent matplotlib from trying to use any Xwindows backend
+matplotlib.use("Agg")
 
 # Location of paths with all simulation configs
 SIM_CONFIG_PATH = "nuplan.planning.script.config.simulation"
