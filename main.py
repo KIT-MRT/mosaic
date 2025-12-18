@@ -17,7 +17,6 @@ NUBOARD_CONFIG_PATH = "nuplan.planning.script.config.nuboard"
 NUBOARD_CONFIG_NAME = "default_nuboard"
 # Select simulation parameters
 CHALLENGE = "closed_loop_reactive_agents"  # [open_loop_boxes, closed_loop_nonreactive_agents, closed_loop_reactive_agents]
-# OBSERVATION = 'idm_agents_observation'  # [box_observation, idm_agents_observation, lidar_pc_observation]
 
 # Initialize configuration management system
 hydra.core.global_hydra.GlobalHydra.instance().clear()  # reinitialize hydra if already initialized
@@ -40,7 +39,7 @@ from nuplan.planning.script.run_simulation import run_simulation as main_simulat
 
 nest_asyncio.apply()
 
-planner = EgoAgent()  # 构造 planner
+planner = EgoAgent()
 
 main_simulation(cfg, planners=planner)
 
@@ -68,5 +67,4 @@ with initialize_config_module(config_module=NUBOARD_CONFIG_PATH):
 # Run nuBoard
 from nuplan.planning.script.run_nuboard import main as main_nuboard
 
-# Run nuBoard
 main_nuboard(cfg)
