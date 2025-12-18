@@ -16,7 +16,7 @@ from typing_extensions import override
 
 from arbitration_pdm.behavior.emergency_stop_behavior import EmergencyStopBehavior
 from arbitration_pdm.behavior.pdm_closed import PDMClosedBehavior
-from arbitration_pdm.behavior.pdm_open import PDMOpenBehavior
+from arbitration_pdm.behavior.flow_drive import FlowDriveBehavior
 from arbitration_pdm.common.command import Command
 from arbitration_pdm.common.environment_model import EnvironmentModel
 from arbitration_pdm.cost_estimator import TrajectoryCostEstimator
@@ -30,7 +30,7 @@ class EgoAgent(AbstractPlanner):
 
     class Parameters:
         trajectory_sampling: TrajectorySampling = TrajectorySampling(
-            time_horizon=8.0, interval_length=0.1
+            time_horizon=4.0, interval_length=0.1
         )
         scoring_sampling: TrajectorySampling = TrajectorySampling(
             time_horizon=4.0, interval_length=0.1
@@ -70,8 +70,8 @@ class EgoAgent(AbstractPlanner):
         print("EgoAgent initialized")
 
     def initialize_arbitration_graph(self) -> None:
+        self.flow_drive_behavior = FlowDriveBehavior()
         self.pdm_closed_behavior = PDMClosedBehavior()
-        self.pdm_open_behavior = PDMOpenBehavior()
         self.emergency_stop_behavior: EmergencyStopBehavior = EmergencyStopBehavior(
             self.parameters.emergency_stop_behavior
         )
@@ -83,12 +83,12 @@ class EgoAgent(AbstractPlanner):
         )
 
         self.cost_arbitrator.add_option(
-            self.pdm_closed_behavior,
+            self.flow_drive_behavior,
             CostArbitrator.Option.Flags.NO_FLAGS,
             self.cost_estimator,
         )
         self.cost_arbitrator.add_option(
-            self.pdm_open_behavior,
+            self.pdm_closed_behavior,
             CostArbitrator.Option.Flags.NO_FLAGS,
             self.cost_estimator,
         )
@@ -109,8 +109,8 @@ class EgoAgent(AbstractPlanner):
         super().initialize(initialization)
 
         self.environment_model.initialize(initialization)
+        self.flow_drive_behavior.initialize(self.environment_model)
         self.pdm_closed_behavior.initialize(self.environment_model)
-        self.pdm_open_behavior.initialize(self.environment_model)
 
     @override
     def name(self) -> str:
