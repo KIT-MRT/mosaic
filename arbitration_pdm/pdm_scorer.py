@@ -3,7 +3,7 @@ from typing import Dict, List, Optional, Union
 import numpy as np
 import numpy.typing as npt
 from nuplan.common.actor_state.ego_state import EgoState
-from nuplan.common.actor_state.state_representation import StateSE2
+from nuplan.common.actor_state.state_representation import StateSE2, TimePoint
 from nuplan.common.maps.maps_datatypes import SemanticMapLayer
 from nuplan.planning.simulation.planner.abstract_planner import (
     PlannerInitialization,
@@ -22,6 +22,9 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.observation.pdm_obser
 )
 from tuplan_garage.planning.simulation.planner.pdm_planner.scoring.pdm_scorer import (
     PDMScorer,
+)
+from tuplan_garage.planning.simulation.planner.pdm_planner.simulation.pdm_simulator import (
+    PDMSimulator,
 )
 from tuplan_garage.planning.simulation.planner.pdm_planner.utils.graph_search.dijkstra import (
     Dijkstra,
@@ -86,6 +89,9 @@ class PDMTrajectoryScorer:
             map_radius if map_radius is not None else 50,
         )
         self._scorer = PDMScorer(proposal_sampling)
+
+        # simulator: always simulate provided trajectories before scoring
+        self._simulator = PDMSimulator(proposal_sampling)
 
         # dynamic state
         self._initial_ego_state: Optional[EgoState] = None
@@ -184,6 +190,9 @@ class PDMTrajectoryScorer:
                 "PDMTrajectoryScorer: centerline not initialized; call update() after initialization with valid route"
             )
 
+        # simulate closed-loop execution traces starting from the real ego state
+        states = self._simulator.simulate_proposals(states, self._initial_ego_state)
+
         scores = self._scorer.score_proposals(
             states,
             self._initial_ego_state,
@@ -231,6 +240,9 @@ class PDMTrajectoryScorer:
 
         # Stack into shape (n, T, state_dim)
         states = np.stack(states_list, axis=0)
+
+        # simulate provided trajectories so infraction times reflect realized execution
+        states = self._simulator.simulate_proposals(states, self._initial_ego_state)
 
         # call score_proposals which populates time-to-infraction indices
         _ = self._scorer.score_proposals(
