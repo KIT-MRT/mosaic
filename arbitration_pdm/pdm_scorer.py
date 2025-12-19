@@ -3,7 +3,7 @@ from typing import Dict, List, Optional, Union
 import numpy as np
 import numpy.typing as npt
 from nuplan.common.actor_state.ego_state import EgoState
-from nuplan.common.actor_state.state_representation import StateSE2
+from nuplan.common.actor_state.state_representation import StateSE2, TimePoint
 from nuplan.common.maps.maps_datatypes import SemanticMapLayer
 from nuplan.planning.simulation.planner.abstract_planner import (
     PlannerInitialization,
@@ -22,6 +22,9 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.observation.pdm_obser
 )
 from tuplan_garage.planning.simulation.planner.pdm_planner.scoring.pdm_scorer import (
     PDMScorer,
+)
+from tuplan_garage.planning.simulation.planner.pdm_planner.simulation.pdm_simulator import (
+    PDMSimulator,
 )
 from tuplan_garage.planning.simulation.planner.pdm_planner.utils.graph_search.dijkstra import (
     Dijkstra,
@@ -86,6 +89,9 @@ class PDMTrajectoryScorer:
             map_radius if map_radius is not None else 50,
         )
         self._scorer = PDMScorer(proposal_sampling)
+
+        # simulator: always simulate provided trajectories before scoring
+        self._simulator = PDMSimulator(proposal_sampling)
 
         # dynamic state
         self._initial_ego_state: Optional[EgoState] = None
@@ -166,51 +172,12 @@ class PDMTrajectoryScorer:
         else:
             trajectories_list = list(trajectories)
 
-        # convert each trajectory -> ego states -> state array
-        states_list: List[npt.NDArray[np.float64]] = []
-        for traj in trajectories_list:
-            # Resample trajectory strictly to the proposal sampling using nuplan interpolation
-            step_time_s = self._proposal_sampling.step_time
-            expected_len = self._proposal_sampling.num_poses + 1
+        # Convert each trajectory to a (T, state_dim) array
+        states_list = [
+            self._trajectory_to_state_array(traj) for traj in trajectories_list
+        ]
 
-            # anchor sampling to the trajectory start time
-            start_time = traj.start_time
-            time_points = [
-                type(start_time)(start_time.time_us + int(round(k * step_time_s * 1e6)))
-                for k in range(expected_len)
-            ]
-
-            # If the final requested time is just slightly beyond trajectory end due to
-            # rounding/float artifacts, allow clamping to traj.end_time for <=1 microsecond.
-            # TODO: There has got to be a cleaner way of getting correctly sampled trajectories in nuplan.
-            last_tp_us = time_points[-1].time_us
-            traj_end_us = traj.end_time.time_us
-            if last_tp_us > traj_end_us:
-                if last_tp_us - traj_end_us <= 1:
-                    time_points[-1] = type(start_time)(traj_end_us)
-                else:
-                    raise AssertionError(
-                        f"PDMTrajectoryScorer: trajectory time window {traj.start_time}..{traj.end_time} "
-                        f"does not contain required times for proposal sampling {self._proposal_sampling}"
-                    )
-
-            try:
-                ego_states = traj.get_state_at_times(time_points)
-            except AssertionError as exc:
-                raise AssertionError(
-                    f"PDMTrajectoryScorer: trajectory time window {traj.start_time}..{traj.end_time} "
-                    f"does not contain required times for proposal sampling {self._proposal_sampling}"
-                ) from exc
-
-            if len(ego_states) != expected_len:
-                raise AssertionError(
-                    f"PDMTrajectoryScorer: resampled trajectory length {len(ego_states)} does not match expected {expected_len}"
-                )
-
-            state_array = ego_states_to_state_array(ego_states)
-            states_list.append(state_array)
-
-        # stack into shape (n, T, state_dim)
+        # Stack into shape (n, T, state_dim)
         states = np.stack(states_list, axis=0)
 
         if self._initial_ego_state is None:
@@ -223,6 +190,9 @@ class PDMTrajectoryScorer:
                 "PDMTrajectoryScorer: centerline not initialized; call update() after initialization with valid route"
             )
 
+        # simulate closed-loop execution traces starting from the real ego state
+        states = self._simulator.simulate_proposals(states, self._initial_ego_state)
+
         scores = self._scorer.score_proposals(
             states,
             self._initial_ego_state,
@@ -234,6 +204,75 @@ class PDMTrajectoryScorer:
         )
 
         return scores
+
+    def is_trajectories_valid(
+        self,
+        trajectories: Union[InterpolatedTrajectory, List[InterpolatedTrajectory]],
+        *,
+        infraction: str = "collision",
+        time_to_infraction_threshold: float = 2.0,
+        max_ego_speed: float = 5.0,
+    ) -> npt.NDArray[np.bool_]:
+        """Validate one or multiple InterpolatedTrajectory objects.
+
+        Returns a boolean numpy array (or scalar) indicating whether each trajectory is safe.
+        """
+        if self._initial_ego_state is None:
+            raise AssertionError(
+                "PDMTrajectoryScorer: scorer.update(current_input) must be called before validation()"
+            )
+
+        if self._centerline is None and self._require_route:
+            raise AssertionError(
+                "PDMTrajectoryScorer: centerline not initialized; call update() after initialization with valid route"
+            )
+
+        if infraction not in ("collision", "ttc"):
+            raise AssertionError("infraction must be 'collision' or 'ttc'")
+
+        if isinstance(trajectories, InterpolatedTrajectory):
+            traj_list = [trajectories]
+        else:
+            traj_list = list(trajectories)
+
+        # Convert each trajectory to state array using the helper
+        states_list = [self._trajectory_to_state_array(traj) for traj in traj_list]
+
+        # Stack into shape (n, T, state_dim)
+        states = np.stack(states_list, axis=0)
+
+        # simulate provided trajectories so infraction times reflect realized execution
+        states = self._simulator.simulate_proposals(states, self._initial_ego_state)
+
+        # call score_proposals which populates time-to-infraction indices
+        _ = self._scorer.score_proposals(
+            states,
+            self._initial_ego_state,
+            self._observation,
+            self._centerline,
+            self._route_lane_dict,
+            self._drivable_area_map,
+            self._map_api,
+        )
+
+        results = np.ones(len(traj_list), dtype=bool)
+        ego_speed = self._initial_ego_state.dynamic_car_state.speed
+
+        for i in range(len(traj_list)):
+            if infraction == "ttc":
+                t = self._scorer.time_to_ttc_infraction(i)
+            else:
+                t = self._scorer.time_to_at_fault_collision(i)
+
+            results[i] = not (
+                t <= time_to_infraction_threshold and ego_speed <= max_ego_speed
+            )
+
+        return results[0] if len(results) == 1 else results
+
+    def is_trajectory_valid(self, trajectory: InterpolatedTrajectory, **kwargs) -> bool:
+        """Convenience wrapper returning a single boolean for a single trajectory."""
+        return bool(self.is_trajectories_valid(trajectory, **kwargs))
 
     # --- helper methods copied from AbstractPDMPlanner; minimal set ---
     def _get_discrete_centerline(
@@ -325,3 +364,45 @@ class PDMTrajectoryScorer:
                 on_route_heading_errors.append(heading_error)
 
         return on_route_lanes, on_route_heading_errors
+
+    def _trajectory_to_state_array(
+        self, traj: InterpolatedTrajectory
+    ) -> npt.NDArray[np.float64]:
+        """Resample an InterpolatedTrajectory to proposal sampling and convert to state array."""
+        step_time_s = self._proposal_sampling.step_time
+        expected_len = self._proposal_sampling.num_poses + 1
+
+        # Anchor sampling to the trajectory start time
+        start_time = traj.start_time
+        time_points = [
+            type(start_time)(start_time.time_us + int(round(k * step_time_s * 1e6)))
+            for k in range(expected_len)
+        ]
+
+        # Allow ≤1µs clamping at the end due to rounding artifacts
+        last_tp_us = time_points[-1].time_us
+        traj_end_us = traj.end_time.time_us
+        if last_tp_us > traj_end_us:
+            if last_tp_us - traj_end_us <= 1:
+                time_points[-1] = type(start_time)(traj_end_us)
+            else:
+                raise AssertionError(
+                    f"PDMTrajectoryScorer: trajectory time window {traj.start_time}..{traj.end_time} "
+                    f"does not contain required times for proposal sampling {self._proposal_sampling}"
+                )
+
+        try:
+            ego_states = traj.get_state_at_times(time_points)
+        except AssertionError as exc:
+            raise AssertionError(
+                f"PDMTrajectoryScorer: trajectory time window {traj.start_time}..{traj.end_time} "
+                f"does not contain required times for proposal sampling {self._proposal_sampling}"
+            ) from exc
+
+        if len(ego_states) != expected_len:
+            raise AssertionError(
+                f"PDMTrajectoryScorer: resampled trajectory length {len(ego_states)} "
+                f"does not match expected {expected_len}"
+            )
+
+        return ego_states_to_state_array(ego_states)
