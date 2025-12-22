@@ -567,16 +567,17 @@ class PDMScorer:
 
     def _calculate_drivable_area_compliance(self) -> None:
         """
-        Re-implementation of nuPlan's drivable area compliance metric
+        Re-implementation of nuPlan's drivable area compliance metric.
+        Produces a continuous score in [0,1] representing fraction of timesteps
+        where the ego footprint is inside drivable area (on-route).
         """
-        drivable_area_compliance_scores = np.ones(self._num_proposals, dtype=np.float64)
-        off_road_mask = self._ego_areas[:, :, EgoAreaIndex.NON_DRIVABLE_AREA].any(
-            axis=-1
-        )
-        drivable_area_compliance_scores[off_road_mask] = 0.0
-        self._multi_metrics[
-            MultiMetricIndex.DRIVABLE_AREA
-        ] = drivable_area_compliance_scores
+        # center in polygon mask for on-route drivable polygons
+        on_route_mask = self._ego_areas[:, :, EgoAreaIndex.NON_DRIVABLE_AREA] == False
+        # fraction of timesteps where ego is not in non-drivable area
+        fraction_in_drivable = on_route_mask.sum(axis=1) / float(self._proposal_sampling.num_poses + 1)
+        # ensure in [0,1]
+        fraction_in_drivable = np.clip(fraction_in_drivable, 0.0, 1.0)
+        self._multi_metrics[MultiMetricIndex.DRIVABLE_AREA] = fraction_in_drivable
 
     def _calculate_driving_direction_compliance(self) -> None:
         """
