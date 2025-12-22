@@ -55,6 +55,12 @@ DRIVING_DIRECTION_VIOLATION_THRESHOLD = 6.0  # [m] (driving direction)
 STOPPED_SPEED_THRESHOLD = 5e-03  # [m/s] (ttc)
 PROGRESS_DISTANCE_THRESHOLD = 0.1  # [m] (progress)
 
+# absolute progress normalization defaults
+PROGRESS_REF_SPEED_FACTOR = 1.0  # multiply ego speed when computing expected progress
+PROGRESS_FALLBACK_MAX_METERS = 10.0  # maximum expected progress fallback
+PROGRESS_MIN_EXPECTED_METERS = 0.1  # avoid tiny denominators
+PROGRESS_CAP_TO_CENTERLINE = True  # cap expected progress to remaining centerline length
+
 
 class PDMScorer:
     """Class to score proposals in PDM pipeline. Re-implements nuPlan's closed-loop metrics."""
@@ -167,13 +173,10 @@ class PDMScorer:
         multiplicate_metric_scores = self._multi_metrics.prod(axis=0)
 
         # normalize and fill progress values
-        raw_progress = self._progress_raw * multiplicate_metric_scores
-        max_raw_progress = np.max(raw_progress)
-        if max_raw_progress > PROGRESS_DISTANCE_THRESHOLD:
-            normalized_progress = raw_progress / max_raw_progress
-        else:
-            normalized_progress = np.ones(len(raw_progress), dtype=np.float64)
-            normalized_progress[multiplicate_metric_scores == 0.0] = 0.0
+        # progress is already normalized per-proposal to [0,1] using expected achievable progress
+        normalized_progress = np.array(self._progress_raw, copy=True)
+        # zero out progress for proposals that fail multiplicative metrics
+        normalized_progress[multiplicate_metric_scores == 0.0] = 0.0
         self._weighted_metrics[WeightedMetricIndex.PROGRESS] = normalized_progress
 
         # accumulate weighted metrics
@@ -492,11 +495,12 @@ class PDMScorer:
 
     def _calculate_progress(self) -> None:
         """
-        Re-implementation of nuPlan's progress metric (non-normalized).
-        Calculates progress along the centerline.
+        Re-implementation of nuPlan's progress metric, normalized per-proposal.
+        Calculates progress along the centerline and normalizes it against an
+        expected achievable progress computed from ego speed and horizon.
         """
 
-        # calculate raw progress in meter
+        # calculate raw progress in meter (start->end projection along centerline)
         progress_in_meter = np.zeros(self._num_proposals, dtype=np.float64)
         for proposal_idx in range(self._num_proposals):
             start_point = Point(
@@ -506,7 +510,47 @@ class PDMScorer:
             progress = self._centerline.project([start_point, end_point])
             progress_in_meter[proposal_idx] = progress[1] - progress[0]
 
-        self._progress_raw = np.clip(progress_in_meter, a_min=0, a_max=None)
+        # expected progress by speed over horizon
+        horizon_time_s = self._proposal_sampling.num_poses * self._proposal_sampling.interval_length
+        ego_speed = 0.0
+        try:
+            ego_speed = float(self._initial_ego_state.dynamic_car_state.speed)
+        except Exception:
+            # fallback: try to infer from states array at initial timestep
+            try:
+                vx = self._states[:, 0, StateIndex.VELOCITY_X]
+                vy = self._states[:, 0, StateIndex.VELOCITY_Y]
+                ego_speed = float(np.hypot(vx, vy).mean())
+            except Exception:
+                ego_speed = 0.0
+
+        expected_by_speed = ego_speed * horizon_time_s * PROGRESS_REF_SPEED_FACTOR
+
+        progress_scores = np.zeros(self._num_proposals, dtype=np.float64)
+        for proposal_idx in range(self._num_proposals):
+            expected = expected_by_speed
+
+            # cap to remaining centerline length if available
+            if PROGRESS_CAP_TO_CENTERLINE and self._centerline is not None:
+                try:
+                    proj_start = (
+                        self._centerline.project(
+                            Point(*self._ego_coords[proposal_idx, 0, BBCoordsIndex.CENTER])
+                        )
+                    )
+                    centerline_remaining = max(0.0, self._centerline.length - float(proj_start))
+                    expected = min(expected, centerline_remaining)
+                except Exception:
+                    # if projection fails, ignore centerline cap
+                    pass
+
+            # enforce conservative caps
+            expected = min(expected, PROGRESS_FALLBACK_MAX_METERS)
+            expected = max(expected, PROGRESS_MIN_EXPECTED_METERS)
+
+            progress_scores[proposal_idx] = float(np.clip(progress_in_meter[proposal_idx] / expected, 0.0, 1.0))
+
+        self._progress_raw = progress_scores
 
     def _calculate_is_comfortable(self) -> None:
         """
