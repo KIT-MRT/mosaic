@@ -329,6 +329,12 @@ class PDMScorer:
     def _calculate_no_at_fault_collision(self) -> None:
         """
         Re-implementation of nuPlan's at-fault collision metric.
+
+        This version computes a continuous collision-severity score in [0,1]
+        based on overlap area between ego footprint and the other object. The
+        resulting metric is 1.0 for no collision, and approaches 0.0 for large
+        overlaps. When multiple collisions occur for the same proposal the
+        worst (minimum) score is used.
         """
         no_collision_scores = np.ones(self._num_proposals, dtype=np.float64)
 
@@ -377,18 +383,60 @@ class PDMScorer:
                     collision_type == CollisionType.ACTIVE_LATERAL_COLLISION
                 )
 
-                # 1. at fault collision
+                # 1. at fault collision -> compute continuous severity
                 if collisions_at_stopped_track_or_active_front or (
                     ego_in_multiple_lanes_or_nondrivable_area and collision_at_lateral
                 ):
-                    no_at_fault_collision_score = (
-                        0.0
-                        if tracked_object.tracked_object_type in AGENT_TYPES
-                        else 0.5
+                    ego_poly = self._ego_polygons[proposal_idx, time_idx]
+
+                    # attempt to obtain a polygon representation for the tracked object
+                    tracked_geom = self._observation[time_idx][token]
+                    track_poly = None
+                    try:
+                        # common nuPlan representation: object has a 'box' with to_polygon
+                        if hasattr(tracked_object, "box") and hasattr(tracked_object.box, "to_polygon"):
+                            track_poly = tracked_object.box.to_polygon()
+                        # some observations expose a geometry attribute
+                        elif hasattr(tracked_geom, "geometry"):
+                            track_poly = tracked_geom.geometry
+                        # fallback: use centroid with small buffer
+                        elif hasattr(tracked_geom, "centroid"):
+                            c = tracked_geom.centroid
+                            track_poly = Point(c.x, c.y).buffer(0.5)
+                        else:
+                            track_poly = tracked_geom
+                    except Exception:
+                        # on any failure fall back to a small centroid buffer
+                        try:
+                            c = tracked_geom.centroid
+                            track_poly = Point(c.x, c.y).buffer(0.5)
+                        except Exception:
+                            track_poly = ego_poly
+
+                    # compute overlap ratio (relative to ego footprint area)
+                    try:
+                        overlap_area = float(ego_poly.intersection(track_poly).area)
+                    except Exception:
+                        overlap_area = 0.0
+
+                    ego_area = float(ego_poly.area) + 1e-6
+                    overlap_ratio = np.clip(overlap_area / ego_area, 0.0, 1.0)
+
+                    # simple linear mapping: severity in [0,1] where 1.0 is safe
+                    collision_score = 1.0 - overlap_ratio
+
+                    # if the tracked object is not an agent (static), be slightly
+                    # less punitive to mirror previous 0.5 behavior for non-agents
+                    if tracked_object.tracked_object_type not in AGENT_TYPES:
+                        # blend the collision score towards 0.5 for static objects
+                        collision_score = 0.5 + 0.5 * collision_score
+
+                    # maintain worst-severity (min) across multiple collisions
+                    no_collision_scores[proposal_idx] = min(
+                        no_collision_scores[proposal_idx], float(np.clip(collision_score, 0.0, 1.0))
                     )
-                    no_collision_scores[proposal_idx] = np.minimum(
-                        no_collision_scores[proposal_idx], no_at_fault_collision_score
-                    )
+
+                    # record earliest collision time if applicable
                     self._collision_time_idcs[proposal_idx] = min(
                         time_idx, self._collision_time_idcs[proposal_idx]
                     )
