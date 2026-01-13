@@ -20,7 +20,7 @@ from nuplan.planning.simulation.simulation_time_controller.simulation_iteration 
 from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
 
 from arbitration_pdm.common.utils.time_conversion import to_timedelta
-from arbitration_pdm.pdm_scorer import PDMTrajectoryScorer
+from arbitration_pdm.scorer.pdm_scorer_wrapper import PDMTrajectoryScorer
 
 
 class EnvironmentModel:
