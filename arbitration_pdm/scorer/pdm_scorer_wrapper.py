@@ -20,9 +20,6 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.observation.pdm_obser
 from tuplan_garage.planning.simulation.planner.pdm_planner.observation.pdm_observation_utils import (
     get_drivable_area_map,
 )
-from tuplan_garage.planning.simulation.planner.pdm_planner.scoring.pdm_scorer import (
-    PDMScorer,
-)
 from tuplan_garage.planning.simulation.planner.pdm_planner.simulation.pdm_simulator import (
     PDMSimulator,
 )
@@ -36,6 +33,10 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_geometry_ut
     normalize_angle,
 )
 from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_path import PDMPath
+
+from arbitration_pdm.scorer.pdm_scorer import (
+    PDMScorer,
+)
 
 
 class PDMTrajectoryScorer:
