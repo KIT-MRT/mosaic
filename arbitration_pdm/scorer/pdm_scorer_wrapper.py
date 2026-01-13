@@ -70,13 +70,7 @@ class PDMTrajectoryScorer:
         # route dicts (copied from planner._load_route_dicts)
         self._route_roadblock_dict: Dict[str, object] = {}
         self._route_lane_dict: Dict[str, object] = {}
-        route_roadblock_ids = getattr(initialization, "route_roadblock_ids", []) or []
-        if route_roadblock_ids:
-            self._load_route_dicts(route_roadblock_ids)
-        else:
-            raise AssertionError(
-                "PDMTrajectoryScorer: route_roadblock_ids required for centerline computation"
-            )
+        self._load_route_dicts(initialization.route_roadblock_ids)
 
         # observation and scorer
         # for observation we need trajectory_sampling and proposal_sampling; for simplicity
