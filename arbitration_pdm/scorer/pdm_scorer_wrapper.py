@@ -56,19 +56,16 @@ class PDMTrajectoryScorer:
         initialization: PlannerInitialization,
         proposal_sampling: TrajectorySampling,
         map_radius: Optional[float] = None,
-        require_route: bool = True,
     ) -> None:
         """Create the wrapper and copy route dicts from initialization.
 
         :param initialization: PlannerInitialization providing `map_api` and route ids.
         :param proposal_sampling: proposal sampling used for scoring (must match trajectories).
         :param map_radius: optional override for drivable area radius.
-        :param require_route: if True, raise when route/centerline can't be computed.
         """
         self._proposal_sampling = proposal_sampling
         self._map_api = initialization.map_api
         self._map_radius = map_radius
-        self._require_route = require_route
 
         # route dicts (copied from planner._load_route_dicts)
         self._route_roadblock_dict: Dict[str, object] = {}
@@ -76,7 +73,7 @@ class PDMTrajectoryScorer:
         route_roadblock_ids = getattr(initialization, "route_roadblock_ids", []) or []
         if route_roadblock_ids:
             self._load_route_dicts(route_roadblock_ids)
-        elif require_route:
+        else:
             raise AssertionError(
                 "PDMTrajectoryScorer: route_roadblock_ids required for centerline computation"
             )
@@ -149,13 +146,9 @@ class PDMTrajectoryScorer:
         # need a starting lane
         current_lane = self._get_starting_lane(ego_state)
         if current_lane is None:
-            if self._require_route:
-                raise AssertionError(
-                    "PDMTrajectoryScorer: could not determine starting lane for centerline"
-                )
-            else:
-                self._centerline = None
-                return
+            raise AssertionError(
+                "PDMTrajectoryScorer: could not determine starting lane for centerline"
+            )
 
         centerline_discrete_path = self._get_discrete_centerline(current_lane)
         self._centerline = PDMPath(centerline_discrete_path)
@@ -186,7 +179,7 @@ class PDMTrajectoryScorer:
                 "PDMTrajectoryScorer: scorer.update(current_input) must be called before score()"
             )
 
-        if self._centerline is None and self._require_route:
+        if self._centerline is None:
             raise AssertionError(
                 "PDMTrajectoryScorer: centerline not initialized; call update() after initialization with valid route"
             )
@@ -223,7 +216,7 @@ class PDMTrajectoryScorer:
                 "PDMTrajectoryScorer: scorer.update(current_input) must be called before validation()"
             )
 
-        if self._centerline is None and self._require_route:
+        if self._centerline is None:
             raise AssertionError(
                 "PDMTrajectoryScorer: centerline not initialized; call update() after initialization with valid route"
             )
