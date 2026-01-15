@@ -1,21 +1,15 @@
-from typing import Optional, cast
+from typing import Optional
 
 import numpy as np
 import numpy.typing as npt
 from nuplan.common.actor_state.ego_state import EgoState
 from nuplan.common.actor_state.state_representation import (
     StateSE2,
-    TimeDuration,
-    TimePoint,
 )
 from nuplan.common.maps.abstract_map_objects import (
     LaneGraphEdgeMapObject,
     RoadBlockGraphEdgeMapObject,
 )
-from nuplan.planning.simulation.trajectory.interpolated_trajectory import (
-    InterpolatedTrajectory,
-)
-from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
 from shapely.geometry import Point
 from tuplan_garage.planning.simulation.planner.pdm_planner.observation.pdm_occupancy_map import (
     PDMOccupancyMap,
@@ -23,28 +17,9 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.observation.pdm_occup
 from tuplan_garage.planning.simulation.planner.pdm_planner.utils.graph_search.dijkstra import (
     Dijkstra,
 )
-from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_array_representation import (
-    ego_states_to_state_array,
-)
 from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_geometry_utils import (
     normalize_angle,
 )
-
-
-def trajectory_to_state_array(
-    trajectory: InterpolatedTrajectory, trajectory_sampling: TrajectorySampling
-) -> npt.NDArray[np.float64]:
-    """Resample an InterpolatedTrajectory to desired sampling and convert to state array."""
-    step_time: TimeDuration = TimeDuration.from_s(trajectory_sampling.step_time)
-    num_poses = trajectory_sampling.num_poses
-    assert num_poses is not None
-
-    time_points: list[TimePoint] = [
-        trajectory.start_time + step_time * i for i in range(num_poses + 1)
-    ]
-    ego_states = cast(list[EgoState], trajectory.get_state_at_times(time_points))
-
-    return ego_states_to_state_array(ego_states)
 
 
 def get_discrete_centerline(
@@ -81,7 +56,7 @@ def get_starting_lane(
     ego_state: EgoState,
     drivable_area_map: PDMOccupancyMap,
     route_lane_dict: dict[str, LaneGraphEdgeMapObject],
-) -> Optional[LaneGraphEdgeMapObject]:
+) -> LaneGraphEdgeMapObject:
     """
     Returns the most suitable starting lane, in ego's vicinity.
     :param ego_state: state of ego-vehicle
@@ -110,6 +85,11 @@ def get_starting_lane(
             if distance < closest_distance:
                 starting_lane = edge
                 closest_distance = distance
+
+    if starting_lane is None:
+        raise AssertionError(
+            "PDMTrajectoryScorer: could not determine starting lane for centerline"
+        )
 
     return starting_lane
 

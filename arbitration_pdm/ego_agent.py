@@ -35,6 +35,12 @@ class EgoAgent(AbstractPlanner):
         scoring_sampling: TrajectorySampling = TrajectorySampling(
             time_horizon=4.0, interval_length=0.1
         )
+        map_radius: float = 50.0
+        cost_estimator: TrajectoryCostEstimator.Parameters = (
+            TrajectoryCostEstimator.Parameters(
+                trajectory_sampling=scoring_sampling,
+            )
+        )
         emergency_stop_behavior: EmergencyStopBehavior.Parameters = (
             EmergencyStopBehavior.Parameters(
                 emergency_brake_planner=EmergencyStopPlanner.Parameters(
@@ -54,7 +60,9 @@ class EgoAgent(AbstractPlanner):
 
         self.environment_model = EnvironmentModel(
             EnvironmentModel.Parameters(
-                self.parameters.trajectory_sampling, self.parameters.scoring_sampling
+                self.parameters.trajectory_sampling,
+                self.parameters.scoring_sampling,
+                self.parameters.map_radius,
             )
         )
         self.initialize_arbitration_graph()
@@ -69,7 +77,7 @@ class EgoAgent(AbstractPlanner):
         )
 
         self.verifier = TrajectoryVerifier()
-        self.cost_estimator = TrajectoryCostEstimator()
+        self.cost_estimator = TrajectoryCostEstimator(self.parameters.cost_estimator)
         self.cost_arbitrator = CostArbitrator(
             name="CostArbitrator", verifier=self.verifier
         )
