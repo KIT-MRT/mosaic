@@ -27,6 +27,7 @@ class EnvironmentModel:
     @dataclass
     class Parameters:
         trajectory_sampling: TrajectorySampling
+        scoring_sampling: TrajectorySampling
 
     def __init__(self, parameters: Parameters) -> None:
         self.parameters: EnvironmentModel.Parameters = parameters
@@ -47,7 +48,7 @@ class EnvironmentModel:
         self._map_api = planner_initialization.map_api
 
         self.scorer = PDMTrajectoryScorer(
-            planner_initialization, self.parameters.trajectory_sampling
+            planner_initialization, self.parameters.scoring_sampling
         )
 
     def update(self, planner_input: PlannerInput) -> None:

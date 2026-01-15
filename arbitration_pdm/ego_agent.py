@@ -32,6 +32,9 @@ class EgoAgent(AbstractPlanner):
         trajectory_sampling: TrajectorySampling = TrajectorySampling(
             time_horizon=8.0, interval_length=0.1
         )
+        scoring_sampling: TrajectorySampling = TrajectorySampling(
+            time_horizon=4.0, interval_length=0.1
+        )
         emergency_stop_behavior: EmergencyStopBehavior.Parameters = (
             EmergencyStopBehavior.Parameters(
                 emergency_brake_planner=EmergencyStopPlanner.Parameters(
@@ -50,7 +53,9 @@ class EgoAgent(AbstractPlanner):
         self.parameters: EgoAgent.Parameters = parameters
 
         self.environment_model = EnvironmentModel(
-            EnvironmentModel.Parameters(self.parameters.trajectory_sampling)
+            EnvironmentModel.Parameters(
+                self.parameters.trajectory_sampling, self.parameters.scoring_sampling
+            )
         )
         self.initialize_arbitration_graph()
 
