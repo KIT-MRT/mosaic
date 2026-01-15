@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Union
+from typing import Optional, Union, final
 
 import numpy as np
 import numpy.typing as npt
@@ -31,6 +31,7 @@ from arbitration_pdm.scorer.pdm_scorer import (
 )
 
 
+@final
 class PDMTrajectoryScorer:
     """Wrapper scorer that mirrors planner lifecycle and reuses PDMScorer.
 
@@ -57,11 +58,11 @@ class PDMTrajectoryScorer:
         """
         self._proposal_sampling = proposal_sampling
         self._map_api = initialization.map_api
-        self._map_radius = map_radius
+        self._map_radius = map_radius if map_radius is not None else 50
 
         # route dicts (copied from planner._load_route_dicts)
-        self._route_roadblock_dict: Dict[str, RoadBlockGraphEdgeMapObject] = {}
-        self._route_lane_dict: Dict[str, LaneGraphEdgeMapObject] = {}
+        self._route_roadblock_dict: dict[str, RoadBlockGraphEdgeMapObject] = {}
+        self._route_lane_dict: dict[str, LaneGraphEdgeMapObject] = {}
         self._load_route_dicts(initialization.route_roadblock_ids)
 
         # observation and scorer
@@ -70,7 +71,7 @@ class PDMTrajectoryScorer:
         self._observation = PDMObservation(
             proposal_sampling,
             proposal_sampling,
-            map_radius if map_radius is not None else 50,
+            self._map_radius,
         )
         self._scorer = PDMScorer(proposal_sampling)
 
@@ -82,12 +83,12 @@ class PDMTrajectoryScorer:
         self._drivable_area_map = None
         self._centerline: Optional[PDMPath] = None
 
-    def _load_route_dicts(self, route_roadblock_ids: List[str]) -> None:
-        """Load roadblock and lane dictionaries of the target route from the map-api.
-
-        Copied logic from AbstractPDMPlanner._load_route_dicts.
+    def _load_route_dicts(self, route_roadblock_ids: list[str]) -> None:
         """
-        # remove repeated ids while preserving order
+        Loads roadblock and lane dictionaries of the target route from the map-api.
+        :param route_roadblock_ids: ID's of on-route roadblocks
+        """
+        # remove repeated ids while remaining order in list
         route_roadblock_ids = list(dict.fromkeys(route_roadblock_ids))
 
         self._route_roadblock_dict = {}
@@ -112,9 +113,6 @@ class PDMTrajectoryScorer:
         ego_state, observation = current_input.history.current_state
         self._initial_ego_state = ego_state
 
-        # ensure map radius
-        map_radius = self._map_radius if self._map_radius is not None else 50
-
         # update observation (forecasted occupancy maps)
         self._observation.update(
             ego_state,
@@ -125,7 +123,7 @@ class PDMTrajectoryScorer:
 
         # drivable area map
         self._drivable_area_map = get_drivable_area_map(
-            self._map_api, ego_state, map_radius
+            self._map_api, ego_state, self._map_radius
         )
 
         # compute centerline identical to planner
@@ -144,7 +142,7 @@ class PDMTrajectoryScorer:
         self._centerline = PDMPath(centerline_discrete_path)
 
     def score(
-        self, trajectories: Union[InterpolatedTrajectory, List[InterpolatedTrajectory]]
+        self, trajectories: Union[InterpolatedTrajectory, list[InterpolatedTrajectory]]
     ) -> npt.NDArray[np.float64]:
         """Score one or multiple InterpolatedTrajectory objects.
 
@@ -178,6 +176,7 @@ class PDMTrajectoryScorer:
         # simulate closed-loop execution traces starting from the real ego state
         states = self._simulator.simulate_proposals(states, self._initial_ego_state)
 
+        assert self._drivable_area_map is not None, "drivable area map not initialized"
         scores = self._scorer.score_proposals(
             states,
             self._initial_ego_state,
@@ -192,7 +191,7 @@ class PDMTrajectoryScorer:
 
     def is_trajectories_valid(
         self,
-        trajectories: Union[InterpolatedTrajectory, List[InterpolatedTrajectory]],
+        trajectories: Union[InterpolatedTrajectory, list[InterpolatedTrajectory]],
         *,
         infraction: str = "collision",
         time_to_infraction_threshold: float = 2.0,
