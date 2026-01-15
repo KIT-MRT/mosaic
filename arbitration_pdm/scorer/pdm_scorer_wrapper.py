@@ -3,7 +3,8 @@ from typing import Dict, List, Optional, Union
 import numpy as np
 import numpy.typing as npt
 from nuplan.common.actor_state.ego_state import EgoState
-from nuplan.common.actor_state.state_representation import StateSE2, TimePoint
+from nuplan.common.maps.abstract_map import RoadBlockGraphEdgeMapObject
+from nuplan.common.maps.abstract_map_objects import LaneGraphEdgeMapObject
 from nuplan.common.maps.maps_datatypes import SemanticMapLayer
 from nuplan.planning.simulation.planner.abstract_planner import (
     PlannerInitialization,
@@ -13,7 +14,6 @@ from nuplan.planning.simulation.trajectory.interpolated_trajectory import (
     InterpolatedTrajectory,
 )
 from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
-from shapely.geometry import Point
 from tuplan_garage.planning.simulation.planner.pdm_planner.observation.pdm_observation import (
     PDMObservation,
 )
@@ -23,15 +23,9 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.observation.pdm_obser
 from tuplan_garage.planning.simulation.planner.pdm_planner.simulation.pdm_simulator import (
     PDMSimulator,
 )
-from tuplan_garage.planning.simulation.planner.pdm_planner.utils.graph_search.dijkstra import (
-    Dijkstra,
-)
-from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_geometry_utils import (
-    normalize_angle,
-)
 from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_path import PDMPath
 
-import arbitration_pdm.scorer.utils as utils
+import arbitration_pdm.scorer.utils as scorer_utils
 from arbitration_pdm.scorer.pdm_scorer import (
     PDMScorer,
 )
@@ -66,8 +60,8 @@ class PDMTrajectoryScorer:
         self._map_radius = map_radius
 
         # route dicts (copied from planner._load_route_dicts)
-        self._route_roadblock_dict: Dict[str, object] = {}
-        self._route_lane_dict: Dict[str, object] = {}
+        self._route_roadblock_dict: Dict[str, RoadBlockGraphEdgeMapObject] = {}
+        self._route_lane_dict: Dict[str, LaneGraphEdgeMapObject] = {}
         self._load_route_dicts(initialization.route_roadblock_ids)
 
         # observation and scorer
@@ -136,13 +130,17 @@ class PDMTrajectoryScorer:
 
         # compute centerline identical to planner
         # need a starting lane
-        current_lane = self._get_starting_lane(ego_state)
+        current_lane = scorer_utils.get_starting_lane(
+            ego_state, self._drivable_area_map, self._route_lane_dict
+        )
         if current_lane is None:
             raise AssertionError(
                 "PDMTrajectoryScorer: could not determine starting lane for centerline"
             )
 
-        centerline_discrete_path = self._get_discrete_centerline(current_lane)
+        centerline_discrete_path = scorer_utils.get_discrete_centerline(
+            current_lane, self._route_lane_dict, self._route_roadblock_dict
+        )
         self._centerline = PDMPath(centerline_discrete_path)
 
     def score(
@@ -160,7 +158,7 @@ class PDMTrajectoryScorer:
 
         # Convert each trajectory to a (T, state_dim) array
         states_list = [
-            utils.trajectory_to_state_array(traj, self._proposal_sampling)
+            scorer_utils.trajectory_to_state_array(traj, self._proposal_sampling)
             for traj in trajectories_list
         ]
 
@@ -224,7 +222,7 @@ class PDMTrajectoryScorer:
 
         # Convert each trajectory to state array using the helper
         states_list = [
-            utils.trajectory_to_state_array(traj, self._proposal_sampling)
+            scorer_utils.trajectory_to_state_array(traj, self._proposal_sampling)
             for traj in traj_list
         ]
 
@@ -263,94 +261,3 @@ class PDMTrajectoryScorer:
     def is_trajectory_valid(self, trajectory: InterpolatedTrajectory, **kwargs) -> bool:
         """Convenience wrapper returning a single boolean for a single trajectory."""
         return bool(self.is_trajectories_valid(trajectory, **kwargs))
-
-    # --- helper methods copied from AbstractPDMPlanner; minimal set ---
-    def _get_discrete_centerline(
-        self, current_lane, search_depth: int = 30
-    ) -> List[StateSE2]:
-        """Compute discrete centerline by applying Dijkstra search on lane-graph.
-
-        Logic copied from AbstractPDMPlanner._get_discrete_centerline.
-        """
-        roadblocks = list(self._route_roadblock_dict.values())
-        roadblock_ids = list(self._route_roadblock_dict.keys())
-
-        # find current roadblock index
-        start_idx = int(
-            np.argmax(np.array(roadblock_ids) == current_lane.get_roadblock_id())
-        )
-        roadblock_window = roadblocks[start_idx : start_idx + search_depth]
-
-        graph_search = Dijkstra(current_lane, list(self._route_lane_dict.keys()))
-        route_plan, path_found = graph_search.search(roadblock_window[-1])
-
-        centerline_discrete_path: List[StateSE2] = []
-        for lane in route_plan:
-            centerline_discrete_path.extend(lane.baseline_path.discrete_path)
-
-        return centerline_discrete_path
-
-    def _get_starting_lane(self, ego_state: EgoState):
-        """Return most suitable starting lane in ego's vicinity. Copied logic from planner."""
-        starting_lane = None
-        on_route_lanes, heading_error = self._get_intersecting_lanes(ego_state)
-
-        if on_route_lanes:
-            starting_lane = on_route_lanes[
-                int(np.argmin(np.abs(np.array(heading_error))))
-            ]
-            return starting_lane
-
-        else:
-            # find any lane on-route that contains point or is closest
-            closest_distance = np.inf
-            for edge in self._route_lane_dict.values():
-                if edge.contains_point(ego_state.center):
-                    starting_lane = edge
-                    break
-
-                distance = edge.polygon.distance(ego_state.car_footprint.geometry)
-                if distance < closest_distance:
-                    starting_lane = edge
-                    closest_distance = distance
-
-        return starting_lane
-
-    def _get_intersecting_lanes(self, ego_state: EgoState):
-        """Return on-route lanes and heading errors where ego intersects. Copied logic."""
-        assert self._drivable_area_map, (
-            "PDMTrajectoryScorer: Drivable area map must be initialized first!"
-        )
-
-        ego_position_array = ego_state.rear_axle.array
-        ego_rear_axle_point = Point(*ego_position_array)
-        ego_heading = ego_state.rear_axle.heading
-
-        intersecting_lanes = self._drivable_area_map.intersects(ego_rear_axle_point)
-
-        on_route_lanes, on_route_heading_errors = [], []
-        for lane_id in intersecting_lanes:
-            if lane_id in self._route_lane_dict.keys():
-                lane_object = self._route_lane_dict[lane_id]
-                lane_discrete_path: List[StateSE2] = (
-                    lane_object.baseline_path.discrete_path
-                )
-                lane_state_se2_array = np.array(
-                    [state.array for state in lane_discrete_path], dtype=np.float64
-                )
-
-                lane_distances = (
-                    ego_position_array[None, ...] - lane_state_se2_array
-                ) ** 2
-                lane_distances = lane_distances.sum(axis=-1) ** 0.5
-
-                heading_error = (
-                    lane_discrete_path[int(np.argmin(lane_distances))].heading
-                    - ego_heading
-                )
-                heading_error = abs(normalize_angle(heading_error))
-
-                on_route_lanes.append(lane_object)
-                on_route_heading_errors.append(heading_error)
-
-        return on_route_lanes, on_route_heading_errors
