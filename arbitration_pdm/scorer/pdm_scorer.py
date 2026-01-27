@@ -98,6 +98,9 @@ class PDMScorer:
         self._collision_time_idcs: Optional[npt.NDArray[np.float64]] = None
         self._ttc_time_idcs: Optional[npt.NDArray[np.float64]] = None
 
+        if not np.isclose(SAFETY_METRICS_WEIGHTS.sum(), 1.0):
+            raise ValueError("SAFETY_METRICS_WEIGHTS must sum to 1.0")
+
     def time_to_at_fault_collision(self, proposal_idx: int) -> float:
         """
         Returns time to at-fault collision for given proposal
@@ -175,11 +178,9 @@ class PDMScorer:
         """
 
         # compute safety scores as weighted average of multi_metrics
-        if SAFETY_METRICS_WEIGHTS.sum() == 0.0:
-            safety_scores = np.ones(self._num_proposals, dtype=np.float64)
-        else:
-            safety_scores = (self._multi_metrics * SAFETY_METRICS_WEIGHTS[..., None]).sum(axis=0)
-            safety_scores = safety_scores / float(SAFETY_METRICS_WEIGHTS.sum())
+        # TODO: Rename multi_metrics to safety_metrics if they are not multiplicative anymore
+        safety_scores = (self._multi_metrics * SAFETY_METRICS_WEIGHTS[..., None]).sum(axis=0)
+        safety_scores /= SAFETY_METRICS_WEIGHTS.sum()
 
         # normalize and fill progress values
         # progress is already normalized per-proposal to [0,1] using expected achievable progress
