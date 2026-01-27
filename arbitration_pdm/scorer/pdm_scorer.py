@@ -61,6 +61,11 @@ PROGRESS_FALLBACK_MAX_METERS = 10.0  # maximum expected progress fallback
 PROGRESS_MIN_EXPECTED_METERS = 0.1  # avoid tiny denominators
 PROGRESS_CAP_TO_CENTERLINE = True  # cap expected progress to remaining centerline length
 
+# Safety aggregation defaults
+# weights for MultiMetricIndex entries (NO_COLLISION, DRIVABLE_AREA, DRIVING_DIRECTION)
+SAFETY_METRICS_WEIGHTS = np.array([0.6, 0.3, 0.1], dtype=np.float64)
+# overall safety weight when fusing with performance metrics
+SAFETY_WEIGHT = 0.7
 
 class PDMScorer:
     """Class to score proposals in PDM pipeline. Re-implements nuPlan's closed-loop metrics."""
@@ -165,12 +170,17 @@ class PDMScorer:
 
     def _aggregate_scores(self) -> npt.NDArray[np.float64]:
         """
-        Aggregates metrics with multiplicative and weighted average.
+        Aggregates metrics by computing a continuous safety score and combining
+        it with the weighted performance metrics.
         :return: array containing score of each proposal
         """
 
-        # accumulate multiplicative metrics
-        multiplicate_metric_scores = self._multi_metrics.prod(axis=0)
+        # compute safety scores as weighted average of multi_metrics
+        if SAFETY_METRICS_WEIGHTS.sum() == 0.0:
+            safety_scores = np.ones(self._num_proposals, dtype=np.float64)
+        else:
+            safety_scores = (self._multi_metrics * SAFETY_METRICS_WEIGHTS[..., None]).sum(axis=0)
+            safety_scores = safety_scores / float(SAFETY_METRICS_WEIGHTS.sum())
 
         # normalize and fill progress values
         # progress is already normalized per-proposal to [0,1] using expected achievable progress
@@ -179,14 +189,12 @@ class PDMScorer:
         normalized_progress[multiplicate_metric_scores == 0.0] = 0.0
         self._weighted_metrics[WeightedMetricIndex.PROGRESS] = normalized_progress
 
-        # accumulate weighted metrics
-        weighted_metric_scores = (
-            self._weighted_metrics * WEIGHTED_METRICS_WEIGHTS[..., None]
-        ).sum(axis=0)
+        # accumulate weighted performance metrics
+        weighted_metric_scores = (self._weighted_metrics * WEIGHTED_METRICS_WEIGHTS[..., None]).sum(axis=0)
         weighted_metric_scores /= WEIGHTED_METRICS_WEIGHTS.sum()
 
-        # calculate final scores
-        final_scores = multiplicate_metric_scores * weighted_metric_scores
+        # final score is fusion of safety and performance
+        final_scores = SAFETY_WEIGHT * safety_scores + (1.0 - SAFETY_WEIGHT) * weighted_metric_scores
 
         return final_scores
 
