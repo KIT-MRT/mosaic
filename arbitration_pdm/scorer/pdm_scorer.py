@@ -383,42 +383,18 @@ class PDMScorer:
                 )
 
                 # 1. at fault collision -> compute continuous severity
+                # TODO: This should probably be reworked. An overlap-ratio of 1.0 is very unlikely.
+                # Also, collisions with static objects will have at most 0.5 severity due to blending.
                 if collisions_at_stopped_track_or_active_front or (
                     ego_in_multiple_lanes_or_nondrivable_area and collision_at_lateral
                 ):
                     ego_poly = self._ego_polygons[proposal_idx, time_idx]
-
-                    # attempt to obtain a polygon representation for the tracked object
-                    tracked_geom = self._observation[time_idx][token]
-                    track_poly = None
-                    try:
-                        # common nuPlan representation: object has a 'box' with to_polygon
-                        if hasattr(tracked_object, "box") and hasattr(tracked_object.box, "to_polygon"):
-                            track_poly = tracked_object.box.to_polygon()
-                        # some observations expose a geometry attribute
-                        elif hasattr(tracked_geom, "geometry"):
-                            track_poly = tracked_geom.geometry
-                        # fallback: use centroid with small buffer
-                        elif hasattr(tracked_geom, "centroid"):
-                            c = tracked_geom.centroid
-                            track_poly = Point(c.x, c.y).buffer(0.5)
-                        else:
-                            track_poly = tracked_geom
-                    except Exception:
-                        # on any failure fall back to a small centroid buffer
-                        try:
-                            c = tracked_geom.centroid
-                            track_poly = Point(c.x, c.y).buffer(0.5)
-                        except Exception:
-                            track_poly = ego_poly
+                    track_poly =tracked_object.box.geometry
 
                     # compute overlap ratio (relative to ego footprint area)
-                    try:
-                        overlap_area = float(ego_poly.intersection(track_poly).area)
-                    except Exception:
-                        overlap_area = 0.0
+                    overlap_area = ego_poly.intersection(track_poly).area
 
-                    ego_area = float(ego_poly.area) + 1e-6
+                    ego_area = ego_poly.area + 1e-6
                     overlap_ratio = np.clip(overlap_area / ego_area, 0.0, 1.0)
 
                     # simple linear mapping: severity in [0,1] where 1.0 is safe
