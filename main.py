@@ -30,6 +30,10 @@ with initialize_config_module(config_module=SIM_CONFIG_PATH):
             "scenario_filter=val14_split",
             "scenario_builder=nuplan",
             "enable_simulation_progress_bar=true",
+            "worker=ray_distributed",
+            "worker.threads_per_node=160",
+            "distributed_mode=SINGLE_NODE",
+            "number_of_gpus_allocated_per_simulation=0.05",
             "hydra.searchpath=[pkg://tuplan_garage.planning.script.config.common, pkg://tuplan_garage.planning.script.config.simulation, pkg://nuplan.planning.script.config.common, pkg://nuplan.planning.script.experiments]",
         ],
     )
