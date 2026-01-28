@@ -63,7 +63,7 @@ PROGRESS_CAP_TO_CENTERLINE = True  # cap expected progress to remaining centerli
 
 # Safety aggregation defaults
 # weights for MultiMetricIndex entries (NO_COLLISION, DRIVABLE_AREA, DRIVING_DIRECTION)
-SAFETY_METRICS_WEIGHTS = np.array([0.6, 0.3, 0.1], dtype=np.float64)
+SAFETY_METRICS_WEIGHTS = np.array([0.8, 0.1, 0.1], dtype=np.float64)
 # overall safety weight when fusing with performance metrics
 SAFETY_WEIGHT = 0.7
 
