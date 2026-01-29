@@ -16,7 +16,6 @@ from nuplan.planning.simulation.observation.idm.utils import (
 )
 from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
 from shapely import Point, creation
-
 from tuplan_garage.planning.simulation.planner.pdm_planner.observation.pdm_observation import (
     PDMObservation,
 )
@@ -186,7 +185,7 @@ class PDMScorer:
         # progress is already normalized per-proposal to [0,1] using expected achievable progress
         normalized_progress = np.array(self._progress_raw, copy=True)
         # zero out progress for proposals that fail multiplicative metrics
-        normalized_progress[multiplicate_metric_scores == 0.0] = 0.0
+        normalized_progress[safety_scores == 0.0] = 0.0
         self._weighted_metrics[WeightedMetricIndex.PROGRESS] = normalized_progress
 
         # accumulate weighted performance metrics
