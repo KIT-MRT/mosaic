@@ -16,7 +16,6 @@ from nuplan.planning.simulation.observation.idm.utils import (
 )
 from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
 from shapely import Point, creation
-
 from tuplan_garage.planning.simulation.planner.pdm_planner.observation.pdm_observation import (
     PDMObservation,
 )
@@ -55,6 +54,17 @@ DRIVING_DIRECTION_VIOLATION_THRESHOLD = 6.0  # [m] (driving direction)
 STOPPED_SPEED_THRESHOLD = 5e-03  # [m/s] (ttc)
 PROGRESS_DISTANCE_THRESHOLD = 0.1  # [m] (progress)
 
+# absolute progress normalization defaults
+PROGRESS_REF_SPEED_FACTOR = 1.0  # multiply ego speed when computing expected progress
+PROGRESS_FALLBACK_MAX_METERS = 10.0  # maximum expected progress fallback
+PROGRESS_MIN_EXPECTED_METERS = 0.1  # avoid tiny denominators
+PROGRESS_CAP_TO_CENTERLINE = True  # cap expected progress to remaining centerline length
+
+# Safety aggregation defaults
+# weights for MultiMetricIndex entries (NO_COLLISION, DRIVABLE_AREA, DRIVING_DIRECTION)
+SAFETY_METRICS_WEIGHTS = np.array([0.8, 0.1, 0.1], dtype=np.float64)
+# overall safety weight when fusing with performance metrics
+SAFETY_WEIGHT = 0.7
 
 class PDMScorer:
     """Class to score proposals in PDM pipeline. Re-implements nuPlan's closed-loop metrics."""
@@ -87,6 +97,9 @@ class PDMScorer:
 
         self._collision_time_idcs: Optional[npt.NDArray[np.float64]] = None
         self._ttc_time_idcs: Optional[npt.NDArray[np.float64]] = None
+
+        if not np.isclose(SAFETY_METRICS_WEIGHTS.sum(), 1.0):
+            raise ValueError("SAFETY_METRICS_WEIGHTS must sum to 1.0")
 
     def time_to_at_fault_collision(self, proposal_idx: int) -> float:
         """
@@ -159,31 +172,29 @@ class PDMScorer:
 
     def _aggregate_scores(self) -> npt.NDArray[np.float64]:
         """
-        Aggregates metrics with multiplicative and weighted average.
+        Aggregates metrics by computing a continuous safety score and combining
+        it with the weighted performance metrics.
         :return: array containing score of each proposal
         """
 
-        # accumulate multiplicative metrics
-        multiplicate_metric_scores = self._multi_metrics.prod(axis=0)
+        # compute safety scores as weighted average of multi_metrics
+        # TODO: Rename multi_metrics to safety_metrics if they are not multiplicative anymore
+        safety_scores = (self._multi_metrics * SAFETY_METRICS_WEIGHTS[..., None]).sum(axis=0)
+        safety_scores /= SAFETY_METRICS_WEIGHTS.sum()
 
         # normalize and fill progress values
-        raw_progress = self._progress_raw * multiplicate_metric_scores
-        max_raw_progress = np.max(raw_progress)
-        if max_raw_progress > PROGRESS_DISTANCE_THRESHOLD:
-            normalized_progress = raw_progress / max_raw_progress
-        else:
-            normalized_progress = np.ones(len(raw_progress), dtype=np.float64)
-            normalized_progress[multiplicate_metric_scores == 0.0] = 0.0
+        # progress is already normalized per-proposal to [0,1] using expected achievable progress
+        normalized_progress = np.array(self._progress_raw, copy=True)
+        # zero out progress for proposals that fail multiplicative metrics
+        normalized_progress[safety_scores == 0.0] = 0.0
         self._weighted_metrics[WeightedMetricIndex.PROGRESS] = normalized_progress
 
-        # accumulate weighted metrics
-        weighted_metric_scores = (
-            self._weighted_metrics * WEIGHTED_METRICS_WEIGHTS[..., None]
-        ).sum(axis=0)
+        # accumulate weighted performance metrics
+        weighted_metric_scores = (self._weighted_metrics * WEIGHTED_METRICS_WEIGHTS[..., None]).sum(axis=0)
         weighted_metric_scores /= WEIGHTED_METRICS_WEIGHTS.sum()
 
-        # calculate final scores
-        final_scores = multiplicate_metric_scores * weighted_metric_scores
+        # final score is fusion of safety and performance
+        final_scores = SAFETY_WEIGHT * safety_scores + (1.0 - SAFETY_WEIGHT) * weighted_metric_scores
 
         return final_scores
 
@@ -318,6 +329,12 @@ class PDMScorer:
     def _calculate_no_at_fault_collision(self) -> None:
         """
         Re-implementation of nuPlan's at-fault collision metric.
+
+        This version computes a continuous collision-severity score in [0,1]
+        based on overlap area between ego footprint and the other object. The
+        resulting metric is 1.0 for no collision, and approaches 0.0 for large
+        overlaps. When multiple collisions occur for the same proposal the
+        worst (minimum) score is used.
         """
         no_collision_scores = np.ones(self._num_proposals, dtype=np.float64)
 
@@ -366,18 +383,36 @@ class PDMScorer:
                     collision_type == CollisionType.ACTIVE_LATERAL_COLLISION
                 )
 
-                # 1. at fault collision
+                # 1. at fault collision -> compute continuous severity
+                # TODO: This should probably be reworked. An overlap-ratio of 1.0 is very unlikely.
+                # Also, collisions with static objects will have at most 0.5 severity due to blending.
                 if collisions_at_stopped_track_or_active_front or (
                     ego_in_multiple_lanes_or_nondrivable_area and collision_at_lateral
                 ):
-                    no_at_fault_collision_score = (
-                        0.0
-                        if tracked_object.tracked_object_type in AGENT_TYPES
-                        else 0.5
+                    ego_poly = self._ego_polygons[proposal_idx, time_idx]
+                    track_poly =tracked_object.box.geometry
+
+                    # compute overlap ratio (relative to ego footprint area)
+                    overlap_area = ego_poly.intersection(track_poly).area
+
+                    ego_area = ego_poly.area + 1e-6
+                    overlap_ratio = np.clip(overlap_area / ego_area, 0.0, 1.0)
+
+                    # simple linear mapping: severity in [0,1] where 1.0 is safe
+                    collision_score = 1.0 - overlap_ratio
+
+                    # if the tracked object is not an agent (static), be slightly
+                    # less punitive to mirror previous 0.5 behavior for non-agents
+                    if tracked_object.tracked_object_type not in AGENT_TYPES:
+                        # blend the collision score towards 0.5 for static objects
+                        collision_score = 0.5 + 0.5 * collision_score
+
+                    # maintain worst-severity (min) across multiple collisions
+                    no_collision_scores[proposal_idx] = min(
+                        no_collision_scores[proposal_idx], float(np.clip(collision_score, 0.0, 1.0))
                     )
-                    no_collision_scores[proposal_idx] = np.minimum(
-                        no_collision_scores[proposal_idx], no_at_fault_collision_score
-                    )
+
+                    # record earliest collision time if applicable
                     self._collision_time_idcs[proposal_idx] = min(
                         time_idx, self._collision_time_idcs[proposal_idx]
                     )
@@ -492,11 +527,12 @@ class PDMScorer:
 
     def _calculate_progress(self) -> None:
         """
-        Re-implementation of nuPlan's progress metric (non-normalized).
-        Calculates progress along the centerline.
+        Re-implementation of nuPlan's progress metric, normalized per-proposal.
+        Calculates progress along the centerline and normalizes it against an
+        expected achievable progress computed from ego speed and horizon.
         """
 
-        # calculate raw progress in meter
+        # calculate raw progress in meter (start->end projection along centerline)
         progress_in_meter = np.zeros(self._num_proposals, dtype=np.float64)
         for proposal_idx in range(self._num_proposals):
             start_point = Point(
@@ -506,7 +542,47 @@ class PDMScorer:
             progress = self._centerline.project([start_point, end_point])
             progress_in_meter[proposal_idx] = progress[1] - progress[0]
 
-        self._progress_raw = np.clip(progress_in_meter, a_min=0, a_max=None)
+        # expected progress by speed over horizon
+        horizon_time_s = self._proposal_sampling.num_poses * self._proposal_sampling.interval_length
+        ego_speed = 0.0
+        try:
+            ego_speed = float(self._initial_ego_state.dynamic_car_state.speed)
+        except Exception:
+            # fallback: try to infer from states array at initial timestep
+            try:
+                vx = self._states[:, 0, StateIndex.VELOCITY_X]
+                vy = self._states[:, 0, StateIndex.VELOCITY_Y]
+                ego_speed = float(np.hypot(vx, vy).mean())
+            except Exception:
+                ego_speed = 0.0
+
+        expected_by_speed = ego_speed * horizon_time_s * PROGRESS_REF_SPEED_FACTOR
+
+        progress_scores = np.zeros(self._num_proposals, dtype=np.float64)
+        for proposal_idx in range(self._num_proposals):
+            expected = expected_by_speed
+
+            # cap to remaining centerline length if available
+            if PROGRESS_CAP_TO_CENTERLINE and self._centerline is not None:
+                try:
+                    proj_start = (
+                        self._centerline.project(
+                            Point(*self._ego_coords[proposal_idx, 0, BBCoordsIndex.CENTER])
+                        )
+                    )
+                    centerline_remaining = max(0.0, self._centerline.length - float(proj_start))
+                    expected = min(expected, centerline_remaining)
+                except Exception:
+                    # if projection fails, ignore centerline cap
+                    pass
+
+            # enforce conservative caps
+            expected = min(expected, PROGRESS_FALLBACK_MAX_METERS)
+            expected = max(expected, PROGRESS_MIN_EXPECTED_METERS)
+
+            progress_scores[proposal_idx] = float(np.clip(progress_in_meter[proposal_idx] / expected, 0.0, 1.0))
+
+        self._progress_raw = progress_scores
 
     def _calculate_is_comfortable(self) -> None:
         """
@@ -523,16 +599,17 @@ class PDMScorer:
 
     def _calculate_drivable_area_compliance(self) -> None:
         """
-        Re-implementation of nuPlan's drivable area compliance metric
+        Re-implementation of nuPlan's drivable area compliance metric.
+        Produces a continuous score in [0,1] representing fraction of timesteps
+        where the ego footprint is inside drivable area (on-route).
         """
-        drivable_area_compliance_scores = np.ones(self._num_proposals, dtype=np.float64)
-        off_road_mask = self._ego_areas[:, :, EgoAreaIndex.NON_DRIVABLE_AREA].any(
-            axis=-1
-        )
-        drivable_area_compliance_scores[off_road_mask] = 0.0
-        self._multi_metrics[
-            MultiMetricIndex.DRIVABLE_AREA
-        ] = drivable_area_compliance_scores
+        # center in polygon mask for on-route drivable polygons
+        on_route_mask = self._ego_areas[:, :, EgoAreaIndex.NON_DRIVABLE_AREA] == False
+        # fraction of timesteps where ego is not in non-drivable area
+        fraction_in_drivable = on_route_mask.sum(axis=1) / float(self._proposal_sampling.num_poses + 1)
+        # ensure in [0,1]
+        fraction_in_drivable = np.clip(fraction_in_drivable, 0.0, 1.0)
+        self._multi_metrics[MultiMetricIndex.DRIVABLE_AREA] = fraction_in_drivable
 
     def _calculate_driving_direction_compliance(self) -> None:
         """
