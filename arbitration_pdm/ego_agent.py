@@ -39,6 +39,7 @@ class EgoAgent(AbstractPlanner):
         cost_estimator: TrajectoryCostEstimator.Parameters = (
             TrajectoryCostEstimator.Parameters(
                 trajectory_sampling=scoring_sampling,
+                logging_enabled=True,
             )
         )
         emergency_stop_behavior: EmergencyStopBehavior.Parameters = (

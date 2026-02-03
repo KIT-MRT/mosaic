@@ -1,7 +1,11 @@
+import json
+import logging
+import os
 from dataclasses import dataclass
 from typing import final
 
 import numpy as np
+import ray
 from arbitration_graphs import CostEstimator
 from arbitration_graphs.typing import Time
 from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
@@ -21,6 +25,8 @@ class TrajectoryCostEstimator(CostEstimator):
     @dataclass
     class Parameters:
         trajectory_sampling: TrajectorySampling
+        logging_enabled: bool
+        log_dir: str = "logs"
 
     def __init__(self, parameters: Parameters) -> None:
         super().__init__()
@@ -30,6 +36,9 @@ class TrajectoryCostEstimator(CostEstimator):
             self.parameters.trajectory_sampling
         )
         self._scorer: PDMScorer = PDMScorer(self.parameters.trajectory_sampling)
+
+        self._logger: logging.Logger = self._setup_logger()
+        self._ray_metadata: dict[str, object] = {}
 
     @override
     def estimate_cost(
@@ -68,7 +77,71 @@ class TrajectoryCostEstimator(CostEstimator):
             raise ValueError(
                 f"Expected score shape (1,), got {scores.shape} when scoring trajectory."
             )
+
+        if self.parameters.logging_enabled:
+            self._log_scoring(time, command, is_active, float(scores[0]))
+
         return -scores[0]
+
+    def _setup_logger(self) -> logging.Logger:
+        """
+        Create a per-worker logger that writes JSON lines including Ray metadata.
+        """
+        logger = logging.getLogger(f"trajectory_cost_estimator_{id(self)}")
+        logger.setLevel(logging.INFO)
+        # Disable propagation to parent loggers (prevents printing to stdout)
+        logger.propagate = False
+
+        if not logger.hasHandlers():
+            # Ensure log directory exists
+            os.makedirs(self.parameters.log_dir, exist_ok=True)
+
+            # Get Ray metadata
+            worker_id = ray.get_runtime_context().get_worker_id()
+            task_id = ray.get_runtime_context().get_task_id()
+
+            log_file = os.path.join(
+                self.parameters.log_dir, f"trajectory_costs_{worker_id}_{task_id}.jsonl"
+            )
+
+            handler = logging.FileHandler(log_file, mode="a")
+            formatter = logging.Formatter("%(message)s")  # we log full JSON ourselves
+            handler.setFormatter(formatter)
+            logger.addHandler(handler)
+
+            # Store metadata for reuse in log entries
+            self._ray_metadata = {
+                "task_id": task_id,
+                "worker_id": worker_id,
+            }
+
+        return logger
+
+    def _log_scoring(
+        self,
+        time: Time,
+        command: Command,
+        is_active: bool,
+        score: float,
+    ) -> None:
+
+        log = {
+            "time": time.total_seconds(),
+            "command": command.name,
+            "is_active": is_active,
+            "final_score": score,
+            "components": {
+                "multi_metrics": list(
+                    map(float, self._scorer._multi_metrics[:, 0].tolist())
+                ),
+                "weighted_metrics": list(
+                    map(float, self._scorer._weighted_metrics[:, 0].tolist())
+                ),
+            },
+            **self._ray_metadata,
+        }
+
+        self._logger.info(json.dumps(log))
 
     def __getstate__(self) -> dict[str, object]:
         """
