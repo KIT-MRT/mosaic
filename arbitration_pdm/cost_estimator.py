@@ -2,12 +2,14 @@ import json
 import logging
 import os
 from dataclasses import dataclass
-from typing import final
+from datetime import timedelta
+from typing import cast, final
 
 import git
 import numpy as np
+import numpy.typing as npt
 import ray
-from arbitration_graphs import CostEstimator
+from arbitration_graphs import BatchCostEstimator
 from arbitration_graphs.typing import Time
 from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
 from tuplan_garage.planning.simulation.planner.pdm_planner.simulation.pdm_simulator import (
@@ -22,7 +24,7 @@ from arbitration_pdm.scorer.pdm_scorer import PDMScorer
 
 
 @final
-class TrajectoryCostEstimator(CostEstimator):
+class TrajectoryCostEstimator(BatchCostEstimator):
     @dataclass
     class Parameters:
         trajectory_sampling: TrajectorySampling
@@ -42,14 +44,13 @@ class TrajectoryCostEstimator(CostEstimator):
         self._ray_metadata: dict[str, object] = {}
 
     @override
-    def estimate_cost(
+    def estimate_costs(
         self,
         time: Time,
         environment_model: EnvironmentModel,
-        command: Command,
-        is_active: bool,
-    ) -> float:
-        trajectories_list = [command.trajectory]
+        candidates: list[BatchCostEstimator.Candidate],
+    ) -> list[float]:
+        trajectories_list = [cast(Command, c.command).trajectory for c in candidates]
 
         # Convert each trajectory to a (T, state_dim) array
         states_list = [
@@ -74,15 +75,18 @@ class TrajectoryCostEstimator(CostEstimator):
             environment_model.drivable_area_map,
             environment_model.map_api,
         )
-        if scores.shape != (1,):
+
+        if scores.shape != (len(candidates),):
             raise ValueError(
-                f"Expected score shape (1,), got {scores.shape} when scoring trajectory."
+                f"Expected score shape ({len(candidates)},), got {scores.shape}"
             )
 
         if self.parameters.logging_enabled:
-            self._log_scoring(time, command, is_active, float(scores[0]))
+            self._log_scoring(time, candidates, scores)
 
-        return -scores[0]
+        costs = [-score for score in scores]
+
+        return costs
 
     def _setup_logger(self) -> logging.Logger:
         """
@@ -95,8 +99,8 @@ class TrajectoryCostEstimator(CostEstimator):
 
         if not logger.hasHandlers():
             # Get Ray metadata
-            worker_id = ray.get_runtime_context().get_worker_id()
-            task_id = ray.get_runtime_context().get_task_id()
+            worker_id = ray.get_runtime_context().get_worker_id()  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
+            task_id = ray.get_runtime_context().get_task_id()  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
 
             # Get current git commit hash
             repo = git.Repo(search_parent_directories=True)
@@ -127,28 +131,40 @@ class TrajectoryCostEstimator(CostEstimator):
     def _log_scoring(
         self,
         time: Time,
-        command: Command,
-        is_active: bool,
-        score: float,
+        candidates: list[BatchCostEstimator.Candidate],
+        scores: npt.NDArray[np.float64],
     ) -> None:
+        proposals_log: list[dict[str, object]] = []
+        for i, (candidate, score) in enumerate(zip(candidates, scores)):
+            command = cast(Command, candidate.command)
 
-        log = {
+            # TODO: Add an interface to the scorer to get the individual metric components
+            # instead of reaching into protected members here
+            proposals_log.append(
+                {
+                    "command": command.name,
+                    "is_active": candidate.is_active,
+                    "final_score": float(score),
+                    "components": {
+                        "multi_metrics": list(
+                            map(float, self._scorer._multi_metrics[:, i].tolist())
+                        ),
+                        "weighted_metrics": list(
+                            map(float, self._scorer._weighted_metrics[:, i].tolist())
+                        ),
+                    },
+                }
+            )
+
+        assert isinstance(time, timedelta)
+        entry = {
             "time": time.total_seconds(),
-            "command": command.name,
-            "is_active": is_active,
-            "final_score": score,
-            "components": {
-                "multi_metrics": list(
-                    map(float, self._scorer._multi_metrics[:, 0].tolist())
-                ),
-                "weighted_metrics": list(
-                    map(float, self._scorer._weighted_metrics[:, 0].tolist())
-                ),
-            },
+            "num_candidates": len(candidates),
+            "proposals": proposals_log,
             **self._ray_metadata,
         }
 
-        self._logger.info(json.dumps(log))
+        self._logger.info(json.dumps(entry))
 
     def __getstate__(self) -> dict[str, object]:
         """
