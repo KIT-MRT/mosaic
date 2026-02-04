@@ -25,3 +25,10 @@ include = ["arbitration_pdm*"]
 [tool.setuptools.package-data]
 "arbitration_pdm" = ["**/*.yaml"]
 
+[tool.uv.sources]
+nuplan-devkit = { git = "https://github.com/ll-nick/nuplan-devkit" }
+tuplan-garage = { git = "https://github.com/ll-nick/tuplan_garage" }
+
+[tool.uv]
+prerelease = "allow"
+
