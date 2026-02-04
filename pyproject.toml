@@ -22,3 +22,6 @@ dependencies = [
 where = ["."]
 include = ["arbitration_pdm*"]
 
+[tool.setuptools.package-data]
+"arbitration_pdm" = ["**/*.yaml"]
+
