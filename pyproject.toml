@@ -14,6 +14,7 @@ readme = "README.md"
 requires-python = "==3.9.*"
 dependencies = [
     "arbitration_graphs >=1.0.0",
+    "flow-drive",
     "nuplan-devkit",
     "tuplan-garage",
 ]
@@ -28,7 +29,14 @@ include = ["arbitration_pdm*"]
 [tool.uv.sources]
 nuplan-devkit = { git = "https://github.com/ll-nick/nuplan-devkit" }
 tuplan-garage = { git = "https://github.com/ll-nick/tuplan_garage" }
+flow-drive = { path = "../flowdrive" }
 
 [tool.uv]
+override-dependencies = [
+    # Flowdrive and nuplan-devkit have conflicting dependencies, so we need to override them here
+    "pytorch-lightning==2.0.1",
+    "torch==2.8.0",
+    "torchvision==0.23.0",
+]
 prerelease = "allow"
 
