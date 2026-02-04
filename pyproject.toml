@@ -18,3 +18,7 @@ dependencies = [
     "tuplan-garage",
 ]
 
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["arbitration_pdm*"]
+
