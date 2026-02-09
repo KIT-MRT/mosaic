@@ -52,6 +52,7 @@ WEIGHTED_METRICS_WEIGHTS[WeightedMetricIndex.COMFORTABLE] = 2.0
 DRIVING_DIRECTION_COMPLIANCE_THRESHOLD = 2.0  # [m] (driving direction)
 DRIVING_DIRECTION_VIOLATION_THRESHOLD = 6.0  # [m] (driving direction)
 STOPPED_SPEED_THRESHOLD = 5e-03  # [m/s] (ttc)
+TTC_TIME_HORIZON = 3.0  # [s] projection horizon for TTC, matches nuPlan's time_horizon
 PROGRESS_DISTANCE_THRESHOLD = 0.1  # [m] (progress)
 
 # absolute progress normalization defaults
@@ -425,6 +426,12 @@ class PDMScorer:
     def _calculate_ttc(self):
         """
         Re-implementation of nuPlan's time-to-collision metric.
+
+        Produces a continuous score in [0,1] per proposal based on the earliest
+        projected collision time.  A collision projected at t=0 scores 0.0
+        (imminent), while one at the edge of the projection horizon scores
+        close to 1.0.  No collision yields 1.0.  The score is linearly mapped
+        as  min_ttc_seconds / TTC_TIME_HORIZON  (clamped to [0,1]).
         """
 
         ttc_scores = np.ones(self._num_proposals, dtype=np.float64)
@@ -433,11 +440,12 @@ class PDMScorer:
             for proposal_idx in range(self._num_proposals)
         }
 
-        # calculate TTC for 1s in the future with less temporal resolution.
-        future_time_idcs = np.arange(0, 10, 3)
+        # project ego forward up to TTC_TIME_HORIZON at proposal interval resolution
+        ttc_steps = int(TTC_TIME_HORIZON / self._proposal_sampling.interval_length)
+        future_time_idcs = np.arange(0, ttc_steps + 1, 1)
         n_future_steps = len(future_time_idcs)
 
-        # create polygons for each ego position and 1s future projection
+        # create projected ego polygons for each position and future time step
         coords_exterior = self._ego_coords.copy()
         coords_exterior[:, :, BBCoordsIndex.CENTER, :] = coords_exterior[
             :, :, BBCoordsIndex.FRONT_LEFT, :
@@ -514,8 +522,10 @@ class PDMScorer:
                         )
                         and not is_agent_behind(ego_rear_axle, track_state)
                     ):
-                        ttc_scores[proposal_idx] = np.minimum(
-                            ttc_scores[proposal_idx], 0.0
+                        ttc_seconds = float(future_time_idx) * self._proposal_sampling.interval_length
+                        ttc_score = float(np.clip(ttc_seconds / TTC_TIME_HORIZON, 0.0, 1.0))
+                        ttc_scores[proposal_idx] = min(
+                            ttc_scores[proposal_idx], ttc_score
                         )
                         self._ttc_time_idcs[proposal_idx] = min(
                             time_idx, self._ttc_time_idcs[proposal_idx]
