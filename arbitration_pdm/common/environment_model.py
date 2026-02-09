@@ -47,6 +47,7 @@ class EnvironmentModel:
         trajectory_sampling: TrajectorySampling
         proposal_sampling: TrajectorySampling
         map_radius: float
+        ttc_horizon: float = 3.0
 
     def __init__(self, parameters: Parameters) -> None:
         self.parameters: EnvironmentModel.Parameters = parameters
@@ -77,6 +78,7 @@ class EnvironmentModel:
             self.parameters.trajectory_sampling,
             self.parameters.proposal_sampling,
             self.parameters.map_radius,
+            ttc_horizon=self.parameters.ttc_horizon,
         )
 
     def update(self, planner_input: PlannerInput) -> None:
