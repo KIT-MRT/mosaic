@@ -2,7 +2,7 @@
 
 ### Setup and Usage
 
-We use [`uv](https://docs.astral.sh/uv/) to manage our Python environment.
+We use [`uv`](https://docs.astral.sh/uv/) to manage the Python environment.
 With the cloned repository, run `uv sync` to install the dependencies.
 Then activate the environment with `source .venv/bin/activate` (or whichever script is appropriate for your shell).
 
