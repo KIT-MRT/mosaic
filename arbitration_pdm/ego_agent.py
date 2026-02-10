@@ -15,8 +15,8 @@ from nuplan.planning.simulation.trajectory.trajectory_sampling import Trajectory
 from typing_extensions import override
 
 from arbitration_pdm.behavior.emergency_stop_behavior import EmergencyStopBehavior
-from arbitration_pdm.behavior.pdm_closed import PDMClosedBehavior
 from arbitration_pdm.behavior.flow_drive import FlowDriveBehavior
+from arbitration_pdm.behavior.pdm_closed import PDMClosedBehavior
 from arbitration_pdm.common.command import Command
 from arbitration_pdm.common.environment_model import EnvironmentModel
 from arbitration_pdm.cost_estimator import TrajectoryCostEstimator
@@ -39,6 +39,7 @@ class EgoAgent(AbstractPlanner):
         cost_estimator: TrajectoryCostEstimator.Parameters = (
             TrajectoryCostEstimator.Parameters(
                 trajectory_sampling=scoring_sampling,
+                logging_enabled=True,
             )
         )
         emergency_stop_behavior: EmergencyStopBehavior.Parameters = (
@@ -84,12 +85,12 @@ class EgoAgent(AbstractPlanner):
 
         self.cost_arbitrator.add_option(
             self.flow_drive_behavior,
-            CostArbitrator.Option.Flags.NO_FLAGS,
+            CostArbitrator.Option.Flags.INTERRUPTABLE,
             self.cost_estimator,
         )
         self.cost_arbitrator.add_option(
             self.pdm_closed_behavior,
-            CostArbitrator.Option.Flags.NO_FLAGS,
+            CostArbitrator.Option.Flags.INTERRUPTABLE,
             self.cost_estimator,
         )
 

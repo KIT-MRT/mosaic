@@ -63,7 +63,7 @@ class PDMClosedBehavior(Behavior):
     def check_commitment_condition(
         self, time: Time, environment_model: EnvironmentModel
     ) -> bool:
-        return False
+        return True
 
     def __getstate__(self) -> dict[str, object]:
         """

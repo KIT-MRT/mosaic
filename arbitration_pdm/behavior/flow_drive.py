@@ -1,6 +1,7 @@
 from importlib import resources
 from pathlib import Path
 
+import flow_drive
 from arbitration_graphs import Behavior
 from arbitration_graphs.typing import Time
 from hydra.utils import instantiate
@@ -13,8 +14,6 @@ from typing_extensions import cast, final, override
 
 from arbitration_pdm.common.command import Command
 from arbitration_pdm.common.environment_model import EnvironmentModel
-
-import flow_drive
 
 
 @final
@@ -69,7 +68,7 @@ class FlowDriveBehavior(Behavior):
     def check_commitment_condition(
         self, time: Time, environment_model: EnvironmentModel
     ) -> bool:
-        return False
+        return True
 
     def __getstate__(self) -> dict[str, object]:
         """
