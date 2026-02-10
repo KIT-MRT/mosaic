@@ -4,6 +4,7 @@ import os
 from dataclasses import dataclass
 from typing import final
 
+import git
 import numpy as np
 import ray
 from arbitration_graphs import CostEstimator
@@ -26,7 +27,7 @@ class TrajectoryCostEstimator(CostEstimator):
     class Parameters:
         trajectory_sampling: TrajectorySampling
         logging_enabled: bool
-        log_dir: str = "logs"
+        log_base_dir: str = "logs"
 
     def __init__(self, parameters: Parameters) -> None:
         super().__init__()
@@ -93,15 +94,21 @@ class TrajectoryCostEstimator(CostEstimator):
         logger.propagate = False
 
         if not logger.hasHandlers():
-            # Ensure log directory exists
-            os.makedirs(self.parameters.log_dir, exist_ok=True)
-
             # Get Ray metadata
             worker_id = ray.get_runtime_context().get_worker_id()
             task_id = ray.get_runtime_context().get_task_id()
 
+            # Get current git commit hash
+            repo = git.Repo(search_parent_directories=True)
+            sha = repo.head.object.hexsha
+
+            log_dir = os.path.join(self.parameters.log_base_dir, sha)
+
+            # Ensure log directory exists
+            os.makedirs(log_dir, exist_ok=True)
+
             log_file = os.path.join(
-                self.parameters.log_dir, f"trajectory_costs_{worker_id}_{task_id}.jsonl"
+                log_dir, f"trajectory_costs_{worker_id}_{task_id}.jsonl"
             )
 
             handler = logging.FileHandler(log_file, mode="a")
