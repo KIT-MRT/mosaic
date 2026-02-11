@@ -17,10 +17,10 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.simulation.pdm_simula
 )
 from typing_extensions import override
 
-import arbitration_pdm.common.utils.trajectory as trajectory_utils
-from arbitration_pdm.common.command import Command
-from arbitration_pdm.common.environment_model import EnvironmentModel
-from arbitration_pdm.scorer.pdm_scorer import PDMScorer
+import mosaic.common.utils.trajectory as trajectory_utils
+from mosaic.common.command import Command
+from mosaic.common.environment_model import EnvironmentModel
+from mosaic.scorer.mosaic_scorer import MosaicScorer
 
 
 @final
@@ -38,7 +38,7 @@ class TrajectoryCostEstimator(BatchCostEstimator):
         self._simulator: PDMSimulator = PDMSimulator(
             self.parameters.trajectory_sampling
         )
-        self._scorer: PDMScorer = PDMScorer(self.parameters.trajectory_sampling)
+        self._scorer: MosaicScorer = MosaicScorer(self.parameters.trajectory_sampling)
 
         self._logger: logging.Logger = self._setup_logger()
         self._ray_metadata: dict[str, object] = {}

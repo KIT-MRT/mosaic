@@ -3,7 +3,7 @@ requires = ["setuptools>=42"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "arbitration_pdm"
+name = "mosaic"
 version = "0.1.0"
 description = "Arbitration Graphs meet PDM trajectory planning"
 authors = [
@@ -21,10 +21,10 @@ dependencies = [
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["arbitration_pdm*"]
+include = ["mosaic*"]
 
 [tool.setuptools.package-data]
-"arbitration_pdm" = ["**/*.yaml"]
+"mosaic" = ["**/*.yaml"]
 
 [tool.uv.sources]
 nuplan-devkit = { git = "https://github.com/ll-nick/nuplan-devkit" }

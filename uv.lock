@@ -249,25 +249,6 @@ wheels = [
 ]
 
 [[package]]
-name = "arbitration-pdm"
-version = "0.1.0"
-source = { editable = "." }
-dependencies = [
-    { name = "arbitration-graphs" },
-    { name = "flow-drive" },
-    { name = "nuplan-devkit" },
-    { name = "tuplan-garage" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "arbitration-graphs", specifier = ">=2.0.0" },
-    { name = "flow-drive", directory = "../flowdrive" },
-    { name = "nuplan-devkit", git = "https://github.com/ll-nick/nuplan-devkit" },
-    { name = "tuplan-garage", git = "https://github.com/ll-nick/tuplan_garage" },
-]
-
-[[package]]
 name = "argon2-cffi"
 version = "25.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -2073,6 +2054,25 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/07/8c/14c2ae915e5f9dca5a22edd68b35be94400719ccfa068a03e0fb63d0f6f6/mock-5.2.0.tar.gz", hash = "sha256:4e460e818629b4b173f32d08bf30d3af8123afbb8e04bb5707a1fd4799e503f0", size = 92796, upload-time = "2025-03-03T12:31:42.911Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/bd/d9/617e6af809bf3a1d468e0d58c3997b1dc219a9a9202e650d30c2fc85d481/mock-5.2.0-py3-none-any.whl", hash = "sha256:7ba87f72ca0e915175596069dbbcc7c75af7b5e9b9bc107ad6349ede0819982f", size = 31617, upload-time = "2025-03-03T12:31:41.518Z" },
+]
+
+[[package]]
+name = "mosaic"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "arbitration-graphs" },
+    { name = "flow-drive" },
+    { name = "nuplan-devkit" },
+    { name = "tuplan-garage" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "arbitration-graphs", specifier = ">=2.0.0" },
+    { name = "flow-drive", directory = "../flowdrive" },
+    { name = "nuplan-devkit", git = "https://github.com/ll-nick/nuplan-devkit" },
+    { name = "tuplan-garage", git = "https://github.com/ll-nick/tuplan_garage" },
 ]
 
 [[package]]

@@ -2,8 +2,8 @@ from arbitration_graphs.typing import Time
 from arbitration_graphs.verification import Result, Verifier
 from typing_extensions import override
 
-from arbitration_pdm.common.command import Command
-from arbitration_pdm.common.environment_model import EnvironmentModel
+from mosaic.common.command import Command
+from mosaic.common.environment_model import EnvironmentModel
 
 
 class VerificationResult(Result):

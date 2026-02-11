@@ -36,9 +36,8 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.simulation.pdm_simula
 )
 from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_path import PDMPath
 
-from arbitration_pdm.common.utils import map as map_utils
-from arbitration_pdm.common.utils.time_conversion import to_timedelta
-from arbitration_pdm.scorer.pdm_scorer import PDMScorer
+from mosaic.common.utils import map as map_utils
+from mosaic.common.utils.time_conversion import to_timedelta
 
 
 class EnvironmentModel:
