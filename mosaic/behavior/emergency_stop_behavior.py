@@ -1,52 +1,36 @@
-from importlib import resources
+from dataclasses import dataclass
 
 from arbitration_graphs import Behavior
 from arbitration_graphs.typing import Time
-from hydra.utils import instantiate
-from nuplan.planning.simulation.planner.abstract_planner import (
-    AbstractPlanner,
-)
 from nuplan.planning.simulation.trajectory.abstract_trajectory import AbstractTrajectory
-from omegaconf import OmegaConf
-from typing_extensions import cast, final, override
+from typing_extensions import cast, override
 
-from arbitration_pdm.common.command import Command
-from arbitration_pdm.common.environment_model import EnvironmentModel
+from mosaic.common.command import Command
+from mosaic.common.environment_model import EnvironmentModel
+from mosaic.planner.emergency_stop_planner import (
+    EmergencyStopPlanner,
+)
 
 
-@final
-class PDMClosedBehavior(Behavior):
+class EmergencyStopBehavior(Behavior):
+    @dataclass
+    class Parameters:
+        emergency_brake_planner: EmergencyStopPlanner.Parameters
+
     def __init__(
         self,
-        name: str = "pdm_closed",
+        parameters: Parameters,
+        name: str = "EmergencyStop",
     ):
         super().__init__(name)
-
-        cfg_path = (
-            resources.files("tuplan_garage")
-            / "planning"
-            / "script"
-            / "config"
-            / "simulation"
-            / "planner"
-            / "pdm_closed_planner.yaml"
+        self.planner: EmergencyStopPlanner = EmergencyStopPlanner(
+            parameters.emergency_brake_planner
         )
-
-        with cfg_path.open("r") as f:
-            pdm_closed_cfg = OmegaConf.load(f)
-
-        self.planner = cast(
-            AbstractPlanner, instantiate(pdm_closed_cfg.pdm_closed_planner)
-        )
-
-    def initialize(self, environment_model: EnvironmentModel) -> None:
-        self.planner.initialize(environment_model.planner_initialization)
 
     @override
     def get_command(self, time: Time, environment_model: EnvironmentModel) -> Command:
-        trajectory: AbstractTrajectory = self.planner.compute_planner_trajectory(
-            environment_model.planner_input
-        )
+        ego_state = environment_model.ego_state
+        trajectory: AbstractTrajectory = self.planner.plan_trajectory(ego_state)
 
         return Command(
             name=self.name(),
@@ -63,7 +47,7 @@ class PDMClosedBehavior(Behavior):
     def check_commitment_condition(
         self, time: Time, environment_model: EnvironmentModel
     ) -> bool:
-        return True
+        return False
 
     def __getstate__(self) -> dict[str, object]:
         """

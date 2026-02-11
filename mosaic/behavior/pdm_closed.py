@@ -10,15 +10,15 @@ from nuplan.planning.simulation.trajectory.abstract_trajectory import AbstractTr
 from omegaconf import OmegaConf
 from typing_extensions import cast, final, override
 
-from arbitration_pdm.common.command import Command
-from arbitration_pdm.common.environment_model import EnvironmentModel
+from mosaic.common.command import Command
+from mosaic.common.environment_model import EnvironmentModel
 
 
 @final
-class PDMOpenBehavior(Behavior):
+class PDMClosedBehavior(Behavior):
     def __init__(
         self,
-        name: str = "pdm_open",
+        name: str = "pdm_closed",
     ):
         super().__init__(name)
 
@@ -29,20 +29,15 @@ class PDMOpenBehavior(Behavior):
             / "config"
             / "simulation"
             / "planner"
-            / "pdm_open_planner.yaml"
+            / "pdm_closed_planner.yaml"
         )
 
         with cfg_path.open("r") as f:
-            pdm_open_cfg = OmegaConf.load(f)
+            pdm_closed_cfg = OmegaConf.load(f)
 
-        # Define PDM Open checkpoint path
-        pdm_open_cfg.pdm_open_planner.checkpoint_path = str(
-            resources.files("arbitration_pdm").parent
-            / "ckpt"
-            / "pdm_open_checkpoint.ckpt"
+        self.planner = cast(
+            AbstractPlanner, instantiate(pdm_closed_cfg.pdm_closed_planner)
         )
-
-        self.planner = cast(AbstractPlanner, instantiate(pdm_open_cfg.pdm_open_planner))
 
     def initialize(self, environment_model: EnvironmentModel) -> None:
         self.planner.initialize(environment_model.planner_initialization)
@@ -68,7 +63,7 @@ class PDMOpenBehavior(Behavior):
     def check_commitment_condition(
         self, time: Time, environment_model: EnvironmentModel
     ) -> bool:
-        return False
+        return True
 
     def __getstate__(self) -> dict[str, object]:
         """

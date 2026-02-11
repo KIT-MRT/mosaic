@@ -17,10 +17,10 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.simulation.pdm_simula
 )
 from typing_extensions import override
 
-import arbitration_pdm.common.utils.trajectory as trajectory_utils
-from arbitration_pdm.common.command import Command
-from arbitration_pdm.common.environment_model import EnvironmentModel
-from arbitration_pdm.scorer.pdm_scorer import PDMScorer
+import mosaic.common.utils.trajectory as trajectory_utils
+from mosaic.common.command import Command
+from mosaic.common.environment_model import EnvironmentModel
+from mosaic.scorer.pdm_scorer import PDMScorer
 
 
 @final

@@ -1,10 +1,9 @@
-import hydra
-from hydra import initialize_config_module, compose
 from pathlib import Path
 
-from arbitration_pdm.ego_agent import EgoAgent
-
+import hydra
 import matplotlib
+from hydra import compose, initialize_config_module
+from mosaic.ego_agent import EgoAgent
 
 # Prevent matplotlib from trying to use any Xwindows backend
 matplotlib.use("Agg")
@@ -25,7 +24,7 @@ with initialize_config_module(config_module=SIM_CONFIG_PATH):
     cfg = compose(
         config_name=SIM_CONFIG_NAME,
         overrides=[
-            "experiment_name=arbitration_pdm",
+            "experiment_name=mosaic",
             f"+simulation={CHALLENGE}",
             "scenario_filter=val14_split",
             "scenario_builder=nuplan",

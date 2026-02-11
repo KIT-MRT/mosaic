@@ -14,14 +14,14 @@ from nuplan.planning.simulation.trajectory.abstract_trajectory import AbstractTr
 from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
 from typing_extensions import override
 
-from arbitration_pdm.behavior.emergency_stop_behavior import EmergencyStopBehavior
-from arbitration_pdm.behavior.flow_drive import FlowDriveBehavior
-from arbitration_pdm.behavior.pdm_closed import PDMClosedBehavior
-from arbitration_pdm.common.command import Command
-from arbitration_pdm.common.environment_model import EnvironmentModel
-from arbitration_pdm.cost_estimator import TrajectoryCostEstimator
-from arbitration_pdm.planner.emergency_stop_planner import EmergencyStopPlanner
-from arbitration_pdm.verifier import TrajectoryVerifier
+from mosaic.behavior.emergency_stop_behavior import EmergencyStopBehavior
+from mosaic.behavior.flow_drive import FlowDriveBehavior
+from mosaic.behavior.pdm_closed import PDMClosedBehavior
+from mosaic.common.command import Command
+from mosaic.common.environment_model import EnvironmentModel
+from mosaic.cost_estimator import TrajectoryCostEstimator
+from mosaic.planner.emergency_stop_planner import EmergencyStopPlanner
+from mosaic.verifier import TrajectoryVerifier
 
 
 @final

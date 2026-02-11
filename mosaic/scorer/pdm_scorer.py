@@ -59,13 +59,16 @@ PROGRESS_DISTANCE_THRESHOLD = 0.1  # [m] (progress)
 PROGRESS_REF_SPEED_FACTOR = 1.0  # multiply ego speed when computing expected progress
 PROGRESS_FALLBACK_MAX_METERS = 10.0  # maximum expected progress fallback
 PROGRESS_MIN_EXPECTED_METERS = 0.1  # avoid tiny denominators
-PROGRESS_CAP_TO_CENTERLINE = True  # cap expected progress to remaining centerline length
+PROGRESS_CAP_TO_CENTERLINE = (
+    True  # cap expected progress to remaining centerline length
+)
 
 # Safety aggregation defaults
 # weights for MultiMetricIndex entries (NO_COLLISION, DRIVABLE_AREA, DRIVING_DIRECTION)
 SAFETY_METRICS_WEIGHTS = np.array([0.8, 0.1, 0.1], dtype=np.float64)
 # overall safety weight when fusing with performance metrics
 SAFETY_WEIGHT = 0.7
+
 
 class PDMScorer:
     """Class to score proposals in PDM pipeline. Re-implements nuPlan's closed-loop metrics."""
@@ -180,7 +183,9 @@ class PDMScorer:
 
         # compute safety scores as weighted average of multi_metrics
         # TODO: Rename multi_metrics to safety_metrics if they are not multiplicative anymore
-        safety_scores = (self._multi_metrics * SAFETY_METRICS_WEIGHTS[..., None]).sum(axis=0)
+        safety_scores = (self._multi_metrics * SAFETY_METRICS_WEIGHTS[..., None]).sum(
+            axis=0
+        )
         safety_scores /= SAFETY_METRICS_WEIGHTS.sum()
 
         # normalize and fill progress values
@@ -191,11 +196,16 @@ class PDMScorer:
         self._weighted_metrics[WeightedMetricIndex.PROGRESS] = normalized_progress
 
         # accumulate weighted performance metrics
-        weighted_metric_scores = (self._weighted_metrics * WEIGHTED_METRICS_WEIGHTS[..., None]).sum(axis=0)
+        weighted_metric_scores = (
+            self._weighted_metrics * WEIGHTED_METRICS_WEIGHTS[..., None]
+        ).sum(axis=0)
         weighted_metric_scores /= WEIGHTED_METRICS_WEIGHTS.sum()
 
         # final score is fusion of safety and performance
-        final_scores = SAFETY_WEIGHT * safety_scores + (1.0 - SAFETY_WEIGHT) * weighted_metric_scores
+        final_scores = (
+            SAFETY_WEIGHT * safety_scores
+            + (1.0 - SAFETY_WEIGHT) * weighted_metric_scores
+        )
 
         return final_scores
 
@@ -278,9 +288,7 @@ class PDMScorer:
         in_polygons = self._drivable_area_map.points_in_polygons(coordinates)
         in_polygons = in_polygons.reshape(
             len(self._drivable_area_map), n_proposals, n_horizon, n_points
-        ).transpose(
-            1, 2, 0, 3
-        )  # shape: n_proposals, n_horizon, n_polygons, n_points
+        ).transpose(1, 2, 0, 3)  # shape: n_proposals, n_horizon, n_polygons, n_points
 
         drivable_area_on_route_idcs: List[int] = [
             idx
@@ -314,18 +322,18 @@ class PDMScorer:
         batch_nondrivable_area_mask = (corners_in_polygon.sum(axis=-2) > 0).sum(
             axis=-1
         ) < 4
-        self._ego_areas[
-            batch_nondrivable_area_mask, EgoAreaIndex.NON_DRIVABLE_AREA
-        ] = True
+        self._ego_areas[batch_nondrivable_area_mask, EgoAreaIndex.NON_DRIVABLE_AREA] = (
+            True
+        )
 
         # in_oncoming_traffic: if center not in any drivable polygon that is on-route
         batch_oncoming_traffic_mask = np.zeros((n_proposals, n_horizon), dtype=np.bool_)
         batch_oncoming_traffic_mask = (
             center_in_polygon[..., drivable_area_on_route_idcs].sum(axis=-1) == 0
         )
-        self._ego_areas[
-            batch_oncoming_traffic_mask, EgoAreaIndex.ONCOMING_TRAFFIC
-        ] = True
+        self._ego_areas[batch_oncoming_traffic_mask, EgoAreaIndex.ONCOMING_TRAFFIC] = (
+            True
+        )
 
     def _calculate_no_at_fault_collision(self) -> None:
         """
@@ -391,7 +399,7 @@ class PDMScorer:
                     ego_in_multiple_lanes_or_nondrivable_area and collision_at_lateral
                 ):
                     ego_poly = self._ego_polygons[proposal_idx, time_idx]
-                    track_poly =tracked_object.box.geometry
+                    track_poly = tracked_object.box.geometry
 
                     # compute overlap ratio (relative to ego footprint area)
                     overlap_area = ego_poly.intersection(track_poly).area
@@ -410,7 +418,8 @@ class PDMScorer:
 
                     # maintain worst-severity (min) across multiple collisions
                     no_collision_scores[proposal_idx] = min(
-                        no_collision_scores[proposal_idx], float(np.clip(collision_score, 0.0, 1.0))
+                        no_collision_scores[proposal_idx],
+                        float(np.clip(collision_score, 0.0, 1.0)),
                     )
 
                     # record earliest collision time if applicable
@@ -522,8 +531,13 @@ class PDMScorer:
                         )
                         and not is_agent_behind(ego_rear_axle, track_state)
                     ):
-                        ttc_seconds = float(future_time_idx) * self._proposal_sampling.interval_length
-                        ttc_score = float(np.clip(ttc_seconds / TTC_TIME_HORIZON, 0.0, 1.0))
+                        ttc_seconds = (
+                            float(future_time_idx)
+                            * self._proposal_sampling.interval_length
+                        )
+                        ttc_score = float(
+                            np.clip(ttc_seconds / TTC_TIME_HORIZON, 0.0, 1.0)
+                        )
                         ttc_scores[proposal_idx] = min(
                             ttc_scores[proposal_idx], ttc_score
                         )
@@ -553,7 +567,9 @@ class PDMScorer:
             progress_in_meter[proposal_idx] = progress[1] - progress[0]
 
         # expected progress by speed over horizon
-        horizon_time_s = self._proposal_sampling.num_poses * self._proposal_sampling.interval_length
+        horizon_time_s = (
+            self._proposal_sampling.num_poses * self._proposal_sampling.interval_length
+        )
         ego_speed = 0.0
         try:
             ego_speed = float(self._initial_ego_state.dynamic_car_state.speed)
@@ -575,12 +591,12 @@ class PDMScorer:
             # cap to remaining centerline length if available
             if PROGRESS_CAP_TO_CENTERLINE and self._centerline is not None:
                 try:
-                    proj_start = (
-                        self._centerline.project(
-                            Point(*self._ego_coords[proposal_idx, 0, BBCoordsIndex.CENTER])
-                        )
+                    proj_start = self._centerline.project(
+                        Point(*self._ego_coords[proposal_idx, 0, BBCoordsIndex.CENTER])
                     )
-                    centerline_remaining = max(0.0, self._centerline.length - float(proj_start))
+                    centerline_remaining = max(
+                        0.0, self._centerline.length - float(proj_start)
+                    )
                     expected = min(expected, centerline_remaining)
                 except Exception:
                     # if projection fails, ignore centerline cap
@@ -590,7 +606,9 @@ class PDMScorer:
             expected = min(expected, PROGRESS_FALLBACK_MAX_METERS)
             expected = max(expected, PROGRESS_MIN_EXPECTED_METERS)
 
-            progress_scores[proposal_idx] = float(np.clip(progress_in_meter[proposal_idx] / expected, 0.0, 1.0))
+            progress_scores[proposal_idx] = float(
+                np.clip(progress_in_meter[proposal_idx] / expected, 0.0, 1.0)
+            )
 
         self._progress_raw = progress_scores
 
@@ -616,7 +634,9 @@ class PDMScorer:
         # center in polygon mask for on-route drivable polygons
         on_route_mask = self._ego_areas[:, :, EgoAreaIndex.NON_DRIVABLE_AREA] == False
         # fraction of timesteps where ego is not in non-drivable area
-        fraction_in_drivable = on_route_mask.sum(axis=1) / float(self._proposal_sampling.num_poses + 1)
+        fraction_in_drivable = on_route_mask.sum(axis=1) / float(
+            self._proposal_sampling.num_poses + 1
+        )
         # ensure in [0,1]
         fraction_in_drivable = np.clip(fraction_in_drivable, 0.0, 1.0)
         self._multi_metrics[MultiMetricIndex.DRIVABLE_AREA] = fraction_in_drivable
@@ -668,6 +688,6 @@ class PDMScorer:
             else:
                 driving_direction_compliance_scores[proposal_idx] = 0.0
 
-        self._multi_metrics[
-            MultiMetricIndex.DRIVING_DIRECTION
-        ] = driving_direction_compliance_scores
+        self._multi_metrics[MultiMetricIndex.DRIVING_DIRECTION] = (
+            driving_direction_compliance_scores
+        )
