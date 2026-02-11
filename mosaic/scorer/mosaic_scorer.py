@@ -70,7 +70,7 @@ SAFETY_METRICS_WEIGHTS = np.array([0.8, 0.1, 0.1], dtype=np.float64)
 SAFETY_WEIGHT = 0.7
 
 
-class PDMScorer:
+class MosaicScorer:
     """Class to score proposals in PDM pipeline. Re-implements nuPlan's closed-loop metrics."""
 
     def __init__(self, proposal_sampling: TrajectorySampling):

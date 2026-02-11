@@ -38,7 +38,6 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_path import
 
 from mosaic.common.utils import map as map_utils
 from mosaic.common.utils.time_conversion import to_timedelta
-from mosaic.scorer.pdm_scorer import PDMScorer
 
 
 class EnvironmentModel:
