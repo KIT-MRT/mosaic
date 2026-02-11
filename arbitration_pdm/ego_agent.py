@@ -77,25 +77,23 @@ class EgoAgent(AbstractPlanner):
             self.parameters.emergency_stop_behavior
         )
 
-        self.verifier = TrajectoryVerifier()
-        self.cost_estimator = TrajectoryCostEstimator(self.parameters.cost_estimator)
+        cost_estimator = TrajectoryCostEstimator(self.parameters.cost_estimator)
+        verifier = TrajectoryVerifier()
         self.cost_arbitrator = CostArbitrator(
-            name="CostArbitrator", verifier=self.verifier
+            "CostArbitrator", cost_estimator, verifier
         )
 
         self.cost_arbitrator.add_option(
             self.flow_drive_behavior,
             CostArbitrator.Option.Flags.INTERRUPTABLE,
-            self.cost_estimator,
         )
         self.cost_arbitrator.add_option(
             self.pdm_closed_behavior,
             CostArbitrator.Option.Flags.INTERRUPTABLE,
-            self.cost_estimator,
         )
 
         self.root_arbitrator: PriorityArbitrator = PriorityArbitrator(
-            "RootArbitrator", self.verifier
+            "RootArbitrator", verifier
         )
 
         self.root_arbitrator.add_option(
