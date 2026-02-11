@@ -238,14 +238,14 @@ wheels = [
 
 [[package]]
 name = "arbitration-graphs"
-version = "1.0.0"
+version = "2.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pyyaml" },
     { name = "typing-extensions" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b9/4f/981386a803dfa99e10ebea4b90f7aa9303acdb3391e1254a0844ee94c7fa/arbitration_graphs-1.0.0-cp39-cp39-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:36b6c72c6066f952722df40c76c16f92e6ea6d1cdcf720db8455825d2935510d", size = 546464, upload-time = "2025-09-23T07:45:52.608Z" },
+    { url = "https://files.pythonhosted.org/packages/c8/89/09c7af164bf847415c1ace894f2672e08f14edca1d2ca133d15bdc645e44/arbitration_graphs-2.0.0-cp39-cp39-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:0a301e567f6d52a2fb5ff6905b5a44ae506c5ae0e47db607ec674f05a9852531", size = 565193, upload-time = "2026-02-11T11:07:14.297Z" },
 ]
 
 [[package]]
@@ -261,7 +261,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "arbitration-graphs", specifier = ">=1.0.0" },
+    { name = "arbitration-graphs", specifier = ">=2.0.0" },
     { name = "flow-drive", directory = "../flowdrive" },
     { name = "nuplan-devkit", git = "https://github.com/ll-nick/nuplan-devkit" },
     { name = "tuplan-garage", git = "https://github.com/ll-nick/tuplan_garage" },

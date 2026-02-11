@@ -13,7 +13,7 @@ authors = [
 readme = "README.md"
 requires-python = "==3.9.*"
 dependencies = [
-    "arbitration_graphs >=1.0.0",
+    "arbitration_graphs >=2.0.0",
     "flow-drive",
     "nuplan-devkit",
     "tuplan-garage",
