@@ -1,4 +1,11 @@
+import os
 from pathlib import Path
+
+# Set UV_PROJECT_ENVIRONMENT to an absolute path so that it can be found by subprocesses launched by Ray
+if "UV_PROJECT_ENVIRONMENT" not in os.environ:
+    os.environ["UV_PROJECT_ENVIRONMENT"] = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), ".venv"
+    )
 
 import hydra
 import matplotlib

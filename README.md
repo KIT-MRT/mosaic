@@ -10,4 +10,4 @@ Now you can run the main script with `python main.py`.
 
 Notes:
 - Until Flowdrive has been open-sourced, it must be cloned next to this repository for uv to find it.
-- `uv run` will not work due to issues with the ray parallelization.
+- Until Flowdrive has been open-sourced, the `uv run` command will not work due to Ray environment issues.
