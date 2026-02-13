@@ -1,0 +1,84 @@
+_target_: nuplan.planning.scenario_builder.scenario_filter.ScenarioFilter
+_convert_: 'all'
+
+scenario_types: null
+scenario_tokens:
+  - '00c202ab992e50aa'
+  - '02a982b22eed53fc'
+  - '05abec5c2a67537b'
+  - '06f3e1d3f9df598a'
+  - '0a05b5cb5f6454b0'
+  - '0bd3ee0c8e1357b2'
+  - '0ebba0e8fbd3528f'
+  - '1bb4a47dd9f155cd'
+  - '1c83f8728505588c'
+  - '1f82b16afa96569a'
+  - '2315ca6fdcf65ce0'
+  - '30e0f8ea46375f52'
+  - '36516922212f5065'
+  - '3b882e9cddd75b23'
+  - '3c2dc4fa5cea5da2'
+  - '42dc17b3a3e551bc'
+  - '45f20433b45a554c'
+  - '4b3b50a9f58b5d79'
+  - '501383db138758ce'
+  - '558d1c44968c5319'
+  - '56dcbd23b5c9522b'
+  - '56f6af31e23b504b'
+  - '57534af9046058a2'
+  - '5783cad294585faa'
+  - '59bb3fec07495d87'
+  - '5e0cf44e7e735acb'
+  - '6badb2820fd251fd'
+  - '6be690074b835ee7'
+  - '6d34396ecc375932'
+  - '6f247bc70fe3555e'
+  - '72c4b3e9788b5bf7'
+  - '738efdf625b35ff9'
+  - '74f33e65028d5917'
+  - '7b7128c02637583e'
+  - '7d24fb93bcf850e8'
+  - '81f2464a004e54d0'
+  - '82317508dea55b9d'
+  - '83a18a11bf9b5baa'
+  - '8bd63e2b025d5e38'
+  - '99ac1ec87510556d'
+  - 'a5617ebfe1ec5b2e'
+  - 'b1f369f514d95f4c'
+  - 'b2ab7d150c1f5fa4'
+  - 'b9371ca8b59154c3'
+  - 'bbc7bb010c275ea4'
+  - 'c1567e02a98e53e5'
+  - 'c2f0546ea2565af3'
+  - 'c556f4bc6f165a76'
+  - 'c5b92860ee7a565e'
+  - 'c7468120b03a56e7'
+  - 'caaab29c36ef5bee'
+  - 'ce9a8994426651f9'
+  - 'd1233a44bda8587d'
+  - 'dc6ad473cea05799'
+  - 'e04d9ab64a0854f3'
+  - 'e2c9d4f7a6ca5df7'
+  - 'e3e2933994835eba'
+  - 'e57de37711215456'
+  - 'e59d7ba3a5c1500b'
+  - 'f36c397ff1125e10'
+  - 'f46984fbdd745dca'
+  - 'f958ec121f5a5287'
+  - 'ffbd3b860a825ef9'
+
+log_names: null
+map_names: null
+
+num_scenarios_per_type: null
+limit_total_scenarios: null
+timestamp_threshold_s: null
+
+ego_displacement_minimum_m: null
+ego_start_speed_threshold: null
+ego_stop_speed_threshold: null
+speed_noise_tolerance: null
+
+expand_scenarios: false
+remove_invalid_goals: true
+shuffle: false
