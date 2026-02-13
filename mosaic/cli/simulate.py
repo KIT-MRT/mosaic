@@ -50,9 +50,17 @@ import click
     multiple=True,
     help="Arbitrary Hydra overrides (repeatable, e.g. -o worker.threads_per_node=80).",
 )
-def simulate(challenge, scenario_filter, limit_scenarios, experiment_name, threads, gpus_per_sim, override):
-    """Run closed-loop simulation."""
-    from mosaic.cli._env import setup_uv_env, setup_matplotlib
+def simulate(
+    challenge,
+    scenario_filter,
+    limit_scenarios,
+    experiment_name,
+    threads,
+    gpus_per_sim,
+    override,
+):
+    """Run nuplan simulation."""
+    from mosaic.cli._env import setup_matplotlib, setup_uv_env
 
     setup_uv_env()
     setup_matplotlib()

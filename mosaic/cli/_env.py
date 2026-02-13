@@ -1,5 +1,3 @@
-"""Environment setup that must run before heavy imports."""
-
 import os
 import sys
 

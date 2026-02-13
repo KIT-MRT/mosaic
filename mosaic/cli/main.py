@@ -1,7 +1,7 @@
 import click
 
-from mosaic.cli.simulate import simulate
 from mosaic.cli.results import results
+from mosaic.cli.simulate import simulate
 
 
 @click.group()

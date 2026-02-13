@@ -7,11 +7,17 @@ def _find_latest_nuboard_file():
     """Find the most recent .nuboard file under the default nuplan output dir."""
     output_root = Path.home() / "nuplan" / "exp"
     if not output_root.exists():
-        raise click.ClickException(f"No output directory found at {output_root}. Run a simulation first or provide --path.")
+        raise click.ClickException(
+            f"No output directory found at {output_root}. Run a simulation first or provide --path."
+        )
 
-    nuboard_files = sorted(output_root.rglob("*.nuboard"), key=lambda p: p.stat().st_mtime, reverse=True)
+    nuboard_files = sorted(
+        output_root.rglob("*.nuboard"), key=lambda p: p.stat().st_mtime, reverse=True
+    )
     if not nuboard_files:
-        raise click.ClickException(f"No .nuboard files found under {output_root}. Run a simulation first or provide --path.")
+        raise click.ClickException(
+            f"No .nuboard files found under {output_root}. Run a simulation first or provide --path."
+        )
 
     return nuboard_files[0]
 
@@ -26,7 +32,7 @@ def _find_latest_nuboard_file():
 )
 def results(path):
     """Launch nuBoard to visualize simulation results."""
-    from mosaic.cli._env import setup_uv_env, setup_matplotlib
+    from mosaic.cli._env import setup_matplotlib, setup_uv_env
 
     setup_uv_env()
     setup_matplotlib()
@@ -41,13 +47,17 @@ def results(path):
             if not nuboard_files:
                 raise click.ClickException(f"No .nuboard files found in {p}")
             if len(nuboard_files) > 1:
-                click.echo(f"Multiple .nuboard files found in {p}, using the most recent one: {nuboard_files[0]}")
+                click.echo(
+                    f"Multiple .nuboard files found in {p}, using the most recent one: {nuboard_files[0]}"
+                )
             nuboard_file = nuboard_files[0]
         else:
             if p.suffix != ".nuboard":
                 raise click.ClickException(f"Provided file {p} is not a .nuboard file.")
             if not p.exists():
-                raise click.ClickException(f"Provided .nuboard file {p} does not exist.")
+                raise click.ClickException(
+                    f"Provided .nuboard file {p} does not exist."
+                )
             nuboard_file = p
 
     import hydra
