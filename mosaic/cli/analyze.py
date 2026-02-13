@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Union
 
 import click
+from pandas import DataFrame
 
 
 def _find_latest_experiment() -> Path:
@@ -28,7 +29,7 @@ def _find_latest_experiment() -> Path:
     return max(candidates, key=lambda p: p.stat().st_mtime)
 
 
-def _load_results(experiment_dir: Path):
+def _load_results(experiment_dir: Path) -> DataFrame:
     import pandas as pd
 
     agg_dir = experiment_dir / "aggregator_metric"
@@ -66,7 +67,7 @@ def _truncate(string: str, width: int) -> str:
     return string[: width - 1] + "…"
 
 
-def _print_summary(df, label: str) -> None:
+def _print_summary(df: DataFrame, label: str) -> None:
     click.echo(f"\n{'=' * 60}")
     click.echo(f"  {label}")
     click.echo(f"{'=' * 60}")
@@ -74,7 +75,7 @@ def _print_summary(df, label: str) -> None:
     click.echo(f"  Overall score: {df['score'].mean():.4f}")
 
 
-def _print_failures(df) -> None:
+def _print_failures(df: DataFrame) -> None:
     click.echo(f"\n  Failure Breakdown:")
     click.echo(f"  {'Metric':<40} {'Fail':>5}  {'Rate':>6}")
     click.echo(f"  {'-' * 55}")
@@ -99,7 +100,7 @@ def _print_failures(df) -> None:
     click.echo(f"\n  Zero-score scenarios: {zero_score}")
 
 
-def _print_per_type(df) -> None:
+def _print_per_type(df: DataFrame) -> None:
     click.echo(f"\n  Per-Scenario-Type Breakdown:")
     click.echo(
         f"  {'Type':<45} {'n':>4}  {'Score':>6}  {'Zero':>4}  {'TTC=0':>5}  {'Coll':>4}"
@@ -131,7 +132,7 @@ def _print_per_type(df) -> None:
         )
 
 
-def _print_comparison(df, baseline_df) -> None:
+def _print_comparison(df: DataFrame, baseline_df: DataFrame) -> None:
     click.echo(f"\n  Comparison with Baseline:")
     overall_diff = df["score"].mean() - baseline_df["score"].mean()
     sign = "+" if overall_diff >= 0 else ""
