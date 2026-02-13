@@ -19,6 +19,9 @@ dependencies = [
     "tuplan-garage",
 ]
 
+[project.scripts]
+mosaic = "mosaic.cli.main:cli"
+
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["mosaic*"]
