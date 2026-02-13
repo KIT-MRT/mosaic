@@ -59,6 +59,13 @@ WEIGHTED_METRICS = {
 }
 
 
+def _truncate(string: str, width: int) -> str:
+    if len(string) <= width:
+        return string
+
+    return string[: width - 1] + "…"
+
+
 def _print_summary(df, label: str) -> None:
     click.echo(f"\n{'=' * 60}")
     click.echo(f"  {label}")
@@ -120,7 +127,7 @@ def _print_per_type(df) -> None:
         type_stats, key=lambda x: x[2]
     ):
         click.echo(
-            f"  {stype:<45} {n:>4}  {score:>6.4f}  {zeros:>4}  {ttc_fail:>5}  {coll_fail:>4}"
+            f"  {_truncate(stype, 45):<45} {n:>4}  {score:>6.4f}  {zeros:>4}  {ttc_fail:>5}  {coll_fail:>4}"
         )
 
 
