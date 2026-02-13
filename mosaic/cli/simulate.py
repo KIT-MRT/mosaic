@@ -85,12 +85,9 @@ def simulate(challenge, scenario_filter, limit_scenarios, experiment_name, threa
     with initialize_config_module(config_module=SIM_CONFIG_PATH):
         cfg = compose(config_name=SIM_CONFIG_NAME, overrides=overrides)
 
-    import nest_asyncio
     from nuplan.planning.script.run_simulation import run_simulation
 
     from mosaic.ego_agent import EgoAgent
-
-    nest_asyncio.apply()
 
     planner = EgoAgent()
     run_simulation(cfg, planners=planner)
