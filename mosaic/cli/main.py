@@ -6,7 +6,7 @@ from mosaic.cli.results import results
 
 @click.group()
 def cli():
-    """Mosaic autonomous driving planner."""
+    """Mosaic: Arbitration Graphs for Composable Motion Planning with Safety Bounds."""
 
 
 cli.add_command(simulate)
