@@ -92,7 +92,7 @@ def simulate(
         f"worker.threads_per_node={threads}",
         "distributed_mode=SINGLE_NODE",
         f"number_of_gpus_allocated_per_simulation={gpus_per_sim}",
-        "hydra.searchpath=[pkg://tuplan_garage.planning.script.config.common, pkg://tuplan_garage.planning.script.config.simulation, pkg://nuplan.planning.script.config.common, pkg://nuplan.planning.script.experiments]",
+        "hydra.searchpath=[pkg://mosaic.config, pkg://tuplan_garage.planning.script.config.common, pkg://tuplan_garage.planning.script.config.simulation, pkg://nuplan.planning.script.config.common, pkg://nuplan.planning.script.experiments]",
     ]
 
     if limit_scenarios is not None:
