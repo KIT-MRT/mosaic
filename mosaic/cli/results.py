@@ -40,8 +40,14 @@ def results(path):
             nuboard_files = list(p.glob("*.nuboard"))
             if not nuboard_files:
                 raise click.ClickException(f"No .nuboard files found in {p}")
+            if len(nuboard_files) > 1:
+                click.echo(f"Multiple .nuboard files found in {p}, using the most recent one: {nuboard_files[0]}")
             nuboard_file = nuboard_files[0]
         else:
+            if p.suffix != ".nuboard":
+                raise click.ClickException(f"Provided file {p} is not a .nuboard file.")
+            if not p.exists():
+                raise click.ClickException(f"Provided .nuboard file {p} does not exist.")
             nuboard_file = p
 
     import hydra
