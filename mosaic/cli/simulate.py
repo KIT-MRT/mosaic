@@ -1,6 +1,21 @@
 from typing import Union
 
 import click
+from omegaconf import DictConfig
+
+
+def _configure_hydra(overrides: list[str]) -> DictConfig:
+    import hydra
+    from hydra import compose, initialize_config_module
+
+    SIM_CONFIG_PATH = "nuplan.planning.script.config.simulation"
+    SIM_CONFIG_NAME = "default_simulation"
+
+    hydra.core.global_hydra.GlobalHydra.instance().clear()
+    with initialize_config_module(config_module=SIM_CONFIG_PATH):
+        cfg = compose(config_name=SIM_CONFIG_NAME, overrides=overrides)
+
+    return cfg
 
 
 @click.command()
@@ -67,12 +82,6 @@ def simulate(
     setup_uv_env()
     setup_matplotlib()
 
-    import hydra
-    from hydra import compose, initialize_config_module
-
-    SIM_CONFIG_PATH = "nuplan.planning.script.config.simulation"
-    SIM_CONFIG_NAME = "default_simulation"
-
     overrides = [
         f"experiment_name={experiment_name}",
         f"+simulation={challenge}",
@@ -90,10 +99,7 @@ def simulate(
         overrides.append(f"scenario_filter.limit_total_scenarios={limit_scenarios}")
 
     overrides.extend(override)
-
-    hydra.core.global_hydra.GlobalHydra.instance().clear()
-    with initialize_config_module(config_module=SIM_CONFIG_PATH):
-        cfg = compose(config_name=SIM_CONFIG_NAME, overrides=overrides)
+    cfg = _configure_hydra(overrides)
 
     from nuplan.planning.script.run_simulation import run_simulation
 
