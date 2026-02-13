@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from typing import Union
 
@@ -5,8 +6,10 @@ import click
 
 
 def _find_latest_nuboard_file() -> Path:
-    """Find the most recent .nuboard file under the default nuplan output dir."""
-    output_root = Path.home() / "nuplan" / "exp"
+    if "NUPLAN_EXP_ROOT" in os.environ:
+        output_root = Path(os.environ["NUPLAN_EXP_ROOT"])
+    else:
+        output_root = Path.home() / "nuplan" / "exp"
     if not output_root.exists():
         raise click.ClickException(
             f"No output directory found at {output_root}. Run a simulation first or provide --path."
