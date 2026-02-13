@@ -24,12 +24,7 @@ def _find_latest_nuboard_file():
     default=None,
     help="Path to simulation output dir or .nuboard file (auto-detects latest if omitted).",
 )
-@click.option(
-    "--scenario-builder",
-    default="nuplan_mini",
-    help="Scenario builder for data visualization.",
-)
-def results(path, scenario_builder):
+def results(path):
     """Launch nuBoard to visualize simulation results."""
     from mosaic.cli._env import setup_uv_env, setup_matplotlib
 
@@ -60,7 +55,7 @@ def results(path, scenario_builder):
         cfg = compose(
             config_name=NUBOARD_CONFIG_NAME,
             overrides=[
-                f"scenario_builder={scenario_builder}",
+                f"scenario_builder=nuplan",
                 f"simulation_path=[{nuboard_file}]",
             ],
         )
