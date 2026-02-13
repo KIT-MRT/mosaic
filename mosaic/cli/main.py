@@ -5,7 +5,7 @@ from mosaic.cli.simulate import simulate
 
 
 @click.group()
-def cli():
+def cli() -> None:
     """Mosaic: Arbitration Graphs for Composable Motion Planning with Safety Bounds."""
 
 

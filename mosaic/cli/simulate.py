@@ -1,3 +1,5 @@
+from typing import Union
+
 import click
 
 
@@ -51,14 +53,14 @@ import click
     help="Arbitrary Hydra overrides (repeatable, e.g. -o worker.threads_per_node=80).",
 )
 def simulate(
-    challenge,
-    scenario_filter,
-    limit_scenarios,
-    experiment_name,
-    threads,
-    gpus_per_sim,
-    override,
-):
+    challenge: str,
+    scenario_filter: str,
+    limit_scenarios: Union[int, None],
+    experiment_name: str,
+    threads: int,
+    gpus_per_sim: float,
+    override: tuple[str, ...],
+) -> None:
     """Run nuplan simulation."""
     from mosaic.cli._env import setup_matplotlib, setup_uv_env
 

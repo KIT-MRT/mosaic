@@ -1,9 +1,10 @@
 from pathlib import Path
+from typing import Union
 
 import click
 
 
-def _find_latest_nuboard_file():
+def _find_latest_nuboard_file() -> Path:
     """Find the most recent .nuboard file under the default nuplan output dir."""
     output_root = Path.home() / "nuplan" / "exp"
     if not output_root.exists():
@@ -30,7 +31,7 @@ def _find_latest_nuboard_file():
     default=None,
     help="Path to simulation output dir or .nuboard file (auto-detects latest if omitted).",
 )
-def results(path):
+def results(path: Union[str, None]) -> None:
     """Launch nuBoard to visualize simulation results."""
     from mosaic.cli._env import setup_matplotlib, setup_uv_env
 
