@@ -56,15 +56,14 @@ def results(path):
     NUBOARD_CONFIG_PATH = "nuplan.planning.script.config.nuboard"
     NUBOARD_CONFIG_NAME = "default_nuboard"
 
+    overrides = [
+        "scenario_builder=nuplan",
+        f"simulation_path=[{nuboard_file}]",
+    ]
+
     hydra.core.global_hydra.GlobalHydra.instance().clear()
     with initialize_config_module(config_module=NUBOARD_CONFIG_PATH):
-        cfg = compose(
-            config_name=NUBOARD_CONFIG_NAME,
-            overrides=[
-                f"scenario_builder=nuplan",
-                f"simulation_path=[{nuboard_file}]",
-            ],
-        )
+        cfg = compose(config_name=NUBOARD_CONFIG_NAME, overrides=overrides)
 
     from nuplan.planning.script.run_nuboard import initialize_nuboard
 
