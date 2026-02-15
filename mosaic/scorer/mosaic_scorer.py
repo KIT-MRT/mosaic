@@ -62,6 +62,7 @@ PROGRESS_MIN_EXPECTED_METERS = 0.1  # avoid tiny denominators
 PROGRESS_CAP_TO_CENTERLINE = (
     True  # cap expected progress to remaining centerline length
 )
+PROGRESS_GATE_THRESHOLD = 0.2  # progress below this is penalized as a soft gate
 
 
 class MosaicScorer:
@@ -170,6 +171,8 @@ class MosaicScorer:
         Aggregates metrics using multiplicative safety gates (matching nuplan's formula).
         Safety metrics (collision, drivable area, driving direction) are multiplied together
         as continuous gates. A collision score of 0 zeroes the entire score, just like nuplan.
+        Progress is also treated as a soft gate to prevent selecting overly cautious trajectories
+        that would fail nuplan's ego_is_making_progress hard gate.
         :return: array containing score of each proposal
         """
 
@@ -185,13 +188,19 @@ class MosaicScorer:
         normalized_progress[safety_gate == 0.0] = 0.0
         self._weighted_metrics[WeightedMetricIndex.PROGRESS] = normalized_progress
 
+        # Progress gate: strongly penalize trajectories that barely move.
+        # Ramps linearly from 0 at progress=0 to 1 at progress=PROGRESS_GATE_THRESHOLD.
+        # Above the threshold, no penalty. This prevents "safe standstill" selection
+        # that would fail nuplan's ego_is_making_progress hard gate.
+        progress_gate = np.minimum(normalized_progress / PROGRESS_GATE_THRESHOLD, 1.0)
+
         # accumulate weighted performance metrics
         weighted_metric_scores = (
             self._weighted_metrics * WEIGHTED_METRICS_WEIGHTS[..., None]
         ).sum(axis=0)
         weighted_metric_scores /= WEIGHTED_METRICS_WEIGHTS.sum()
 
-        final_scores = safety_gate * weighted_metric_scores
+        final_scores = safety_gate * progress_gate * weighted_metric_scores
 
         return final_scores
 
