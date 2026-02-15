@@ -70,7 +70,7 @@ class MosaicScorer:
 
     def __init__(self, proposal_sampling: TrajectorySampling):
         """
-        Constructor of PDMScorer
+        Constructor of MosaicScorer
         :param proposal_sampling: Sampling parameters for proposals
         """
         self._proposal_sampling = proposal_sampling
