@@ -62,12 +62,7 @@ PROGRESS_MIN_EXPECTED_METERS = 0.1  # avoid tiny denominators
 PROGRESS_CAP_TO_CENTERLINE = (
     True  # cap expected progress to remaining centerline length
 )
-
-# Safety aggregation defaults
-# weights for MultiMetricIndex entries (NO_COLLISION, DRIVABLE_AREA, DRIVING_DIRECTION)
-SAFETY_METRICS_WEIGHTS = np.array([0.8, 0.1, 0.1], dtype=np.float64)
-# overall safety weight when fusing with performance metrics
-SAFETY_WEIGHT = 0.7
+PROGRESS_GATE_THRESHOLD = 0.2  # progress below this is penalized as a soft gate
 
 
 class MosaicScorer:
@@ -75,7 +70,7 @@ class MosaicScorer:
 
     def __init__(self, proposal_sampling: TrajectorySampling):
         """
-        Constructor of PDMScorer
+        Constructor of MosaicScorer
         :param proposal_sampling: Sampling parameters for proposals
         """
         self._proposal_sampling = proposal_sampling
@@ -101,9 +96,6 @@ class MosaicScorer:
 
         self._collision_time_idcs: Optional[npt.NDArray[np.float64]] = None
         self._ttc_time_idcs: Optional[npt.NDArray[np.float64]] = None
-
-        if not np.isclose(SAFETY_METRICS_WEIGHTS.sum(), 1.0):
-            raise ValueError("SAFETY_METRICS_WEIGHTS must sum to 1.0")
 
     def time_to_at_fault_collision(self, proposal_idx: int) -> float:
         """
@@ -176,24 +168,31 @@ class MosaicScorer:
 
     def _aggregate_scores(self) -> npt.NDArray[np.float64]:
         """
-        Aggregates metrics by computing a continuous safety score and combining
-        it with the weighted performance metrics.
+        Aggregates metrics using multiplicative safety gates (matching nuplan's formula).
+        Safety metrics (collision, drivable area, driving direction) are multiplied together
+        as continuous gates. A collision score of 0 zeroes the entire score, just like nuplan.
+        Progress is also treated as a soft gate to prevent selecting overly cautious trajectories
+        that would fail nuplan's ego_is_making_progress hard gate.
         :return: array containing score of each proposal
         """
 
-        # compute safety scores as weighted average of multi_metrics
-        # TODO: Rename multi_metrics to safety_metrics if they are not multiplicative anymore
-        safety_scores = (self._multi_metrics * SAFETY_METRICS_WEIGHTS[..., None]).sum(
-            axis=0
+        # Safety metrics are multiplicative gates (continuous, but 0 = total failure)
+        safety_gate = (
+            self._multi_metrics[MultiMetricIndex.NO_COLLISION]
+            * self._multi_metrics[MultiMetricIndex.DRIVABLE_AREA]
+            * self._multi_metrics[MultiMetricIndex.DRIVING_DIRECTION]
         )
-        safety_scores /= SAFETY_METRICS_WEIGHTS.sum()
 
         # normalize and fill progress values
-        # progress is already normalized per-proposal to [0,1] using expected achievable progress
         normalized_progress = np.array(self._progress_raw, copy=True)
-        # zero out progress for proposals that fail multiplicative metrics
-        normalized_progress[safety_scores == 0.0] = 0.0
+        normalized_progress[safety_gate == 0.0] = 0.0
         self._weighted_metrics[WeightedMetricIndex.PROGRESS] = normalized_progress
+
+        # Progress gate: strongly penalize trajectories that barely move.
+        # Ramps linearly from 0 at progress=0 to 1 at progress=PROGRESS_GATE_THRESHOLD.
+        # Above the threshold, no penalty. This prevents "safe standstill" selection
+        # that would fail nuplan's ego_is_making_progress hard gate.
+        progress_gate = np.minimum(normalized_progress / PROGRESS_GATE_THRESHOLD, 1.0)
 
         # accumulate weighted performance metrics
         weighted_metric_scores = (
@@ -201,11 +200,7 @@ class MosaicScorer:
         ).sum(axis=0)
         weighted_metric_scores /= WEIGHTED_METRICS_WEIGHTS.sum()
 
-        # final score is fusion of safety and performance
-        final_scores = (
-            SAFETY_WEIGHT * safety_scores
-            + (1.0 - SAFETY_WEIGHT) * weighted_metric_scores
-        )
+        final_scores = safety_gate * progress_gate * weighted_metric_scores
 
         return final_scores
 
