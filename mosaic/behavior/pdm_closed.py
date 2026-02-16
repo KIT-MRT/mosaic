@@ -35,6 +35,8 @@ class PDMClosedBehavior(Behavior):
         with cfg_path.open("r") as f:
             pdm_closed_cfg = OmegaConf.load(f)
 
+        pdm_closed_cfg.pdm_closed_planner.enable_emergency_brake_fallback = False
+
         self.planner = cast(
             AbstractPlanner, instantiate(pdm_closed_cfg.pdm_closed_planner)
         )
