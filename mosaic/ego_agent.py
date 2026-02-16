@@ -49,6 +49,9 @@ class EgoAgent(AbstractPlanner):
                 )
             )
         )
+        verifier: TrajectoryVerifier.Parameters = TrajectoryVerifier.Parameters(
+            proposal_sampling=scoring_sampling,
+        )
 
     def __init__(
         self,
@@ -77,7 +80,7 @@ class EgoAgent(AbstractPlanner):
         )
 
         cost_estimator = TrajectoryCostEstimator(self.parameters.cost_estimator)
-        verifier = TrajectoryVerifier()
+        verifier = TrajectoryVerifier(self.parameters.verifier)
         self.cost_arbitrator = CostArbitrator(
             "CostArbitrator", cost_estimator, verifier
         )
