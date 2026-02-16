@@ -1,21 +1,26 @@
 from dataclasses import dataclass
+from typing import final
 
 from arbitration_graphs import Behavior
 from arbitration_graphs.typing import Time
 from nuplan.planning.simulation.trajectory.abstract_trajectory import AbstractTrajectory
+from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
+from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_emergency_brake import (
+    PDMEmergencyBrake,
+)
 from typing_extensions import cast, override
 
 from mosaic.common.command import Command
 from mosaic.common.environment_model import EnvironmentModel
-from mosaic.planner.emergency_stop_planner import (
-    EmergencyStopPlanner,
-)
 
 
+@final
 class EmergencyStopBehavior(Behavior):
     @dataclass
     class Parameters:
-        emergency_brake_planner: EmergencyStopPlanner.Parameters
+        trajectory_sampling: TrajectorySampling
+        max_long_accel: float = 2.40
+        min_long_accel: float = -4.05
 
     def __init__(
         self,
@@ -23,14 +28,17 @@ class EmergencyStopBehavior(Behavior):
         name: str = "EmergencyStop",
     ):
         super().__init__(name)
-        self.planner: EmergencyStopPlanner = EmergencyStopPlanner(
-            parameters.emergency_brake_planner
+        self.parameters: EmergencyStopBehavior.Parameters = parameters
+        self.planner = PDMEmergencyBrake(
+            trajectory_sampling=parameters.trajectory_sampling,
+            max_long_accel=parameters.max_long_accel,
+            min_long_accel=parameters.min_long_accel,
         )
 
     @override
     def get_command(self, time: Time, environment_model: EnvironmentModel) -> Command:
         ego_state = environment_model.ego_state
-        trajectory: AbstractTrajectory = self.planner.plan_trajectory(ego_state)
+        trajectory: AbstractTrajectory = self.planner._generate_trajectory(ego_state)
 
         return Command(
             name=self.name(),
