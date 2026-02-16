@@ -20,7 +20,6 @@ from mosaic.behavior.pdm_closed import PDMClosedBehavior
 from mosaic.common.command import Command
 from mosaic.common.environment_model import EnvironmentModel
 from mosaic.cost_estimator import TrajectoryCostEstimator
-from mosaic.planner.emergency_stop_planner import EmergencyStopPlanner
 from mosaic.verifier import TrajectoryVerifier
 
 
@@ -44,9 +43,7 @@ class EgoAgent(AbstractPlanner):
         )
         emergency_stop_behavior: EmergencyStopBehavior.Parameters = (
             EmergencyStopBehavior.Parameters(
-                emergency_brake_planner=EmergencyStopPlanner.Parameters(
-                    trajectory_sampling=trajectory_sampling,
-                )
+                trajectory_sampling=trajectory_sampling,
             )
         )
         verifier: TrajectoryVerifier.Parameters = TrajectoryVerifier.Parameters(
