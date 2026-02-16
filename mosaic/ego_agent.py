@@ -46,7 +46,6 @@ class EgoAgent(AbstractPlanner):
             EmergencyStopBehavior.Parameters(
                 emergency_brake_planner=EmergencyStopPlanner.Parameters(
                     trajectory_sampling=trajectory_sampling,
-                    target_acceleration=-5.0,
                 )
             )
         )
