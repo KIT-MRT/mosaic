@@ -45,7 +45,7 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_path import
 # TODO: Add to config
 WEIGHTED_METRICS_WEIGHTS = np.zeros(len(WeightedMetricIndex), dtype=np.float64)
 WEIGHTED_METRICS_WEIGHTS[WeightedMetricIndex.PROGRESS] = 5.0
-WEIGHTED_METRICS_WEIGHTS[WeightedMetricIndex.TTC] = 5.0
+WEIGHTED_METRICS_WEIGHTS[WeightedMetricIndex.TTC] = 7.0
 WEIGHTED_METRICS_WEIGHTS[WeightedMetricIndex.COMFORTABLE] = 2.0
 
 # TODO: Add to config
