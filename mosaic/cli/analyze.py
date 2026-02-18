@@ -42,7 +42,14 @@ def _load_results(experiment_dir: Path) -> DataFrame:
     if not parquet_files:
         raise click.ClickException(f"No parquet files in {agg_dir}")
 
-    return pd.read_parquet(parquet_files[0])
+    df = pd.read_parquet(parquet_files[0])
+
+    # Drop nuplan aggregate rows (per-type summaries + final_score)
+    aggregate_names = set(df["scenario_type"].unique())
+    aggregate_names.add("final_score")
+    df = df[~df["scenario"].isin(aggregate_names)].reset_index(drop=True)
+
+    return df
 
 
 HARD_GATES = [
