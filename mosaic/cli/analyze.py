@@ -42,7 +42,14 @@ def _load_results(experiment_dir: Path) -> DataFrame:
     if not parquet_files:
         raise click.ClickException(f"No parquet files in {agg_dir}")
 
-    return pd.read_parquet(parquet_files[0])
+    df = pd.read_parquet(parquet_files[0])
+
+    # Drop nuplan aggregate rows (per-type summaries + final_score)
+    aggregate_names = set(df["scenario_type"].unique())
+    aggregate_names.add("final_score")
+    df = df[~df["scenario"].isin(aggregate_names)].reset_index(drop=True)
+
+    return df
 
 
 HARD_GATES = [
@@ -129,6 +136,28 @@ def _print_per_type(df: DataFrame) -> None:
     ):
         click.echo(
             f"  {_truncate(stype, 45):<45} {n:>4}  {score:>6.4f}  {zeros:>4}  {ttc_fail:>5}  {coll_fail:>4}"
+        )
+
+
+def _print_collision_scenarios(df: DataFrame) -> None:
+    if "no_ego_at_fault_collisions" not in df.columns:
+        click.echo("\n  (no_ego_at_fault_collisions column not found)")
+        return
+
+    collision_df = df[df["no_ego_at_fault_collisions"] == 0.0].copy()
+    if collision_df.empty:
+        click.echo("\n  No collision scenarios found.")
+        return
+
+    collision_df = collision_df.sort_values("score")
+
+    click.echo(f"\n  Collision Scenarios ({len(collision_df)}):")
+    click.echo(f"  {'Scenario Token':<20} {'Type':<40} {'Score':>6}  {'Coll':>5}")
+    click.echo(f"  {'-' * 75}")
+    for _, row in collision_df.iterrows():
+        stype = _truncate(str(row.get("scenario_type", "")), 40)
+        click.echo(
+            f"  {row['scenario']:<20} {stype:<40} {row['score']:>6.4f}  {row['no_ego_at_fault_collisions']:>5.2f}"
         )
 
 
@@ -227,6 +256,7 @@ def analyze(path: Union[str, None], baseline: Union[str, None], per_type: bool) 
     df = _load_results(experiment_dir)
     _print_summary(df, experiment_dir.name)
     _print_failures(df)
+    _print_collision_scenarios(df)
 
     if per_type:
         _print_per_type(df)
