@@ -11,10 +11,11 @@ authors = [
     {name = "Nick Le Large", email = "nick.lelarge@kit.edu"}
 ]
 readme = "README.md"
-requires-python = "==3.9.*"
+requires-python = ">=3.9.12"
 dependencies = [
     "arbitration_graphs >=2.0.0",
     "flow-drive",
+    "interplan",
     "nuplan-devkit",
     "tuplan-garage",
 ]
@@ -33,6 +34,7 @@ include = ["mosaic*"]
 nuplan-devkit = { git = "https://github.com/ll-nick/nuplan-devkit" }
 tuplan-garage = { git = "https://github.com/ll-nick/tuplan_garage" }
 flow-drive = { path = "../flowdrive" }
+interplan = { git = "https://github.com/ll-nick/interPlan" }
 
 [tool.uv]
 override-dependencies = [
