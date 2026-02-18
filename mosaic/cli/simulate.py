@@ -92,28 +92,23 @@ def simulate(
     if scenario_filter is None:
         scenario_filter = "interplan10" if is_interplan else "val14_split"
 
+    simulation = challenge
+    searchpath = "pkg://mosaic.config,"
+
     if is_interplan:
-        os.environ["NUPLAN_SIMULATION_ALLOW_ANY_BUILDER"] = "1"
         simulation = "default_interplan_benchmark"
-        searchpath = (
-            "pkg://mosaic.config,"
+        searchpath += (
             "pkg://interplan.planning.script.config.common,"
             "pkg://interplan.planning.script.config.simulation,"
             "pkg://interplan.planning.script.experiments,"
-            "pkg://tuplan_garage.planning.script.config.common,"
-            "pkg://tuplan_garage.planning.script.config.simulation,"
-            "pkg://nuplan.planning.script.config.common,"
-            "pkg://nuplan.planning.script.experiments"
         )
-    else:
-        simulation = challenge
-        searchpath = (
-            "pkg://mosaic.config,"
-            "pkg://tuplan_garage.planning.script.config.common,"
-            "pkg://tuplan_garage.planning.script.config.simulation,"
-            "pkg://nuplan.planning.script.config.common,"
-            "pkg://nuplan.planning.script.experiments"
-        )
+
+    searchpath += (
+        "pkg://tuplan_garage.planning.script.config.common,"
+        "pkg://tuplan_garage.planning.script.config.simulation,"
+        "pkg://nuplan.planning.script.config.common,"
+        "pkg://nuplan.planning.script.experiments"
+    )
 
     overrides = [
         f"experiment_name={experiment_name}",
@@ -131,18 +126,12 @@ def simulate(
         overrides.append(
             "scenario_builder.data_root=${oc.env:NUPLAN_DATA_ROOT}/nuplan-v1.1/splits/test"
         )
-    else:
-        overrides.append("scenario_builder=nuplan")
 
     if limit_scenarios is not None:
         overrides.append(f"scenario_filter.limit_total_scenarios={limit_scenarios}")
 
     overrides.extend(override)
     cfg = _configure_hydra(overrides)
-
-    from mosaic.ego_agent import EgoAgent
-
-    planner = EgoAgent()
 
     if is_interplan:
         from interplan.planning.utils.modifications_preprocessing import (
@@ -154,6 +143,8 @@ def simulate(
     else:
         from nuplan.planning.script.run_simulation import run_simulation
 
-    run_simulation(cfg, planners=planner)
+    from mosaic.ego_agent import EgoAgent
+
+    run_simulation(cfg, planners=EgoAgent())
 
     click.echo(f"Simulation results are saved in: {cfg.output_dir}")
