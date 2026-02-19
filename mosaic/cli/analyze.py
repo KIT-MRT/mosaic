@@ -1,4 +1,6 @@
+import json
 import os
+from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Union
 
@@ -225,6 +227,78 @@ def _print_comparison(df: DataFrame, baseline_df: DataFrame) -> None:
                 )
 
 
+def _analyze_mosaic_logs(experiment_dir: Path) -> None:
+    mosaic_dir = experiment_dir / "mosaic_logs"
+    if not mosaic_dir.exists():
+        click.echo("\n  No mosaic_logs directory found.")
+        return
+
+    # Store statistics
+    command_score_wins = Counter()
+    command_score_ties = 0
+    command_verification_fails = Counter()
+    both_failures = 0
+    total_verification_entries = 0
+
+    for traj_file in mosaic_dir.glob("*_trajectory_costs.jsonl"):
+        scenario_token = traj_file.name.split("_")[0]
+        verif_file = mosaic_dir / f"{scenario_token}_verification.jsonl"
+        if not verif_file.exists():
+            continue
+
+        # --- Cost estimator analysis ---
+        with open(traj_file) as f:
+            for line in f:
+                entry = json.loads(line)
+                proposals = entry.get("proposals", [])
+                if not proposals:
+                    continue
+                # Determine which command has highest final_score
+                max_score = max(p["final_score"] for p in proposals)
+                winners = [
+                    p["command"] for p in proposals if p["final_score"] == max_score
+                ]
+                if len(winners) > 1:
+                    command_score_ties += 1
+                else:
+                    command_score_wins[winners[0]] += 1
+
+        # --- Verifier analysis ---
+        timestep_results = defaultdict(list)
+        with open(verif_file) as f:
+            for line in f:
+                entry = json.loads(line)
+                timestep_results[entry["time"]].append(entry)
+        for entries in timestep_results.values():
+            total_verification_entries += 1
+            fail_count = sum(e["result"] == "fail" for e in entries)
+            for e in entries:
+                if e["result"] == "fail":
+                    command_verification_fails[e["command"]] += 1
+            if fail_count > 1:
+                both_failures += 1
+
+    # --- Print results ---
+    click.echo("\n=== Mosaic Logs Analysis ===")
+
+    click.echo("\nCost estimator results:")
+    total_wins = sum(command_score_wins.values())
+    total_entries = total_wins + command_score_ties
+    for cmd, wins in command_score_wins.items():
+        click.echo(f"  {cmd}: won {wins} times ({wins / total_entries * 100:.1f}%)")
+    click.echo(
+        f"  Tied scores: {command_score_ties} times ({command_score_ties / total_entries * 100:.1f}%)"
+    )
+
+    click.echo("\nVerifier results:")
+    for cmd, fails in command_verification_fails.items():
+        click.echo(f"  {cmd}: {fails} verification failures")
+    click.echo(
+        f"  Both commands failed at same timestep: {both_failures} times "
+        f"out of {total_verification_entries} timesteps ({both_failures / total_verification_entries * 100:.1f}%)"
+    )
+
+
 @click.command()
 @click.option(
     "--path",
@@ -264,3 +338,5 @@ def analyze(path: Union[str, None], baseline: Union[str, None], per_type: bool) 
     if baseline is not None:
         baseline_df = _load_results(Path(baseline))
         _print_comparison(df, baseline_df)
+
+    _analyze_mosaic_logs(experiment_dir)
