@@ -85,7 +85,7 @@ def _print_summary(df: DataFrame, label: str) -> None:
 
 
 def _print_failures(df: DataFrame) -> None:
-    click.echo(f"\n  Failure Breakdown:")
+    click.echo("\n  Failure Breakdown:")
     click.echo(f"  {'Metric':<40} {'Fail':>5}  {'Rate':>6}")
     click.echo(f"  {'-' * 55}")
 
@@ -110,7 +110,7 @@ def _print_failures(df: DataFrame) -> None:
 
 
 def _print_per_type(df: DataFrame) -> None:
-    click.echo(f"\n  Per-Scenario-Type Breakdown:")
+    click.echo("\n  Per-Scenario-Type Breakdown:")
     click.echo(
         f"  {'Type':<45} {'n':>4}  {'Score':>6}  {'Zero':>4}  {'TTC=0':>5}  {'Coll':>4}"
     )
@@ -164,7 +164,7 @@ def _print_collision_scenarios(df: DataFrame) -> None:
 
 
 def _print_comparison(df: DataFrame, baseline_df: DataFrame) -> None:
-    click.echo(f"\n  Comparison with Baseline:")
+    click.echo("\n  Comparison with Baseline:")
     overall_diff = df["score"].mean() - baseline_df["score"].mean()
     sign = "+" if overall_diff >= 0 else ""
     click.echo(f"  Overall score diff: {sign}{overall_diff:.4f}")
@@ -208,7 +208,7 @@ def _print_comparison(df: DataFrame, baseline_df: DataFrame) -> None:
             regressions = merged[merged["score_new"] < merged["score_base"]].copy()
             regressions["diff"] = regressions["score_new"] - regressions["score_base"]
             regressions = regressions.sort_values("diff")
-            click.echo(f"\n  Worst regressions:")
+            click.echo("\n  Worst regressions:")
             for _, row in regressions.head(10).iterrows():
                 click.echo(
                     f"    {row['scenario']}  {row['score_base']:.4f} -> {row['score_new']:.4f}  ({row['diff']:+.4f})"
@@ -220,7 +220,7 @@ def _print_comparison(df: DataFrame, baseline_df: DataFrame) -> None:
                 improvements["score_new"] - improvements["score_base"]
             )
             improvements = improvements.sort_values("diff", ascending=False)
-            click.echo(f"\n  Best improvements:")
+            click.echo("\n  Best improvements:")
             for _, row in improvements.head(10).iterrows():
                 click.echo(
                     f"    {row['scenario']}  {row['score_base']:.4f} -> {row['score_new']:.4f}  ({row['diff']:+.4f})"
@@ -234,20 +234,30 @@ def _analyze_cost_estimator_logs(experiment_dir: Path) -> None:
         return
 
     command_score_wins = Counter()
+    command_appearances = Counter()
+    all_commands = set()
     command_score_ties = 0
 
-    for traj_file in mosaic_dir.glob("*_trajectory_costs.jsonl"):
-        with open(traj_file) as f:
+    for estimator_log in mosaic_dir.glob("*_trajectory_costs.jsonl"):
+        with open(estimator_log) as f:
             for line in f:
                 entry = json.loads(line)
                 proposals = entry.get("proposals", [])
                 if not proposals:
                     continue
-                # Determine which command has highest final_score
+
+                # Track appearances
+                for p in proposals:
+                    cmd = p["command"]
+                    all_commands.add(cmd)
+                    command_appearances[cmd] += 1
+
+                # Determine winner(s)
                 max_score = max(p["final_score"] for p in proposals)
                 winners = [
                     p["command"] for p in proposals if p["final_score"] == max_score
                 ]
+
                 if len(winners) > 1:
                     command_score_ties += 1
                 else:
@@ -255,12 +265,30 @@ def _analyze_cost_estimator_logs(experiment_dir: Path) -> None:
 
     click.echo("\n=== Cost Estimator Analysis ===\n")
 
-    total_wins = sum(command_score_wins.values())
-    total_entries = total_wins + command_score_ties
-    for cmd, wins in command_score_wins.items():
-        click.echo(f"  {cmd}: won {wins} times ({wins / total_entries * 100:.1f}%)")
+    total_decisions = sum(command_score_wins.values()) + command_score_ties
+
+    if total_decisions == 0:
+        click.echo("  No estimator entries found.")
+        return
+
+    for cmd in sorted(all_commands):
+        wins = command_score_wins[cmd]
+        appearances = command_appearances[cmd]
+
+        win_rate_global = wins / total_decisions * 100
+        win_rate_local = wins / appearances * 100 if appearances > 0 else 0.0
+
+        click.echo(
+            f"  {cmd:<20} "
+            f"{wins:>6} wins  "
+            f"({win_rate_global:>6.2f}% of decisions, "
+            f"{win_rate_local:>6.2f}% of its appearances)"
+        )
+
+    tie_rate = command_score_ties / total_decisions * 100
+
     click.echo(
-        f"  Tied scores: {command_score_ties} times ({command_score_ties / total_entries * 100:.1f}%)"
+        f"\n  Tied scores: {command_score_ties} / {total_decisions} ({tie_rate:.2f}%)"
     )
 
 
@@ -270,30 +298,50 @@ def _analyze_verifier_logs(experiment_dir: Path) -> None:
         click.echo("\n  No mosaic_logs directory found.")
         return
 
-    command_verification_fails = Counter()
+    command_fails = Counter()
+    command_checks = Counter()
     both_failures = 0
-    total_verification_entries = 0
-    for verif_file in mosaic_dir.glob("*_verification.jsonl"):
+    total_timesteps = 0
+
+    for verifier_log in mosaic_dir.glob("*_verification.jsonl"):
         timestep_results = defaultdict(list)
-        with open(verif_file) as f:
+
+        with open(verifier_log) as f:
             for line in f:
                 entry = json.loads(line)
+
+                cmd = entry["command"]
                 timestep_results[entry["time"]].append(entry)
+
+                command_checks[cmd] += 1
+                if entry["result"] == "fail":
+                    command_fails[cmd] += 1
+
         for entries in timestep_results.values():
-            total_verification_entries += 1
+            total_timesteps += 1
             fail_count = sum(e["result"] == "fail" for e in entries)
-            for e in entries:
-                if e["result"] == "fail":
-                    command_verification_fails[e["command"]] += 1
             if fail_count > 1:
                 both_failures += 1
 
     click.echo("\n=== Verifier Analysis ===\n")
-    for cmd, fails in command_verification_fails.items():
-        click.echo(f"  {cmd}: {fails} verification failures")
+
+    if not command_checks:
+        click.echo("  No verifier entries found.")
+        return
+
+    for cmd in sorted(command_checks):
+        checks = command_checks[cmd]
+        fails = command_fails[cmd]
+        rate = fails / checks * 100 if checks > 0 else 0.0
+
+        click.echo(f"  {cmd:<20} {fails:>6} / {checks:<6} ({rate:>6.2f}% fail rate)")
+
+    both_rate = both_failures / total_timesteps * 100 if total_timesteps > 0 else 0.0
+
     click.echo(
-        f"  Both commands failed at same timestep: {both_failures} times "
-        f"out of {total_verification_entries} timesteps ({both_failures / total_verification_entries * 100:.1f}%)"
+        f"\n  Both commands failed at same timestep: "
+        f"{both_failures} / {total_timesteps} "
+        f"({both_rate:.2f}%)"
     )
 
 
