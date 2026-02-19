@@ -36,6 +36,11 @@ tuplan-garage = { git = "https://github.com/ll-nick/tuplan_garage" }
 flow-drive = { path = "../flowdrive" }
 interplan = { git = "https://github.com/ll-nick/interPlan" }
 
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+]
+
 [tool.uv]
 override-dependencies = [
     # Flowdrive and nuplan-devkit have conflicting dependencies, so we need to override them here
