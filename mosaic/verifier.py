@@ -51,6 +51,8 @@ class TrajectoryVerifier(Verifier):
         self._scorer: MosaicScorer = MosaicScorer(self.parameters.proposal_sampling)
 
         self._log_buffer: list[dict[str, object]] = []
+        self._cache: dict[str, VerificationResult] = {}
+        self._cache_time: float = float("nan")
 
     @override
     def analyze(
@@ -59,6 +61,14 @@ class TrajectoryVerifier(Verifier):
         environment_model: EnvironmentModel,
         command: Command,
     ) -> VerificationResult:
+        assert isinstance(time, timedelta)
+        t = time.total_seconds()
+        if t != self._cache_time:
+            self._cache.clear()
+            self._cache_time = t
+        if command.name in self._cache:
+            return self._cache[command.name]
+
         # Convert trajectory to state array (1, T, state_dim)
         states = trajectory_utils.trajectory_to_state_array(
             command.trajectory, environment_model.parameters.proposal_sampling
@@ -91,13 +101,16 @@ class TrajectoryVerifier(Verifier):
             self._log_verification(time, command, time_to_infraction, ego_speed, is_ok)
 
         if is_ok:
-            return VerificationResult(True)
+            result = VerificationResult(True)
+        else:
+            result = VerificationResult(
+                False,
+                f"Imminent collision: time_to_infraction={time_to_infraction:.2f}s, "
+                f"ego_speed={ego_speed:.2f}m/s",
+            )
 
-        return VerificationResult(
-            False,
-            f"Imminent collision: time_to_infraction={time_to_infraction:.2f}s, "
-            f"ego_speed={ego_speed:.2f}m/s",
-        )
+        self._cache[command.name] = result
+        return result
 
     def _log_verification(
         self,
