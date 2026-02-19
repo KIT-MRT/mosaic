@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import pathlib
 from typing import TYPE_CHECKING
 
 from nuplan.planning.simulation.callback.abstract_callback import AbstractCallback
@@ -35,9 +34,7 @@ class MosaicLoggingCallback(AbstractCallback):
         pass
 
     @override
-    def on_step_start(
-        self, setup: SimulationSetup, planner: AbstractPlanner
-    ) -> None:
+    def on_step_start(self, setup: SimulationSetup, planner: AbstractPlanner) -> None:
         pass
 
     @override
@@ -78,6 +75,4 @@ class MosaicLoggingCallback(AbstractCallback):
         from mosaic.ego_agent import EgoAgent
 
         if isinstance(planner, EgoAgent):
-            planner.flush_logs(
-                self._output_directory, setup.scenario.scenario_name
-            )
+            planner.flush_logs(self._output_directory, setup.scenario.scenario_name)
