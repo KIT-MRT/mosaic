@@ -1,12 +1,7 @@
-import json
-import logging
-import os
 from dataclasses import dataclass
 from datetime import timedelta
 
-import git
 import numpy as np
-import ray
 from arbitration_graphs.typing import Time
 from arbitration_graphs.verification import Result, Verifier
 from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
@@ -47,7 +42,6 @@ class TrajectoryVerifier(Verifier):
         time_to_infraction_threshold: float = 2.0
         max_ego_speed: float = 5.0
         logging_enabled: bool = True
-        log_base_dir: str = "logs"
 
     def __init__(self, parameters: Parameters):
         super().__init__()
@@ -56,8 +50,7 @@ class TrajectoryVerifier(Verifier):
         self._simulator: PDMSimulator = PDMSimulator(self.parameters.proposal_sampling)
         self._scorer: MosaicScorer = MosaicScorer(self.parameters.proposal_sampling)
 
-        self._logger: logging.Logger = self._setup_logger()
-        self._ray_metadata: dict[str, object] = {}
+        self._log_buffer: list[dict[str, object]] = []
 
     @override
     def analyze(
@@ -106,37 +99,6 @@ class TrajectoryVerifier(Verifier):
             f"ego_speed={ego_speed:.2f}m/s",
         )
 
-    def _setup_logger(self) -> logging.Logger:
-        logger = logging.getLogger(f"trajectory_verifier_{id(self)}")
-        logger.setLevel(logging.INFO)
-        logger.propagate = False
-
-        if not logger.hasHandlers():
-            worker_id = ray.get_runtime_context().get_worker_id()  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
-            task_id = ray.get_runtime_context().get_task_id()  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
-
-            repo = git.Repo(search_parent_directories=True)
-            sha = repo.head.object.hexsha
-
-            log_dir = os.path.join(self.parameters.log_base_dir, sha)
-            os.makedirs(log_dir, exist_ok=True)
-
-            log_file = os.path.join(
-                log_dir, f"verification_{worker_id}_{task_id}.jsonl"
-            )
-
-            handler = logging.FileHandler(log_file, mode="a")
-            formatter = logging.Formatter("%(message)s")
-            handler.setFormatter(formatter)
-            logger.addHandler(handler)
-
-            self._ray_metadata = {
-                "task_id": task_id,
-                "worker_id": worker_id,
-            }
-
-        return logger
-
     def _log_verification(
         self,
         time: Time,
@@ -146,15 +108,14 @@ class TrajectoryVerifier(Verifier):
         is_ok: bool,
     ) -> None:
         assert isinstance(time, timedelta)
-        entry = {
+        entry: dict[str, object] = {
             "time": time.total_seconds(),
             "command": command.name,
             "time_to_infraction": float(time_to_infraction),
             "ego_speed": float(ego_speed),
             "result": "pass" if is_ok else "fail",
-            **self._ray_metadata,
         }
-        self._logger.info(json.dumps(entry))
+        self._log_buffer.append(entry)
 
     def __getstate__(self) -> dict[str, object]:
         """

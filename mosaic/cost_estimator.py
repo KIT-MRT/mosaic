@@ -1,14 +1,10 @@
 import json
-import logging
-import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import timedelta
 from typing import cast, final
 
-import git
 import numpy as np
 import numpy.typing as npt
-import ray
 from arbitration_graphs import BatchCostEstimator
 from arbitration_graphs.typing import Time
 from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
@@ -29,7 +25,6 @@ class TrajectoryCostEstimator(BatchCostEstimator):
     class Parameters:
         trajectory_sampling: TrajectorySampling
         logging_enabled: bool
-        log_base_dir: str = "logs"
 
     def __init__(self, parameters: Parameters) -> None:
         super().__init__()
@@ -40,8 +35,7 @@ class TrajectoryCostEstimator(BatchCostEstimator):
         )
         self._scorer: MosaicScorer = MosaicScorer(self.parameters.trajectory_sampling)
 
-        self._logger: logging.Logger = self._setup_logger()
-        self._ray_metadata: dict[str, object] = {}
+        self._log_buffer: list[dict[str, object]] = []
 
     @override
     def estimate_costs(
@@ -88,46 +82,6 @@ class TrajectoryCostEstimator(BatchCostEstimator):
 
         return costs
 
-    def _setup_logger(self) -> logging.Logger:
-        """
-        Create a per-worker logger that writes JSON lines including Ray metadata.
-        """
-        logger = logging.getLogger(f"trajectory_cost_estimator_{id(self)}")
-        logger.setLevel(logging.INFO)
-        # Disable propagation to parent loggers (prevents printing to stdout)
-        logger.propagate = False
-
-        if not logger.hasHandlers():
-            # Get Ray metadata
-            worker_id = ray.get_runtime_context().get_worker_id()  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
-            task_id = ray.get_runtime_context().get_task_id()  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
-
-            # Get current git commit hash
-            repo = git.Repo(search_parent_directories=True)
-            sha = repo.head.object.hexsha
-
-            log_dir = os.path.join(self.parameters.log_base_dir, sha)
-
-            # Ensure log directory exists
-            os.makedirs(log_dir, exist_ok=True)
-
-            log_file = os.path.join(
-                log_dir, f"trajectory_costs_{worker_id}_{task_id}.jsonl"
-            )
-
-            handler = logging.FileHandler(log_file, mode="a")
-            formatter = logging.Formatter("%(message)s")  # we log full JSON ourselves
-            handler.setFormatter(formatter)
-            logger.addHandler(handler)
-
-            # Store metadata for reuse in log entries
-            self._ray_metadata = {
-                "task_id": task_id,
-                "worker_id": worker_id,
-            }
-
-        return logger
-
     def _log_scoring(
         self,
         time: Time,
@@ -157,14 +111,13 @@ class TrajectoryCostEstimator(BatchCostEstimator):
             )
 
         assert isinstance(time, timedelta)
-        entry = {
+        entry: dict[str, object] = {
             "time": time.total_seconds(),
             "num_candidates": len(candidates),
             "proposals": proposals_log,
-            **self._ray_metadata,
         }
 
-        self._logger.info(json.dumps(entry))
+        self._log_buffer.append(entry)
 
     def __getstate__(self) -> dict[str, object]:
         """
