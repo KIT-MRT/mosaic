@@ -1,3 +1,4 @@
+import os
 from typing import Union
 
 import click
@@ -18,24 +19,28 @@ def _configure_hydra(overrides: list[str]) -> DictConfig:
     return cfg
 
 
+INTERPLAN_CHALLENGE = "interplan"
+
+NUPLAN_CHALLENGES = [
+    "closed_loop_reactive_agents",
+    "closed_loop_nonreactive_agents",
+]
+
+ALL_CHALLENGES = NUPLAN_CHALLENGES + [INTERPLAN_CHALLENGE]
+
+
 @click.command()
 @click.option(
     "--challenge",
     "-c",
     default="closed_loop_reactive_agents",
-    type=click.Choice(
-        [
-            "closed_loop_reactive_agents",
-            "closed_loop_nonreactive_agents",
-            "open_loop_boxes",
-        ]
-    ),
+    type=click.Choice(ALL_CHALLENGES),
     help="Simulation challenge type.",
 )
 @click.option(
     "--scenario-filter",
-    default="val14_split",
-    help="Scenario filter preset.",
+    default=None,
+    help="Scenario filter preset (default: val14_split, or interplan10 for interplan challenge).",
 )
 @click.option(
     "--limit-scenarios",
@@ -69,7 +74,7 @@ def _configure_hydra(overrides: list[str]) -> DictConfig:
 )
 def simulate(
     challenge: str,
-    scenario_filter: str,
+    scenario_filter: Union[str, None],
     limit_scenarios: Union[int, None],
     experiment_name: str,
     threads: int,
@@ -82,18 +87,45 @@ def simulate(
     setup_uv_env()
     setup_matplotlib()
 
+    is_interplan = challenge == INTERPLAN_CHALLENGE
+
+    if scenario_filter is None:
+        scenario_filter = "interplan10" if is_interplan else "val14_split"
+
+    simulation = challenge
+    searchpath = "pkg://mosaic.config,"
+
+    if is_interplan:
+        simulation = "default_interplan_benchmark"
+        searchpath += (
+            "pkg://interplan.planning.script.config.common,"
+            "pkg://interplan.planning.script.config.simulation,"
+            "pkg://interplan.planning.script.experiments,"
+        )
+
+    searchpath += (
+        "pkg://tuplan_garage.planning.script.config.common,"
+        "pkg://tuplan_garage.planning.script.config.simulation,"
+        "pkg://nuplan.planning.script.config.common,"
+        "pkg://nuplan.planning.script.experiments"
+    )
+
     overrides = [
         f"experiment_name={experiment_name}",
-        f"+simulation={challenge}",
+        f"+simulation={simulation}",
         f"scenario_filter={scenario_filter}",
-        "scenario_builder=nuplan",
         "enable_simulation_progress_bar=true",
         "worker=ray_distributed",
         f"worker.threads_per_node={threads}",
         "distributed_mode=SINGLE_NODE",
         f"number_of_gpus_allocated_per_simulation={gpus_per_sim}",
-        "hydra.searchpath=[pkg://mosaic.config, pkg://tuplan_garage.planning.script.config.common, pkg://tuplan_garage.planning.script.config.simulation, pkg://nuplan.planning.script.config.common, pkg://nuplan.planning.script.experiments]",
+        f"hydra.searchpath=[{searchpath}]",
     ]
+
+    if is_interplan:
+        overrides.append(
+            "scenario_builder.data_root=${oc.env:NUPLAN_DATA_ROOT}/nuplan-v1.1/splits/test"
+        )
 
     if limit_scenarios is not None:
         overrides.append(f"scenario_filter.limit_total_scenarios={limit_scenarios}")
@@ -101,11 +133,18 @@ def simulate(
     overrides.extend(override)
     cfg = _configure_hydra(overrides)
 
-    from nuplan.planning.script.run_simulation import run_simulation
+    if is_interplan:
+        from interplan.planning.utils.modifications_preprocessing import (
+            preprocess_scenario_filter,
+        )
+
+        preprocess_scenario_filter(cfg)
+        from interplan.planning.script.run_simulation import run_simulation
+    else:
+        from nuplan.planning.script.run_simulation import run_simulation
 
     from mosaic.ego_agent import EgoAgent
 
-    planner = EgoAgent()
-    run_simulation(cfg, planners=planner)
+    run_simulation(cfg, planners=EgoAgent())
 
     click.echo(f"Simulation results are saved in: {cfg.output_dir}")
