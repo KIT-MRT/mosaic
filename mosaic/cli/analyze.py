@@ -227,12 +227,7 @@ def _print_comparison(df: DataFrame, baseline_df: DataFrame) -> None:
                 )
 
 
-def _analyze_cost_estimator_logs(experiment_dir: Path) -> None:
-    mosaic_dir = experiment_dir / "mosaic_logs"
-    if not mosaic_dir.exists():
-        click.echo("\n  No mosaic_logs directory found.")
-        return
-
+def _analyze_cost_estimator_logs(mosaic_dir: Path) -> None:
     command_score_wins = Counter()
     command_appearances = Counter()
     all_commands = set()
@@ -292,12 +287,7 @@ def _analyze_cost_estimator_logs(experiment_dir: Path) -> None:
     )
 
 
-def _analyze_verifier_logs(experiment_dir: Path) -> None:
-    mosaic_dir = experiment_dir / "mosaic_logs"
-    if not mosaic_dir.exists():
-        click.echo("\n  No mosaic_logs directory found.")
-        return
-
+def _analyze_verifier_logs(mosaic_dir: Path) -> None:
     command_fails = Counter()
     command_checks = Counter()
     both_failures = 0
@@ -385,5 +375,10 @@ def analyze(path: Union[str, None], baseline: Union[str, None], per_type: bool) 
         baseline_df = _load_results(Path(baseline))
         _print_comparison(df, baseline_df)
 
-    _analyze_cost_estimator_logs(experiment_dir)
-    _analyze_verifier_logs(experiment_dir)
+    mosaic_dir = experiment_dir / "mosaic_logs"
+    if not mosaic_dir.exists():
+        click.echo("\n  No mosaic_logs directory found.")
+        return
+
+    _analyze_cost_estimator_logs(mosaic_dir)
+    _analyze_verifier_logs(mosaic_dir)
