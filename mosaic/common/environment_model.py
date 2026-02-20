@@ -31,9 +31,6 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.observation.pdm_obser
 from tuplan_garage.planning.simulation.planner.pdm_planner.observation.pdm_occupancy_map import (
     PDMOccupancyMap,
 )
-from tuplan_garage.planning.simulation.planner.pdm_planner.simulation.pdm_simulator import (
-    PDMSimulator,
-)
 from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_path import PDMPath
 
 from mosaic.common.utils import map as map_utils

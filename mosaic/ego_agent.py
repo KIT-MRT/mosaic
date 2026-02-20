@@ -1,3 +1,5 @@
+import json
+import os
 from typing import Optional, cast, final
 
 from arbitration_graphs import CostArbitrator, PriorityArbitrator
@@ -76,10 +78,10 @@ class EgoAgent(AbstractPlanner):
             self.parameters.emergency_stop_behavior
         )
 
-        cost_estimator = TrajectoryCostEstimator(self.parameters.cost_estimator)
-        verifier = TrajectoryVerifier(self.parameters.verifier)
+        self._cost_estimator = TrajectoryCostEstimator(self.parameters.cost_estimator)
+        self._verifier = TrajectoryVerifier(self.parameters.verifier)
         self.cost_arbitrator = CostArbitrator(
-            "CostArbitrator", cost_estimator, verifier
+            "CostArbitrator", self._cost_estimator, self._verifier
         )
 
         self.cost_arbitrator.add_option(
@@ -92,7 +94,7 @@ class EgoAgent(AbstractPlanner):
         )
 
         self.root_arbitrator: PriorityArbitrator = PriorityArbitrator(
-            "RootArbitrator", verifier
+            "RootArbitrator", self._verifier
         )
 
         self.root_arbitrator.add_option(
@@ -131,6 +133,23 @@ class EgoAgent(AbstractPlanner):
         )
 
         return command.trajectory
+
+    def flush_logs(self, output_dir: str, scenario_name: str) -> None:
+        """Write buffered cost estimator and verifier logs to the output directory."""
+        log_dir = os.path.join(output_dir, "mosaic_logs")
+        os.makedirs(log_dir, exist_ok=True)
+
+        if self._cost_estimator._log_buffer:
+            path = os.path.join(log_dir, f"{scenario_name}_trajectory_costs.jsonl")
+            with open(path, "w") as f:
+                for entry in self._cost_estimator._log_buffer:
+                    f.write(json.dumps(entry) + "\n")
+
+        if self._verifier._log_buffer:
+            path = os.path.join(log_dir, f"{scenario_name}_verification.jsonl")
+            with open(path, "w") as f:
+                for entry in self._verifier._log_buffer:
+                    f.write(json.dumps(entry) + "\n")
 
     def __getstate__(self) -> dict[str, object]:
         """
