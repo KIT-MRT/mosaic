@@ -20,7 +20,7 @@ class EmergencyStopBehavior(Behavior):
     class Parameters:
         trajectory_sampling: TrajectorySampling
         max_long_accel: float = 2.40
-        min_long_accel: float = -4.05
+        min_long_accel: float = -8.0
 
     def __init__(
         self,
