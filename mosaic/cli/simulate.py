@@ -127,6 +127,8 @@ def simulate(
         overrides.append(
             "scenario_builder.data_root=${oc.env:NUPLAN_DATA_ROOT}/nuplan-v1.1/splits/test"
         )
+    else:
+        overrides.append("scenario_builder=nuplan")
 
     if limit_scenarios is not None:
         overrides.append(f"scenario_filter.limit_total_scenarios={limit_scenarios}")
