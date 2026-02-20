@@ -135,6 +135,9 @@ class TrajectoryVerifier(Verifier):
         Custom getstate to fix pickling since this is a class that inherits from a C++ object
         """
         state = self.__dict__.copy()
+        # VerificationResult inherits from C++ Result and can't be pickled
+        state["_cache"] = {}
+        state["_cache_time"] = float("nan")
         return state
 
     def __setstate__(self, state: dict[str, object]) -> None:
