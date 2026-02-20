@@ -15,7 +15,18 @@ from typing_extensions import override
 import mosaic.common.utils.trajectory as trajectory_utils
 from mosaic.common.command import Command
 from mosaic.common.environment_model import EnvironmentModel
-from mosaic.scorer.mosaic_scorer import MosaicScorer
+from mosaic.scorer import (
+    ComfortMetric,
+    DrivableAreaComplianceMetric,
+    DrivingDirectionComplianceMetric,
+    MultiplicativeMetric,
+    NoAtFaultCollisionMetric,
+    ProgressMetric,
+    ScoringInput,
+    TTCMetric,
+    WeightedMetric,
+    aggregate_scores,
+)
 
 
 @final
@@ -32,7 +43,18 @@ class TrajectoryCostEstimator(BatchCostEstimator):
         self._simulator: PDMSimulator = PDMSimulator(
             self.parameters.trajectory_sampling
         )
-        self._scorer: MosaicScorer = MosaicScorer(self.parameters.trajectory_sampling)
+
+        self._multiplicative_metrics: list[MultiplicativeMetric] = [
+            NoAtFaultCollisionMetric(),
+            DrivableAreaComplianceMetric(),
+            DrivingDirectionComplianceMetric(),
+        ]
+        self._progress_metric: ProgressMetric = ProgressMetric()
+        self._weighted_metrics: list[WeightedMetric] = [
+            self._progress_metric,
+            TTCMetric(),
+            ComfortMetric(),
+        ]
 
         self._log_buffer: list[dict[str, object]] = []
 
@@ -45,7 +67,6 @@ class TrajectoryCostEstimator(BatchCostEstimator):
     ) -> list[float]:
         trajectories_list = [cast(Command, c.command).trajectory for c in candidates]
 
-        # Convert each trajectory to a (T, state_dim) array
         states_list = [
             trajectory_utils.trajectory_to_state_array(
                 traj, environment_model.parameters.proposal_sampling
@@ -53,20 +74,36 @@ class TrajectoryCostEstimator(BatchCostEstimator):
             for traj in trajectories_list
         ]
 
-        # Stack into shape (n, T, state_dim)
         states = np.stack(states_list, axis=0)
 
-        # simulate closed-loop execution traces starting from the real ego state
         states = self._simulator.simulate_proposals(states, environment_model.ego_state)
 
-        scores = self._scorer.score_proposals(
+        scoring_input = ScoringInput.create(
             states,
             environment_model.ego_state,
-            environment_model.observation,
-            environment_model.route_center_line,
-            environment_model.route_lane_dict,
             environment_model.drivable_area_map,
-            environment_model.map_api,
+            environment_model.route_lane_dict,
+            environment_model.parameters.proposal_sampling,
+        )
+
+        multi_results = [
+            m.compute(scoring_input, environment_model)
+            for m in self._multiplicative_metrics
+        ]
+        progress_result = self._progress_metric.compute(
+            scoring_input, environment_model
+        )
+        weighted_results = []
+        for m in self._weighted_metrics:
+            if m is self._progress_metric:
+                weighted_results.append((m.weight, progress_result))
+            else:
+                weighted_results.append(
+                    (m.weight, m.compute(scoring_input, environment_model))
+                )
+
+        scores = aggregate_scores(
+            multi_results, weighted_results, progress_result
         )
 
         if scores.shape != (len(candidates),):
@@ -75,7 +112,13 @@ class TrajectoryCostEstimator(BatchCostEstimator):
             )
 
         if self.parameters.logging_enabled:
-            self._log_scoring(time, candidates, scores)
+            self._log_scoring(
+                time,
+                candidates,
+                scores,
+                multi_results,
+                weighted_results,
+            )
 
         costs = [-score for score in scores]
 
@@ -86,26 +129,30 @@ class TrajectoryCostEstimator(BatchCostEstimator):
         time: Time,
         candidates: list[BatchCostEstimator.Candidate],
         scores: npt.NDArray[np.float64],
+        multi_results: list,
+        weighted_results: list[tuple[float, object]],
     ) -> None:
+        # Build a name->result map for weighted metrics by pairing with metric list
+        weighted_named: list[tuple[str, object]] = []
+        for metric, (_, result) in zip(self._weighted_metrics, weighted_results):
+            weighted_named.append((metric.name, result))
+
         proposals_log: list[dict[str, object]] = []
         for i, (candidate, score) in enumerate(zip(candidates, scores)):
             command = cast(Command, candidate.command)
 
-            # TODO: Add an interface to the scorer to get the individual metric components
-            # instead of reaching into protected members here
+            components: dict[str, float] = {}
+            for j, m in enumerate(self._multiplicative_metrics):
+                components[m.name] = float(multi_results[j].scores[i])
+            for name, result in weighted_named:
+                components[name] = float(result.scores[i])
+
             proposals_log.append(
                 {
                     "command": command.name,
                     "is_active": candidate.is_active,
                     "final_score": float(score),
-                    "components": {
-                        "multi_metrics": list(
-                            map(float, self._scorer._multi_metrics[:, i].tolist())
-                        ),
-                        "weighted_metrics": list(
-                            map(float, self._scorer._weighted_metrics[:, i].tolist())
-                        ),
-                    },
+                    "components": components,
                 }
             )
 
