@@ -566,16 +566,7 @@ class MosaicScorer:
             self._proposal_sampling.num_poses * self._proposal_sampling.interval_length
         )
         ego_speed = 0.0
-        try:
-            ego_speed = float(self._initial_ego_state.dynamic_car_state.speed)
-        except Exception:
-            # fallback: try to infer from states array at initial timestep
-            try:
-                vx = self._states[:, 0, StateIndex.VELOCITY_X]
-                vy = self._states[:, 0, StateIndex.VELOCITY_Y]
-                ego_speed = float(np.hypot(vx, vy).mean())
-            except Exception:
-                ego_speed = 0.0
+        ego_speed = float(self._initial_ego_state.dynamic_car_state.speed)
 
         expected_by_speed = ego_speed * horizon_time_s * PROGRESS_REF_SPEED_FACTOR
 
