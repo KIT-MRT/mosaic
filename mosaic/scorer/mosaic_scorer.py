@@ -618,7 +618,7 @@ class MosaicScorer:
         where the ego footprint is inside drivable area (on-route).
         """
         # center in polygon mask for on-route drivable polygons
-        on_route_mask = self._ego_areas[:, :, EgoAreaIndex.NON_DRIVABLE_AREA] == False
+        on_route_mask = ~self._ego_areas[:, :, EgoAreaIndex.NON_DRIVABLE_AREA]
         # fraction of timesteps where ego is not in non-drivable area
         fraction_in_drivable = on_route_mask.sum(axis=1) / float(
             self._proposal_sampling.num_poses + 1
