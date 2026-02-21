@@ -83,8 +83,7 @@ class TTCMetric(WeightedMetric):
                 float(future_time_idx) * scoring_input.proposal_sampling.interval_length
             )
             coords_exterior_time_steps[:, :, idx] = (
-                coords_exterior_time_steps[:, :, idx]
-                + dxy_per_s[:, :, None] * delta_t
+                coords_exterior_time_steps[:, :, idx] + dxy_per_s[:, :, None] * delta_t
             )
 
         polygons = creation.polygons(coords_exterior_time_steps)
@@ -104,9 +103,7 @@ class TTCMetric(WeightedMetric):
                 if len(intersecting) == 0:
                     continue
 
-                for proposal_idx, geometry_idx in zip(
-                    intersecting[0], intersecting[1]
-                ):
+                for proposal_idx, geometry_idx in zip(intersecting[0], intersecting[1]):
                     token = observation[current_time_idx].tokens[geometry_idx]
                     if (
                         (observation.red_light_token in token)
@@ -133,9 +130,7 @@ class TTCMetric(WeightedMetric):
                     )
 
                     centroid = observation[current_time_idx][token].centroid
-                    track_heading = observation.unique_objects[
-                        token
-                    ].box.center.heading
+                    track_heading = observation.unique_objects[token].box.center.heading
                     track_state = StateSE2(centroid.x, centroid.y, track_heading)
                     if is_agent_ahead(ego_rear_axle, track_state) or (
                         (
@@ -151,9 +146,7 @@ class TTCMetric(WeightedMetric):
                             * scoring_input.proposal_sampling.interval_length
                         )
                         ttc_score = float(
-                            np.clip(
-                                ttc_seconds / self._time_horizon, 0.0, 1.0
-                            )
+                            np.clip(ttc_seconds / self._time_horizon, 0.0, 1.0)
                         )
                         ttc_scores[proposal_idx] = min(
                             ttc_scores[proposal_idx], ttc_score

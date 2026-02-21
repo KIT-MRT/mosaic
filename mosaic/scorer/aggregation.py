@@ -37,9 +37,7 @@ def aggregate_scores(
     weighted_sum = np.zeros_like(safety_gate)
     for weight, result in weighted_results:
         # use normalized_progress for the progress entry
-        scores = (
-            normalized_progress if result is progress_result else result.scores
-        )
+        scores = normalized_progress if result is progress_result else result.scores
         weighted_sum += weight * scores
         total_weight += weight
 

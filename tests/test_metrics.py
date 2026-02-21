@@ -40,9 +40,7 @@ def _make_scoring_input(
     if states is None:
         states = np.zeros((N_PROPOSALS, N_POSES + 1, 11), dtype=np.float64)
     if ego_coords is None:
-        ego_coords = np.zeros(
-            (N_PROPOSALS, N_POSES + 1, 5, 2), dtype=np.float64
-        )
+        ego_coords = np.zeros((N_PROPOSALS, N_POSES + 1, 5, 2), dtype=np.float64)
     if ego_polygons is None:
         ego_polygons = np.empty((N_PROPOSALS, N_POSES + 1), dtype=np.object_)
     if ego_areas is None:
@@ -125,9 +123,7 @@ class TestNoAtFaultCollisionMetric:
             intersection_mock.area = 5.0  # 50% overlap
             ego_poly.intersection.return_value = intersection_mock
 
-            ego_polygons = np.empty(
-                (N_PROPOSALS, N_POSES + 1), dtype=np.object_
-            )
+            ego_polygons = np.empty((N_PROPOSALS, N_POSES + 1), dtype=np.object_)
             ego_polygons.fill(MagicMock())
             ego_polygons[0, 0] = ego_poly
 
@@ -158,7 +154,9 @@ class TestDrivableAreaComplianceMetric:
         """Some NON_DRIVABLE_AREA -> score between 0 and 1."""
         ego_areas = np.zeros((N_PROPOSALS, N_POSES + 1, 3), dtype=np.bool_)
         # Mark half the timesteps as non-drivable for proposal 0
-        ego_areas[0, : (N_POSES + 1) // 2, 1] = True  # EgoAreaIndex.NON_DRIVABLE_AREA = 1
+        ego_areas[0, : (N_POSES + 1) // 2, 1] = (
+            True  # EgoAreaIndex.NON_DRIVABLE_AREA = 1
+        )
 
         si = _make_scoring_input(proposal_sampling, ego_areas=ego_areas)
 
@@ -190,9 +188,7 @@ class TestDrivingDirectionComplianceMetric:
         ego_areas[0, :, 2] = True  # EgoAreaIndex.ONCOMING_TRAFFIC = 2
 
         # Create ego_coords where proposal 0 moves 1.0m per timestep
-        ego_coords = np.zeros(
-            (N_PROPOSALS, N_POSES + 1, 5, 2), dtype=np.float64
-        )
+        ego_coords = np.zeros((N_PROPOSALS, N_POSES + 1, 5, 2), dtype=np.float64)
         for t in range(N_POSES + 1):
             ego_coords[0, t, :, 0] = float(t)  # x increases by 1 each step
 
@@ -277,9 +273,7 @@ class TestComfortMetric:
     @patch("mosaic.scorer.comfort_metric.ego_is_comfortable")
     def test_comfortable(self, mock_comfort, proposal_sampling, env_model):
         """All timesteps within comfort bounds -> score 1.0."""
-        mock_comfort.return_value = np.ones(
-            (N_PROPOSALS, N_POSES + 1), dtype=np.bool_
-        )
+        mock_comfort.return_value = np.ones((N_PROPOSALS, N_POSES + 1), dtype=np.bool_)
         si = _make_scoring_input(proposal_sampling)
 
         metric = ComfortMetric()

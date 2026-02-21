@@ -77,9 +77,7 @@ class TestVerifierCaching:
 
         assert verifier._simulator.simulate_proposals.call_count == 2
 
-    def test_new_timestep_clears_old_cache(
-        self, mock_si_create, mock_traj, verifier
-    ):
+    def test_new_timestep_clears_old_cache(self, mock_si_create, mock_traj, verifier):
         """Advancing to a new timestep should clear all cached entries from the previous one."""
         env = MagicMock()
 
