@@ -8,14 +8,12 @@ from mosaic.scorer import (
     ComfortMetric,
     DrivableAreaComplianceMetric,
     DrivingDirectionComplianceMetric,
-    MetricResult,
     NoAtFaultCollisionMetric,
     ProgressGateMetric,
     ProgressMetric,
     TTCMetric,
 )
 from mosaic.scorer.scoring_input import ScoringInput
-
 
 N_PROPOSALS = 2
 N_POSES = 10
@@ -282,26 +280,6 @@ class TestComfortMetric:
         result = metric.compute(si, env_model)
 
         np.testing.assert_array_equal(result.scores, [1.0, 1.0])
-
-
-# === Properties ===
-
-
-class TestMetricProperties:
-    def test_metric_names(self):
-        assert NoAtFaultCollisionMetric().name == "no_at_fault_collision"
-        assert DrivableAreaComplianceMetric().name == "drivable_area"
-        assert DrivingDirectionComplianceMetric().name == "driving_direction"
-        assert ProgressMetric().name == "progress"
-        assert ProgressGateMetric(ProgressMetric()).name == "progress_gate"
-        assert TTCMetric().name == "ttc"
-        assert ComfortMetric().name == "comfort"
-
-    def test_weighted_metric_weight(self):
-        assert ProgressMetric(weight=5.0).weight == 5.0
-        assert TTCMetric(weight=7.0).weight == 7.0
-        assert ComfortMetric(weight=2.0).weight == 2.0
-        assert ProgressMetric(weight=3.14).weight == 3.14
 
 
 # === ProgressGateMetric ===

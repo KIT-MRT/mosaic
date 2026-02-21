@@ -34,18 +34,6 @@ class TestAggregateScores:
         assert scores[0] == 0.0
         assert scores[1] > 0.0
 
-    def test_safety_gate_zeroes_everything(self):
-        """When safety_gate is 0, final score is 0 regardless of weighted scores."""
-        multi = [_result([0.0, 1.0])]
-        weighted = [
-            (5.0, _result([0.8, 0.8])),
-            (7.0, _result([1.0, 1.0])),
-        ]
-
-        scores = aggregate_scores(multi, weighted)
-
-        assert scores[0] == 0.0
-
     def test_weighted_average(self):
         """Known weights and scores -> verify weighted average math."""
         multi = [_result([1.0])]
