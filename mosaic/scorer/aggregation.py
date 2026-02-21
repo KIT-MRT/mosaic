@@ -15,18 +15,17 @@ def aggregate_scores(
     :param weighted_results: Pairs of (weight, result) for weighted-average metrics.
     :return: (n_proposals,) final scores.
     """
-    # safety_gate = product of all multiplicative scores
-    safety_gate = np.ones_like(multiplicative_results[0].scores)
+    multiplicative_score = np.ones_like(multiplicative_results[0].scores)
     for r in multiplicative_results:
-        safety_gate = safety_gate * r.scores
+        multiplicative_score = multiplicative_score * r.scores
 
     # weighted average
     total_weight = 0.0
-    weighted_sum = np.zeros_like(safety_gate)
+    weighted_sum = np.zeros_like(multiplicative_score)
     for weight, result in weighted_results:
         weighted_sum += weight * result.scores
         total_weight += weight
 
     weighted_average = weighted_sum / total_weight
 
-    return safety_gate * weighted_average
+    return multiplicative_score * weighted_average
