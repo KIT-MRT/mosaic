@@ -21,6 +21,7 @@ from mosaic.scorer import (
     DrivingDirectionComplianceMetric,
     MultiplicativeMetric,
     NoAtFaultCollisionMetric,
+    ProgressGateMetric,
     ProgressMetric,
     ScoringInput,
     TTCMetric,
@@ -44,14 +45,15 @@ class TrajectoryCostEstimator(BatchCostEstimator):
             self.parameters.trajectory_sampling
         )
 
+        progress_metric = ProgressMetric()
         self._multiplicative_metrics: list[MultiplicativeMetric] = [
             NoAtFaultCollisionMetric(),
             DrivableAreaComplianceMetric(),
             DrivingDirectionComplianceMetric(),
+            ProgressGateMetric(progress_metric),
         ]
-        self._progress_metric: ProgressMetric = ProgressMetric()
         self._weighted_metrics: list[WeightedMetric] = [
-            self._progress_metric,
+            progress_metric,
             TTCMetric(),
             ComfortMetric(),
         ]
@@ -87,19 +89,12 @@ class TrajectoryCostEstimator(BatchCostEstimator):
             m.compute(scoring_input, environment_model)
             for m in self._multiplicative_metrics
         ]
-        progress_result = self._progress_metric.compute(
-            scoring_input, environment_model
-        )
-        weighted_results = []
-        for m in self._weighted_metrics:
-            if m is self._progress_metric:
-                weighted_results.append((m.weight, progress_result))
-            else:
-                weighted_results.append(
-                    (m.weight, m.compute(scoring_input, environment_model))
-                )
+        weighted_results = [
+            (m.weight, m.compute(scoring_input, environment_model))
+            for m in self._weighted_metrics
+        ]
 
-        scores = aggregate_scores(multi_results, weighted_results, progress_result)
+        scores = aggregate_scores(multi_results, weighted_results)
 
         if scores.shape != (len(candidates),):
             raise ValueError(

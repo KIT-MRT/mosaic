@@ -8,7 +8,9 @@ from mosaic.scorer import (
     ComfortMetric,
     DrivableAreaComplianceMetric,
     DrivingDirectionComplianceMetric,
+    MetricResult,
     NoAtFaultCollisionMetric,
+    ProgressGateMetric,
     ProgressMetric,
     TTCMetric,
 )
@@ -291,6 +293,7 @@ class TestMetricProperties:
         assert DrivableAreaComplianceMetric().name == "drivable_area"
         assert DrivingDirectionComplianceMetric().name == "driving_direction"
         assert ProgressMetric().name == "progress"
+        assert ProgressGateMetric(ProgressMetric()).name == "progress_gate"
         assert TTCMetric().name == "ttc"
         assert ComfortMetric().name == "comfort"
 
@@ -299,3 +302,47 @@ class TestMetricProperties:
         assert TTCMetric(weight=7.0).weight == 7.0
         assert ComfortMetric(weight=2.0).weight == 2.0
         assert ProgressMetric(weight=3.14).weight == 3.14
+
+
+# === ProgressGateMetric ===
+
+
+class TestProgressGateMetric:
+    def test_below_threshold(self, proposal_sampling, env_model):
+        """Progress below threshold -> gate < 1.0."""
+        si = _make_scoring_input(proposal_sampling)
+        centerline = MagicMock()
+        centerline.project.return_value = [0.0, 0.5]  # small progress
+        centerline.length = 100.0
+        env_model.route_center_line = centerline
+        ego_state = MagicMock()
+        ego_state.dynamic_car_state.speed = 10.0
+        env_model.ego_state = ego_state
+
+        progress_metric = ProgressMetric()
+        gate_metric = ProgressGateMetric(progress_metric, threshold=0.2)
+        result = gate_metric.compute(si, env_model)
+
+        # progress = 0.5m, expected = min(10*1.0, 10) = 10m -> score = 0.05
+        # gate = min(0.05 / 0.2, 1.0) = 0.25
+        np.testing.assert_array_almost_equal(result.scores, [0.25, 0.25])
+        assert gate_metric.cached_progress is not None
+
+    def test_above_threshold(self, proposal_sampling, env_model):
+        """Progress above threshold -> gate = 1.0."""
+        si = _make_scoring_input(proposal_sampling)
+        centerline = MagicMock()
+        centerline.project.return_value = [0.0, 10.0]
+        centerline.length = 100.0
+        env_model.route_center_line = centerline
+        ego_state = MagicMock()
+        ego_state.dynamic_car_state.speed = 10.0
+        env_model.ego_state = ego_state
+
+        progress_metric = ProgressMetric()
+        gate_metric = ProgressGateMetric(progress_metric, threshold=0.2)
+        result = gate_metric.compute(si, env_model)
+
+        # progress = 10m, expected = 10m -> score = 1.0
+        # gate = min(1.0 / 0.2, 1.0) = 1.0
+        np.testing.assert_array_almost_equal(result.scores, [1.0, 1.0])

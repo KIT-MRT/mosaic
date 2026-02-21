@@ -1,3 +1,5 @@
+from typing import Optional
+
 import numpy as np
 from shapely import Point
 from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_enums import (
@@ -6,7 +8,11 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_enums impor
 from typing_extensions import override
 
 from mosaic.common.environment_model import EnvironmentModel
-from mosaic.scorer.abstract_metric import MetricResult, WeightedMetric
+from mosaic.scorer.abstract_metric import (
+    MetricResult,
+    MultiplicativeMetric,
+    WeightedMetric,
+)
 from mosaic.scorer.scoring_input import ScoringInput
 
 
@@ -83,3 +89,31 @@ class ProgressMetric(WeightedMetric):
             )
 
         return MetricResult(scores=progress_scores)
+
+
+class ProgressGateMetric(MultiplicativeMetric):
+    """Multiplicative gate that ramps from 0 to 1 over [0, threshold] of progress."""
+
+    def __init__(self, progress_metric: ProgressMetric, threshold: float = 0.2) -> None:
+        self._progress_metric = progress_metric
+        self._threshold = threshold
+        self._cached_result: Optional[MetricResult] = None
+
+    @property
+    @override
+    def name(self) -> str:
+        return "progress_gate"
+
+    @property
+    def cached_progress(self) -> Optional[MetricResult]:
+        return self._cached_result
+
+    @override
+    def compute(
+        self, scoring_input: ScoringInput, environment_model: EnvironmentModel
+    ) -> MetricResult:
+        self._cached_result = self._progress_metric.compute(
+            scoring_input, environment_model
+        )
+        gate = np.minimum(self._cached_result.scores / self._threshold, 1.0)
+        return MetricResult(scores=gate)

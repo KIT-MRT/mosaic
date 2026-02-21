@@ -11,79 +11,68 @@ class TestAggregateScores:
     def test_all_perfect(self):
         """All scores 1.0 -> final score 1.0."""
         multi = [_result([1.0, 1.0])]
-        progress = _result([1.0, 1.0])
         weighted = [
-            (5.0, progress),
+            (5.0, _result([1.0, 1.0])),
             (7.0, _result([1.0, 1.0])),
             (2.0, _result([1.0, 1.0])),
         ]
 
-        scores = aggregate_scores(multi, weighted, progress)
+        scores = aggregate_scores(multi, weighted)
 
         np.testing.assert_array_almost_equal(scores, [1.0, 1.0])
 
     def test_safety_gate_zero(self):
         """One multiplicative score is 0.0 -> final score 0.0."""
         multi = [_result([0.0, 1.0]), _result([1.0, 1.0])]
-        progress = _result([1.0, 1.0])
         weighted = [
-            (5.0, progress),
+            (5.0, _result([1.0, 1.0])),
             (7.0, _result([1.0, 1.0])),
         ]
 
-        scores = aggregate_scores(multi, weighted, progress)
+        scores = aggregate_scores(multi, weighted)
 
         assert scores[0] == 0.0
         assert scores[1] > 0.0
 
-    def test_progress_zeroed_by_safety_gate(self):
-        """When safety_gate is 0, progress contribution is zeroed."""
+    def test_safety_gate_zeroes_everything(self):
+        """When safety_gate is 0, final score is 0 regardless of weighted scores."""
         multi = [_result([0.0, 1.0])]
-        progress = _result([0.8, 0.8])
         weighted = [
-            (5.0, progress),
+            (5.0, _result([0.8, 0.8])),
             (7.0, _result([1.0, 1.0])),
         ]
 
-        scores = aggregate_scores(multi, weighted, progress)
+        scores = aggregate_scores(multi, weighted)
 
-        # For proposal 0: safety_gate=0 -> everything is 0
         assert scores[0] == 0.0
 
     def test_weighted_average(self):
         """Known weights and scores -> verify weighted average math."""
         multi = [_result([1.0])]
-        progress = _result([1.0])
+        w_progress = _result([1.0])
         w_ttc = _result([0.5])
         weighted = [
-            (5.0, progress),
+            (5.0, w_progress),
             (7.0, w_ttc),
         ]
 
-        scores = aggregate_scores(multi, weighted, progress)
+        scores = aggregate_scores(multi, weighted)
 
         # safety_gate = 1.0
-        # normalized_progress = 1.0, progress_gate = min(1.0/0.2, 1.0) = 1.0
         # weighted_avg = (5*1.0 + 7*0.5) / 12 = 8.5/12
-        expected = 1.0 * 1.0 * (8.5 / 12.0)
+        expected = 1.0 * (8.5 / 12.0)
         np.testing.assert_array_almost_equal(scores, [expected])
 
-    def test_progress_gate_ramp(self):
-        """Progress below threshold gets ramped, above threshold is 1.0."""
-        multi = [_result([1.0, 1.0])]
-        progress_low = _result([0.1, 0.4])  # 0.1 < 0.2, 0.4 > 0.2
+    def test_progress_gate_in_multiplicative(self):
+        """Progress gate as a multiplicative metric ramps the score."""
+        # Simulate progress_gate values: 0.5 (below threshold) and 1.0 (above)
+        multi = [_result([1.0, 1.0]), _result([0.5, 1.0])]
         weighted = [
-            (1.0, progress_low),
+            (1.0, _result([0.8, 0.8])),
         ]
 
-        scores = aggregate_scores(
-            multi, weighted, progress_low, progress_gate_threshold=0.2
-        )
+        scores = aggregate_scores(multi, weighted)
 
-        # For proposal 0: progress=0.1, gate=0.1/0.2=0.5
-        #   weighted_avg = 0.1 (normalized progress, since only weight)
-        #   final = 1.0 * 0.5 * 0.1 = 0.05
-        # For proposal 1: progress=0.4, gate=min(0.4/0.2, 1.0)=1.0
-        #   weighted_avg = 0.4
-        #   final = 1.0 * 1.0 * 0.4 = 0.4
-        np.testing.assert_array_almost_equal(scores, [0.05, 0.4])
+        # Proposal 0: 1.0 * 0.5 * 0.8 = 0.4
+        # Proposal 1: 1.0 * 1.0 * 0.8 = 0.8
+        np.testing.assert_array_almost_equal(scores, [0.4, 0.8])
