@@ -79,20 +79,13 @@ class TrajectoryVerifier(Verifier):
         states = self._simulator.simulate_proposals(states, environment_model.ego_state)
 
         # Create scoring input and run only collision metric
-        scoring_input = ScoringInput.create(
-            states,
-            environment_model.ego_state,
-            environment_model.drivable_area_map,
-            environment_model.route_lane_dict,
-            environment_model.parameters.proposal_sampling,
-        )
+        scoring_input = ScoringInput.create(states, environment_model)
 
         result = self._collision_metric.compute(scoring_input, environment_model)
         collision_time_idcs = result.metadata["collision_time_idcs"]
 
         time_to_infraction = float(
-            collision_time_idcs[0]
-            * self.parameters.proposal_sampling.interval_length
+            collision_time_idcs[0] * self.parameters.proposal_sampling.interval_length
         )
         ego_speed: float = float(environment_model.ego_state.dynamic_car_state.speed)
 

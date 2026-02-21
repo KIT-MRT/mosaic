@@ -80,10 +80,7 @@ class TrajectoryCostEstimator(BatchCostEstimator):
 
         scoring_input = ScoringInput.create(
             states,
-            environment_model.ego_state,
-            environment_model.drivable_area_map,
-            environment_model.route_lane_dict,
-            environment_model.parameters.proposal_sampling,
+            environment_model,
         )
 
         multi_results = [
@@ -102,9 +99,7 @@ class TrajectoryCostEstimator(BatchCostEstimator):
                     (m.weight, m.compute(scoring_input, environment_model))
                 )
 
-        scores = aggregate_scores(
-            multi_results, weighted_results, progress_result
-        )
+        scores = aggregate_scores(multi_results, weighted_results, progress_result)
 
         if scores.shape != (len(candidates),):
             raise ValueError(

@@ -5,7 +5,6 @@ from typing import Dict, List
 
 import numpy as np
 import numpy.typing as npt
-from nuplan.common.actor_state.ego_state import EgoState
 from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
 from tuplan_garage.planning.simulation.planner.pdm_planner.observation.pdm_occupancy_map import (
     PDMOccupancyMap,
@@ -18,6 +17,8 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_enums impor
     EgoAreaIndex,
     StateIndex,
 )
+
+from mosaic.common.environment_model import EnvironmentModel
 
 
 @dataclass(frozen=True)
@@ -38,28 +39,35 @@ class ScoringInput:
     def create(
         cls,
         states: npt.NDArray[np.float64],
-        initial_ego_state: EgoState,
-        drivable_area_map: PDMOccupancyMap,
-        route_lane_dict: Dict[str, object],
-        proposal_sampling: TrajectorySampling,
+        environment_model: EnvironmentModel,
     ) -> ScoringInput:
         assert states.ndim == 3
-        assert states.shape[1] == proposal_sampling.num_poses + 1
+        assert (
+            states.shape[1]
+            == environment_model.parameters.proposal_sampling.num_poses + 1
+        )
         assert states.shape[2] == StateIndex.size()
 
         n_proposals = states.shape[0]
 
         ego_coords = state_array_to_coords_array(
-            states, initial_ego_state.car_footprint.vehicle_parameters
+            states, environment_model.ego_state.car_footprint.vehicle_parameters
         )
         ego_polygons = coords_array_to_polygon_array(ego_coords)
 
         ego_areas = np.zeros(
-            (n_proposals, proposal_sampling.num_poses + 1, len(EgoAreaIndex)),
+            (
+                n_proposals,
+                environment_model.parameters.proposal_sampling.num_poses + 1,
+                len(EgoAreaIndex),
+            ),
             dtype=np.bool_,
         )
         _calculate_ego_areas(
-            ego_coords, drivable_area_map, route_lane_dict, ego_areas
+            ego_coords,
+            environment_model.drivable_area_map,
+            environment_model.route_lane_dict,
+            ego_areas,
         )
 
         return cls(
@@ -67,7 +75,7 @@ class ScoringInput:
             ego_coords=ego_coords,
             ego_polygons=ego_polygons,
             ego_areas=ego_areas,
-            proposal_sampling=proposal_sampling,
+            proposal_sampling=environment_model.parameters.proposal_sampling,
         )
 
 
@@ -96,21 +104,15 @@ def _calculate_ego_areas(
     center_in_polygon = in_polygons[..., -1]
 
     # in_multiple_lanes
-    batch_multiple_lanes_mask = (corners_in_polygon.sum(axis=-1) > 0).sum(
-        axis=-1
-    ) > 1
-    batch_not_single_lanes_mask = np.all(
-        corners_in_polygon.sum(axis=-1) != 4, axis=-1
-    )
+    batch_multiple_lanes_mask = (corners_in_polygon.sum(axis=-1) > 0).sum(axis=-1) > 1
+    batch_not_single_lanes_mask = np.all(corners_in_polygon.sum(axis=-1) != 4, axis=-1)
     multiple_lanes_mask = np.logical_and(
         batch_multiple_lanes_mask, batch_not_single_lanes_mask
     )
     ego_areas[multiple_lanes_mask, EgoAreaIndex.MULTIPLE_LANES] = True
 
     # in_nondrivable_area
-    batch_nondrivable_area_mask = (corners_in_polygon.sum(axis=-2) > 0).sum(
-        axis=-1
-    ) < 4
+    batch_nondrivable_area_mask = (corners_in_polygon.sum(axis=-2) > 0).sum(axis=-1) < 4
     ego_areas[batch_nondrivable_area_mask, EgoAreaIndex.NON_DRIVABLE_AREA] = True
 
     # in_oncoming_traffic

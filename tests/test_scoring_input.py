@@ -7,17 +7,9 @@ from nuplan.planning.simulation.trajectory.trajectory_sampling import Trajectory
 
 from mosaic.scorer.scoring_input import ScoringInput
 
-
 N_PROPOSALS = 3
 N_POSES = 10
 STATE_DIM = 11
-
-
-@pytest.fixture
-def proposal_sampling():
-    return TrajectorySampling(
-        time_horizon=1.0, interval_length=0.1
-    )  # num_poses = 10
 
 
 @pytest.fixture
@@ -26,26 +18,21 @@ def mock_states():
 
 
 @pytest.fixture
-def mock_ego_state():
-    ego = MagicMock()
-    ego.car_footprint.vehicle_parameters = MagicMock()
-    return ego
-
-
-@pytest.fixture
-def mock_drivable_area_map():
+def mock_environment_model():
+    env = MagicMock()
+    env.parameters.proposal_sampling = TrajectorySampling(
+        time_horizon=1.0, interval_length=0.1
+    )
+    env.ego_state.car_footprint.vehicle_parameters = MagicMock()
     dam = MagicMock()
     dam.__len__ = MagicMock(return_value=2)
     dam.tokens = ["lane_1", "lane_2"]
     dam.points_in_polygons.return_value = np.ones(
         (2, N_PROPOSALS * (N_POSES + 1) * 5), dtype=np.bool_
     )
-    return dam
-
-
-@pytest.fixture
-def mock_route_lane_dict():
-    return {"lane_1": MagicMock()}
+    env.drivable_area_map = dam
+    env.route_lane_dict = {"lane_1": MagicMock()}
+    return env
 
 
 @patch(
@@ -64,18 +51,12 @@ class TestScoringInput:
         mock_poly_fn,
         mock_coords_fn,
         mock_states,
-        mock_ego_state,
-        mock_drivable_area_map,
-        mock_route_lane_dict,
-        proposal_sampling,
+        mock_environment_model,
     ):
         mock_state_index.size.return_value = STATE_DIM
         si = ScoringInput.create(
             mock_states,
-            mock_ego_state,
-            mock_drivable_area_map,
-            mock_route_lane_dict,
-            proposal_sampling,
+            mock_environment_model,
         )
 
         assert si.ego_coords.shape == (N_PROPOSALS, N_POSES + 1, 5, 2)
@@ -88,18 +69,12 @@ class TestScoringInput:
         mock_poly_fn,
         mock_coords_fn,
         mock_states,
-        mock_ego_state,
-        mock_drivable_area_map,
-        mock_route_lane_dict,
-        proposal_sampling,
+        mock_environment_model,
     ):
         mock_state_index.size.return_value = STATE_DIM
         si = ScoringInput.create(
             mock_states,
-            mock_ego_state,
-            mock_drivable_area_map,
-            mock_route_lane_dict,
-            proposal_sampling,
+            mock_environment_model,
         )
 
         with pytest.raises(FrozenInstanceError):
@@ -111,18 +86,12 @@ class TestScoringInput:
         mock_poly_fn,
         mock_coords_fn,
         mock_states,
-        mock_ego_state,
-        mock_drivable_area_map,
-        mock_route_lane_dict,
-        proposal_sampling,
+        mock_environment_model,
     ):
         mock_state_index.size.return_value = STATE_DIM
         si = ScoringInput.create(
             mock_states,
-            mock_ego_state,
-            mock_drivable_area_map,
-            mock_route_lane_dict,
-            proposal_sampling,
+            mock_environment_model,
         )
 
         assert si.num_proposals == N_PROPOSALS
