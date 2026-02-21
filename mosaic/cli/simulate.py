@@ -112,6 +112,7 @@ def simulate(
         )
 
     searchpath += (
+        "pkg://flow_drive.config,"
         "pkg://tuplan_garage.planning.script.config.common,"
         "pkg://tuplan_garage.planning.script.config.simulation,"
         "pkg://nuplan.planning.script.config.common,"
@@ -132,12 +133,18 @@ def simulate(
         f"hydra.searchpath=[{searchpath}]",
     ]
 
+    is_test_split = scenario_filter.startswith("test14")
+
     if is_interplan:
         overrides.append(
             "scenario_builder.data_root=${oc.env:NUPLAN_DATA_ROOT}/nuplan-v1.1/splits/test"
         )
     else:
         overrides.append("scenario_builder=nuplan")
+        if is_test_split:
+            overrides.append(
+                "scenario_builder.data_root=${oc.env:NUPLAN_DATA_ROOT}/nuplan-v1.1/splits/test"
+            )
 
     if limit_scenarios is not None:
         overrides.append(f"scenario_filter.limit_total_scenarios={limit_scenarios}")
