@@ -1,5 +1,6 @@
 import json
 import os
+from dataclasses import dataclass
 from typing import Optional, cast, final
 
 from arbitration_graphs import CostArbitrator, PriorityArbitrator
@@ -16,6 +17,7 @@ from nuplan.planning.simulation.trajectory.abstract_trajectory import AbstractTr
 from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
 from typing_extensions import override
 
+from mosaic.ablation import Ablation
 from mosaic.behavior.emergency_stop_behavior import EmergencyStopBehavior
 from mosaic.behavior.flow_drive import FlowDriveBehavior
 from mosaic.behavior.pdm_closed import PDMClosedBehavior
@@ -29,7 +31,10 @@ from mosaic.verifier import TrajectoryVerifier
 class EgoAgent(AbstractPlanner):
     """EgoAgent using improved evaluator"""
 
+    @dataclass
     class Parameters:
+        ablation: Ablation = Ablation.NONE
+
         trajectory_sampling: TrajectorySampling = TrajectorySampling(
             time_horizon=4.0, interval_length=0.1
         )
@@ -79,23 +84,32 @@ class EgoAgent(AbstractPlanner):
         )
 
         self._cost_estimator = TrajectoryCostEstimator(self.parameters.cost_estimator)
-        self._verifier = TrajectoryVerifier(self.parameters.verifier)
-        self.cost_arbitrator = CostArbitrator(
-            "CostArbitrator", self._cost_estimator, self._verifier
-        )
+        if self.parameters.ablation == Ablation.NO_VERIFIER:
+            self.root_arbitrator: PriorityArbitrator = PriorityArbitrator(
+                "RootArbitrator"
+            )
+            self.cost_arbitrator = CostArbitrator(
+                "CostArbitrator", self._cost_estimator
+            )
+        else:
+            self._verifier = TrajectoryVerifier(self.parameters.verifier)
+            self.root_arbitrator: PriorityArbitrator = PriorityArbitrator(
+                "RootArbitrator", self._verifier
+            )
+            self.cost_arbitrator = CostArbitrator(
+                "CostArbitrator", self._cost_estimator, self._verifier
+            )
 
-        self.cost_arbitrator.add_option(
-            self.flow_drive_behavior,
-            CostArbitrator.Option.Flags.INTERRUPTABLE,
-        )
-        self.cost_arbitrator.add_option(
-            self.pdm_closed_behavior,
-            CostArbitrator.Option.Flags.INTERRUPTABLE,
-        )
-
-        self.root_arbitrator: PriorityArbitrator = PriorityArbitrator(
-            "RootArbitrator", self._verifier
-        )
+        if self.parameters.ablation != Ablation.PDM_CLOSED_ONLY:
+            self.cost_arbitrator.add_option(
+                self.flow_drive_behavior,
+                CostArbitrator.Option.Flags.INTERRUPTABLE,
+            )
+        if self.parameters.ablation != Ablation.FLOW_DRIVE_ONLY:
+            self.cost_arbitrator.add_option(
+                self.pdm_closed_behavior,
+                CostArbitrator.Option.Flags.INTERRUPTABLE,
+            )
 
         self.root_arbitrator.add_option(
             self.cost_arbitrator, int(PriorityArbitrator.Option.Flags.NO_FLAGS)
@@ -145,7 +159,10 @@ class EgoAgent(AbstractPlanner):
                 for entry in self._cost_estimator._log_buffer:
                     f.write(json.dumps(entry) + "\n")
 
-        if self._verifier._log_buffer:
+        if (
+            self.parameters.ablation != Ablation.NO_VERIFIER
+            and self._verifier._log_buffer
+        ):
             path = os.path.join(log_dir, f"{scenario_name}_verification.jsonl")
             with open(path, "w") as f:
                 for entry in self._verifier._log_buffer:

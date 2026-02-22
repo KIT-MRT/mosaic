@@ -15,6 +15,21 @@ Notes:
 - Until Flowdrive has been open-sourced, it must be cloned next to this repository for uv to find it.
 - Until Flowdrive has been open-sourced, `uv run mosaic simulate` will not work due to Ray environment issues.
 
+### Benchmarks
+
+The benchmarks presented in the paper were generated using:
+
+Benchmark | Command
+--- | ---
+Val14 CLS-R | `mosaic simulate`
+Val14 CLS-NR | `mosaic simulate --challenge closed_loop_nonreactive_agents`
+Test14-hard CLS-R | `mosaic simulate --scenario-filter test14-hard`
+Test14-random CLS-R | `mosaic simulate --scenario-filter test14-random`
+Interplan CLS-R | `mosaic simulate --challenge interplan`
+Ablation: No verifier | `mosaic simulate --ablation no_verifier`
+Ablation: PDM-Closed only | `mosaic simulate --ablation pdm_closed_only`
+Ablation: FlowDrive only | `mosaic simulate --ablation flow_drive_only`
+
 ### Development
 
 To run the tests, use `uv run pytest`.

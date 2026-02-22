@@ -3,6 +3,8 @@ from typing import Union
 import click
 from omegaconf import DictConfig
 
+from mosaic.ablation import Ablation
+
 
 def _configure_hydra(overrides: list[str]) -> DictConfig:
     import hydra
@@ -42,6 +44,12 @@ ALL_CHALLENGES = NUPLAN_CHALLENGES + [INTERPLAN_CHALLENGE]
     help="Scenario filter preset (default: val14_split, or interplan10 for interplan challenge).",
 )
 @click.option(
+    "--ablation",
+    type=click.Choice([a.value for a in Ablation], case_sensitive=False),
+    default=Ablation.NONE.value,
+    help="Ablation mode.",
+)
+@click.option(
     "--limit-scenarios",
     "-n",
     type=int,
@@ -74,6 +82,7 @@ ALL_CHALLENGES = NUPLAN_CHALLENGES + [INTERPLAN_CHALLENGE]
 def simulate(
     challenge: str,
     scenario_filter: Union[str, None],
+    ablation: str,
     limit_scenarios: Union[int, None],
     experiment_name: str,
     threads: int,
@@ -103,6 +112,7 @@ def simulate(
         )
 
     searchpath += (
+        "pkg://flow_drive.config,"
         "pkg://tuplan_garage.planning.script.config.common,"
         "pkg://tuplan_garage.planning.script.config.simulation,"
         "pkg://nuplan.planning.script.config.common,"
@@ -123,12 +133,18 @@ def simulate(
         f"hydra.searchpath=[{searchpath}]",
     ]
 
+    is_test_split = scenario_filter.startswith("test14")
+
     if is_interplan:
         overrides.append(
             "scenario_builder.data_root=${oc.env:NUPLAN_DATA_ROOT}/nuplan-v1.1/splits/test"
         )
     else:
         overrides.append("scenario_builder=nuplan")
+        if is_test_split:
+            overrides.append(
+                "scenario_builder.data_root=${oc.env:NUPLAN_DATA_ROOT}/nuplan-v1.1/splits/test"
+            )
 
     if limit_scenarios is not None:
         overrides.append(f"scenario_filter.limit_total_scenarios={limit_scenarios}")
@@ -148,6 +164,10 @@ def simulate(
 
     from mosaic.ego_agent import EgoAgent
 
-    run_simulation(cfg, planners=EgoAgent())
+    parameters = EgoAgent.Parameters(
+        ablation=Ablation(ablation),
+    )
+
+    run_simulation(cfg, planners=EgoAgent(parameters))
 
     click.echo(f"Simulation results are saved in: {cfg.output_dir}")
