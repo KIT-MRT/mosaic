@@ -13,7 +13,7 @@ from typing_extensions import override
 import mosaic.common.utils.trajectory as trajectory_utils
 from mosaic.common.command import Command
 from mosaic.common.environment_model import EnvironmentModel
-from mosaic.scorer.mosaic_scorer import MosaicScorer
+from mosaic.scorer import NoAtFaultCollisionMetric, ScoringInput
 
 
 class VerificationResult(Result):
@@ -48,7 +48,7 @@ class TrajectoryVerifier(Verifier):
 
         self.parameters: TrajectoryVerifier.Parameters = parameters
         self._simulator: PDMSimulator = PDMSimulator(self.parameters.proposal_sampling)
-        self._scorer: MosaicScorer = MosaicScorer(self.parameters.proposal_sampling)
+        self._collision_metric: NoAtFaultCollisionMetric = NoAtFaultCollisionMetric()
 
         self._log_buffer: list[dict[str, object]] = []
         self._cache: dict[str, VerificationResult] = {}
@@ -78,19 +78,16 @@ class TrajectoryVerifier(Verifier):
         # Simulate closed-loop
         states = self._simulator.simulate_proposals(states, environment_model.ego_state)
 
-        # Score to populate collision time indices
-        self._scorer.score_proposals(
-            states,
-            environment_model.ego_state,
-            environment_model.observation,
-            environment_model.route_center_line,
-            environment_model.route_lane_dict,
-            environment_model.drivable_area_map,
-            environment_model.map_api,
-        )
+        # Create scoring input and run only collision metric
+        scoring_input = ScoringInput.create(states, environment_model)
 
-        time_to_infraction = self._scorer.time_to_at_fault_collision(0)
-        ego_speed: float = environment_model.ego_state.dynamic_car_state.speed
+        result = self._collision_metric.compute(scoring_input, environment_model)
+        collision_time_idcs = result.metadata["collision_time_idcs"]
+
+        time_to_infraction = float(
+            collision_time_idcs[0] * self.parameters.proposal_sampling.interval_length
+        )
+        ego_speed: float = float(environment_model.ego_state.dynamic_car_state.speed)
 
         is_ok = not (
             time_to_infraction <= self.parameters.time_to_infraction_threshold
@@ -101,16 +98,16 @@ class TrajectoryVerifier(Verifier):
             self._log_verification(time, command, time_to_infraction, ego_speed, is_ok)
 
         if is_ok:
-            result = VerificationResult(True)
+            verification_result = VerificationResult(True)
         else:
-            result = VerificationResult(
+            verification_result = VerificationResult(
                 False,
                 f"Imminent collision: time_to_infraction={time_to_infraction:.2f}s, "
                 f"ego_speed={ego_speed:.2f}m/s",
             )
 
-        self._cache[command.name] = result
-        return result
+        self._cache[command.name] = verification_result
+        return verification_result
 
     def _log_verification(
         self,
