@@ -100,7 +100,7 @@ class EgoAgent(AbstractPlanner):
                 "CostArbitrator", self._cost_estimator, self._verifier
             )
 
-        if self.parameters.ablation != Ablation.PDM_ONLY:
+        if self.parameters.ablation != Ablation.PDM_CLOSED_ONLY:
             self.cost_arbitrator.add_option(
                 self.flow_drive_behavior,
                 CostArbitrator.Option.Flags.INTERRUPTABLE,
