@@ -1,5 +1,6 @@
 import json
 import os
+import re
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Union
@@ -335,6 +336,43 @@ def _analyze_verifier_logs(mosaic_dir: Path) -> None:
     )
 
 
+def _parse_duration(duration_str: str) -> float:
+    """Parse 'HH:MM:SS' into total seconds."""
+    parts = duration_str.strip().split(":")
+    return int(parts[0]) * 3600 + int(parts[1]) * 60 + int(parts[2])
+
+
+_TIMING_PATTERN = re.compile(
+    r"(Simulation duration)"
+    r":\s+(\d{2}:\d{2}:\d{2})"
+)
+
+
+def _print_runtime(experiment_dir: Path, num_scenarios: int) -> None:
+    log_file = experiment_dir / "log.txt"
+    if not log_file.exists():
+        return
+
+    timings = {}
+    with open(log_file) as f:
+        for line in f:
+            match = _TIMING_PATTERN.search(line)
+            if match:
+                timings[match.group(1)] = match.group(2)
+
+    if "Simulation duration" not in timings:
+        return
+
+    click.echo("\n=== Runtime ===\n")
+
+    sim_seconds = _parse_duration(timings["Simulation duration"])
+    click.echo(f"  Simulation duration:      {timings['Simulation duration']}")
+
+    if num_scenarios > 0:
+        per_scenario = sim_seconds / num_scenarios
+        click.echo(f"  Per scenario:             {per_scenario:.2f}s")
+
+
 @click.command()
 @click.option(
     "--path",
@@ -365,6 +403,7 @@ def analyze(path: Union[str, None], baseline: Union[str, None], per_type: bool) 
 
     df = _load_results(experiment_dir)
     _print_summary(df, experiment_dir.name)
+    _print_runtime(experiment_dir, len(df))
     _print_failures(df)
     _print_collision_scenarios(df)
 
