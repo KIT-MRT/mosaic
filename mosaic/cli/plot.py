@@ -85,6 +85,7 @@ def plot(path: Union[str, None], output: str) -> None:
     )
     ax.set_aspect("equal")
 
+    plt.rcParams["svg.fonttype"] = "none"
     fig.savefig(output, format="svg", bbox_inches="tight")
     plt.close(fig)
     click.echo(f"Saved pie chart to {output}")
