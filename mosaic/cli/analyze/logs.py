@@ -9,8 +9,13 @@ import click
 from mosaic.cli.analyze.formatting import Table, kv, section
 
 
-def analyze_cost_estimator_logs(mosaic_dir: Path) -> None:
-    """Analyze trajectory cost logs to report per-command win rates."""
+def load_cost_estimator_counts(
+    mosaic_dir: Path,
+) -> tuple[Counter, Counter, set, int]:
+    """Parse trajectory cost JSONL logs and return raw counts.
+
+    Returns (command_score_wins, command_appearances, all_commands, tie_count).
+    """
     command_score_wins: Counter = Counter()
     command_appearances: Counter = Counter()
     all_commands: set = set()
@@ -38,6 +43,15 @@ def analyze_cost_estimator_logs(mosaic_dir: Path) -> None:
                     command_score_ties += 1
                 else:
                     command_score_wins[winners[0]] += 1
+
+    return command_score_wins, command_appearances, all_commands, command_score_ties
+
+
+def analyze_cost_estimator_logs(mosaic_dir: Path) -> None:
+    """Analyze trajectory cost logs to report per-command win rates."""
+    command_score_wins, command_appearances, all_commands, command_score_ties = (
+        load_cost_estimator_counts(mosaic_dir)
+    )
 
     section("Cost Estimator")
 
