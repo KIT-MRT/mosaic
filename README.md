@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/mosaic.png" alt="Mosaic logo" height="128">
+</p>
+
 # Mosaic
 
 **An Extensible Framework for Composing Rule-Based and Learned Motion Planners**
@@ -8,24 +12,25 @@ Evaluated on [nuPlan](https://github.com/motional/nuplan-devkit), Mosaic achieve
 
 ## Results
 
-### nuPlan Val14 benchmark
+### nuPlan Val14 and interPlan benchmarks
 
-| Type | Planner | CLS-NR | CLS-R |
-|---|---|:---:|:---:|
-| Expert | Log-replay | 93.53 | 80.32 |
-| Learning-based | FlowDrive | 91.21 | 85.37 |
-| Rule-based & Hybrid | PDM-Closed | 92.84 | 92.12 |
-| | FlowDrive* | 94.81 | 92.96 |
-| | GIGAFLOW | - | 93.8 |
-| | **Mosaic (ours)** | **95.49** | **93.97** |
+| Type | Planner | Val14 CLS-NR | Val14 CLS-R | interPlan CLS-R |
+|---|---|:---:|:---:|:---:|
+| Expert | Log-replay | 93.53 | 80.32 | 14.76 |
+| Learning-based | FlowDrive | 91.21 | 85.37 | 36.96 |
+| Rule-based & Hybrid | PDM-Closed | 92.84 | 92.12 | 41.23 |
+| | FlowDrive* | 94.81 | 92.96 | 44.05 |
+| | GIGAFLOW | - | 93.80 | - |
+| | **Mosaic (ours)** | **95.49** | **93.97** | **54.03** |
 
-### interPlan benchmark
+### Ablation study (Val14 CLS-R)
 
-| Planner | CLS-R |
-|---|:---:|
-| FlowDrive* | 44.05 |
-| PDM-Closed | 41.23 |
-| **Mosaic (ours)** | **53.97** |
+| Configuration | CLS-R | Collisions | Zero-score |
+|---|:---:|:---:|:---:|
+| **Mosaic (full)** | **93.97** | **15** | **20** |
+| w/o verifier | 93.33 | 27 | 31 |
+| FlowDrive* only | 92.91 | 19 | 31 |
+| PDM-Closed only | 92.15 | 17 | 33 |
 
 ## Architecture
 
@@ -125,7 +130,7 @@ Individual experiments:
 | interPlan CLS-R | `mosaic simulate -c interplan` |
 | Ablation: no verifier | `mosaic simulate --ablation no_verifier` |
 | Ablation: PDM-Closed only | `mosaic simulate --ablation pdm_closed_only` |
-| Ablation: FlowDrive only | `mosaic simulate --ablation flow_drive_only` |
+| Ablation: FlowDrive* only | `mosaic simulate --ablation flow_drive_only` |
 
 ## Development
 
