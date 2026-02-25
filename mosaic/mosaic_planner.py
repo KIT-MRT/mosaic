@@ -28,8 +28,8 @@ from mosaic.verifier import TrajectoryVerifier
 
 
 @final
-class EgoAgent(AbstractPlanner):
-    """EgoAgent using improved evaluator"""
+class Mosaic(AbstractPlanner):
+    """Mosaic planner using arbitration graphs"""
 
     @dataclass
     class Parameters:
@@ -62,8 +62,8 @@ class EgoAgent(AbstractPlanner):
         parameters: Optional[Parameters] = None,
     ) -> None:
         if parameters is None:
-            parameters = EgoAgent.Parameters()
-        self.parameters: EgoAgent.Parameters = parameters
+            parameters = Mosaic.Parameters()
+        self.parameters: Mosaic.Parameters = parameters
 
         self.environment_model = EnvironmentModel(
             EnvironmentModel.Parameters(
@@ -74,8 +74,6 @@ class EgoAgent(AbstractPlanner):
         )
         self.initialize_arbitration_graph()
 
-        print("EgoAgent initialized")
-
     def initialize_arbitration_graph(self) -> None:
         self.flow_drive_behavior = FlowDriveBehavior()
         self.pdm_closed_behavior = PDMClosedBehavior()
@@ -85,19 +83,15 @@ class EgoAgent(AbstractPlanner):
 
         self._cost_estimator = TrajectoryCostEstimator(self.parameters.cost_estimator)
         if self.parameters.ablation == Ablation.NO_VERIFIER:
-            self.root_arbitrator: PriorityArbitrator = PriorityArbitrator(
-                "RootArbitrator"
-            )
-            self.cost_arbitrator = CostArbitrator(
-                "CostArbitrator", self._cost_estimator
-            )
+            self.root_arbitrator: PriorityArbitrator = PriorityArbitrator("Mosaic")
+            self.cost_arbitrator = CostArbitrator("Composer", self._cost_estimator)
         else:
             self._verifier = TrajectoryVerifier(self.parameters.verifier)
             self.root_arbitrator: PriorityArbitrator = PriorityArbitrator(
-                "RootArbitrator", self._verifier
+                "Mosaic", self._verifier
             )
             self.cost_arbitrator = CostArbitrator(
-                "CostArbitrator", self._cost_estimator, self._verifier
+                "Composer", self._cost_estimator, self._verifier
             )
 
         if self.parameters.ablation != Ablation.PDM_CLOSED_ONLY:

@@ -162,12 +162,12 @@ def simulate(
     else:
         from nuplan.planning.script.run_simulation import run_simulation
 
-    from mosaic.ego_agent import EgoAgent
+    from mosaic.mosaic_planner import Mosaic
 
-    parameters = EgoAgent.Parameters(
+    parameters = Mosaic.Parameters(
         ablation=Ablation(ablation),
     )
 
-    run_simulation(cfg, planners=EgoAgent(parameters))
+    run_simulation(cfg, planners=Mosaic(parameters))
 
     click.echo(f"Simulation results are saved in: {cfg.output_dir}")

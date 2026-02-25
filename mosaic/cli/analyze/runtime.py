@@ -14,7 +14,9 @@ def _parse_duration(duration_str: str) -> float:
     return int(parts[0]) * 3600 + int(parts[1]) * 60 + int(parts[2])
 
 
-def get_runtime(experiment_dir: Path, num_scenarios: int) -> Optional[Tuple[str, Optional[str]]]:
+def get_runtime(
+    experiment_dir: Path, num_scenarios: int
+) -> Optional[Tuple[str, Optional[str]]]:
     """Extract simulation runtime from log.txt.
 
     Returns (duration_str, per_scenario_str) or None if unavailable.
