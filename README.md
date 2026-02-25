@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/mosaic.png" alt="Mosaic logo" height="128">
+</p>
+
 # Mosaic
 
 **An Extensible Framework for Composing Rule-Based and Learned Motion Planners**
@@ -126,7 +130,7 @@ Individual experiments:
 | interPlan CLS-R | `mosaic simulate -c interplan` |
 | Ablation: no verifier | `mosaic simulate --ablation no_verifier` |
 | Ablation: PDM-Closed only | `mosaic simulate --ablation pdm_closed_only` |
-| Ablation: FlowDrive only | `mosaic simulate --ablation flow_drive_only` |
+| Ablation: FlowDrive* only | `mosaic simulate --ablation flow_drive_only` |
 
 ## Development
 
