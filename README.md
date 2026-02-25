@@ -17,14 +17,21 @@ Notes:
 
 ### Benchmarks
 
-The benchmarks presented in the paper were generated using:
+To reproduce all experiments presented in the paper, run [`results/run_experiments.sh`](results/run_experiments.sh).
+The script runs each benchmark sequentially and saves the analysis output into the `results/` directory.
+
+Use `--quick` to smoke-test with a single scenario per experiment:
+
+```bash
+bash results/run_experiments.sh --quick
+```
+
+The individual benchmarks can also be run separately:
 
 Benchmark | Command
 --- | ---
 Val14 CLS-R | `mosaic simulate`
 Val14 CLS-NR | `mosaic simulate --challenge closed_loop_nonreactive_agents`
-Test14-hard CLS-R | `mosaic simulate --scenario-filter test14-hard`
-Test14-random CLS-R | `mosaic simulate --scenario-filter test14-random`
 Interplan CLS-R | `mosaic simulate --challenge interplan`
 Ablation: No verifier | `mosaic simulate --ablation no_verifier`
 Ablation: PDM-Closed only | `mosaic simulate --ablation pdm_closed_only`
