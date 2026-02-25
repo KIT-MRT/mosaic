@@ -107,13 +107,13 @@ mosaic plot [OPTIONS]
 Run all benchmarks and ablations with a single script:
 
 ```bash
-bash results/run_experiments.sh
+bash scripts/run_experiments.sh
 ```
 
 This runs 6 experiments sequentially and saves analysis outputs to `results/`. Use `--quick` for a smoke test with one scenario per experiment:
 
 ```bash
-bash results/run_experiments.sh --quick
+bash scripts/run_experiments.sh --quick
 ```
 
 Individual experiments:

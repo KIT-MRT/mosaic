@@ -3,7 +3,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-RESULTS_DIR="$SCRIPT_DIR"
+RESULTS_DIR="$PROJECT_DIR/results"
 
 # Parse --quick flag
 QUICK_ARGS=()
