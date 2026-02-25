@@ -1,0 +1,105 @@
+Using latest experiment: /home/lelarge/nuplan/experiments/exp/ablation-no-verifier/closed_loop_reactive_agents/2026.02.25.16.36.06
+
+╭──────────────────────────────────────────────────────────╮
+│  2026.02.25.16.36.06                                     │
+╰──────────────────────────────────────────────────────────╯
+
+  Scenarios             1118
+  Overall score         0.9333
+  Duration              00:48:31 (2.6s/ea)
+
+
+── Failures ────────────────────────────────────────────────
+
+  Hard Gates
+  ╭────────────────────────────────────────┬───────┬─────────╮
+  │ Metric                                 │  Fail │    Rate │
+  ├────────────────────────────────────────┼───────┼─────────┤
+  │ no_ego_at_fault_collisions             │    27 │    2.4% │ ◆
+  │ drivable_area_compliance               │     2 │    0.2% │ ◆
+  │ driving_direction_compliance           │     1 │    0.1% │ ◆
+  │ ego_is_making_progress                 │     2 │    0.2% │ ◆
+  ╰────────────────────────────────────────┴───────┴─────────╯
+
+  Weighted Metrics
+  ╭────────────────────────────────────────┬───────┬─────────╮
+  │ Metric                                 │  Fail │    Rate │
+  ├────────────────────────────────────────┼───────┼─────────┤
+  │ ego_progress_along_expert_route (w=5)  │     0 │    0.0% │
+  │ time_to_collision_within_bound (w=5)   │    63 │    5.6% │ ◆
+  │ speed_limit_compliance (w=4)           │     0 │    0.0% │
+  │ ego_is_comfortable (w=2)               │    84 │    7.5% │ ◆
+  ╰────────────────────────────────────────┴───────┴─────────╯
+
+  31 scenarios scored zero
+
+
+── Collisions (27) ─────────────────────────────────────────
+  ╭────────────────────┬────────────────────────────────┬────────╮
+  │ Scenario           │ Type                           │  Score │
+  ├────────────────────┼────────────────────────────────┼────────┤
+  │ f545b79ff3d553a0   │ waiting_for_pedestrian_to_cro… │ 0.0000 │
+  │ f958ec121f5a5287   │ changing_lane                  │ 0.0000 │
+  │ 6badb2820fd251fd   │ starting_right_turn            │ 0.0000 │
+  │ ce9a8994426651f9   │ starting_left_turn             │ 0.0000 │
+  │ 738efdf625b35ff9   │ low_magnitude_speed            │ 0.0000 │
+  │ caaab29c36ef5bee   │ changing_lane                  │ 0.0000 │
+  │ 83a18a11bf9b5baa   │ near_multiple_vehicles         │ 0.0000 │
+  │ 59bb3fec07495d87   │ near_multiple_vehicles         │ 0.0000 │
+  │ c1567e02a98e53e5   │ low_magnitude_speed            │ 0.0000 │
+  │ 2315ca6fdcf65ce0   │ waiting_for_pedestrian_to_cro… │ 0.0000 │
+  │ c2f0546ea2565af3   │ starting_left_turn             │ 0.0000 │
+  │ 4b3b50a9f58b5d79   │ changing_lane                  │ 0.0000 │
+  │ 8bd63e2b025d5e38   │ following_lane_with_lead       │ 0.0000 │
+  │ 99ac1ec87510556d   │ low_magnitude_speed            │ 0.0000 │
+  │ 558d1c44968c5319   │ high_magnitude_speed           │ 0.0000 │
+  │ 3b21090dafc054b9   │ low_magnitude_speed            │ 0.0000 │
+  │ c7468120b03a56e7   │ waiting_for_pedestrian_to_cro… │ 0.0000 │
+  │ 00c202ab992e50aa   │ near_multiple_vehicles         │ 0.0000 │
+  │ 0ebba0e8fbd3528f   │ starting_left_turn             │ 0.0000 │
+  │ 1f82b16afa96569a   │ starting_left_turn             │ 0.0000 │
+  │ 42dc17b3a3e551bc   │ starting_left_turn             │ 0.0000 │
+  │ c556f4bc6f165a76   │ changing_lane                  │ 0.0000 │
+  │ b1f369f514d95f4c   │ stationary_in_traffic          │ 0.0000 │
+  │ a7d5055f7958550f   │ near_multiple_vehicles         │ 0.0000 │
+  │ d1233a44bda8587d   │ stationary_in_traffic          │ 0.0000 │
+  │ 1bb4a47dd9f155cd   │ near_multiple_vehicles         │ 0.0000 │
+  │ b2ab7d150c1f5fa4   │ changing_lane                  │ 0.0000 │
+  ╰────────────────────┴────────────────────────────────┴────────╯
+
+
+── Per Scenario Type ───────────────────────────────────────
+  ╭──────────────────────────────────────┬──────┬────────┬──────┬──────┬──────╮
+  │ Type                                 │    n │  Score │ Zero │  TTC │ Coll │
+  ├──────────────────────────────────────┼──────┼────────┼──────┼──────┼──────┤
+  │ following_lane_with_lead             │   15 │ 0.8815 │    1 │    1 │    1 │
+  │ near_multiple_vehicles               │   85 │ 0.8925 │    6 │    7 │    5 │
+  │ starting_left_turn                   │  100 │ 0.8963 │    5 │    8 │    5 │
+  │ changing_lane                        │   70 │ 0.9083 │    5 │    6 │    5 │
+  │ waiting_for_pedestrian_to_cross      │   53 │ 0.9146 │    3 │    4 │    3 │
+  │ high_lateral_acceleration            │   96 │ 0.9228 │    2 │    5 │    0 │
+  │ low_magnitude_speed                  │  100 │ 0.9236 │    4 │    8 │    4 │
+  │ traversing_pickup_dropoff            │   99 │ 0.9280 │    0 │    5 │    0 │
+  │ starting_right_turn                  │   98 │ 0.9371 │    2 │    6 │    1 │
+  │ starting_straight_traffic_light_int… │   98 │ 0.9455 │    0 │    6 │    0 │
+  │ stationary_in_traffic                │   98 │ 0.9588 │    2 │    4 │    2 │
+  │ high_magnitude_speed                 │   99 │ 0.9627 │    1 │    2 │    1 │
+  │ stopping_with_lead                   │   93 │ 0.9896 │    0 │    1 │    0 │
+  │ behind_long_vehicle                  │   14 │ 1.0000 │    0 │    0 │    0 │
+  ╰──────────────────────────────────────┴──────┴────────┴──────┴──────┴──────╯
+
+
+── Cost Estimator ──────────────────────────────────────────
+  ╭────────────────────┬────────┬───────────────┬─────────────────╮
+  │ Command            │   Wins │  Of Decisions │  Of Appearances │
+  ├────────────────────┼────────┼───────────────┼─────────────────┤
+  │ flow_drive         │  31243 │         18.7% │           18.7% │
+  │ pdm_closed         │  48236 │         28.9% │           28.9% │
+  ╰────────────────────┴────────┴───────────────┴─────────────────╯
+
+  Tied scores           87327 / 166806 (52.4%)
+
+
+── Verifier ────────────────────────────────────────────────
+
+  No verifier entries found.
