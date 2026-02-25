@@ -72,7 +72,7 @@ class MosaicLoggingCallback(AbstractCallback):
         planner: AbstractPlanner,
         history: SimulationHistory,
     ) -> None:
-        from mosaic.ego_agent import EgoAgent
+        from mosaic.mosaic_planner import Mosaic
 
-        if isinstance(planner, EgoAgent):
+        if isinstance(planner, Mosaic):
             planner.flush_logs(self._output_directory, setup.scenario.scenario_name)
