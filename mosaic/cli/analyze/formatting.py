@@ -80,7 +80,9 @@ class Table:
         └────────────────────────────────┴────────┘
     """
 
-    def __init__(self, columns: List[str], widths: List[int], aligns: List[str]) -> None:
+    def __init__(
+        self, columns: List[str], widths: List[int], aligns: List[str]
+    ) -> None:
         self.columns = columns
         self.widths = widths
         self.aligns = aligns

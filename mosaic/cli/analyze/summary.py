@@ -116,13 +116,15 @@ def print_per_type(df: DataFrame) -> None:
     for stype, n, score, zeros, ttc_fail, coll_fail in sorted(
         type_stats, key=lambda x: x[2]
     ):
-        t.row([
-            truncate(stype, 36),
-            str(n),
-            f"{score:.4f}",
-            str(zeros),
-            str(ttc_fail),
-            str(coll_fail),
-        ])
+        t.row(
+            [
+                truncate(stype, 36),
+                str(n),
+                f"{score:.4f}",
+                str(zeros),
+                str(ttc_fail),
+                str(coll_fail),
+            ]
+        )
 
     t.render()
