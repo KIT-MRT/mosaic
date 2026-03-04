@@ -50,12 +50,8 @@ If neither planner produces a verified trajectory, **Mosaic** falls back to the 
 
 ### Prerequisites
 
-TODO: Use GitHub clone of FlowDrive rather than local path dependency
-
-- Python >= 3.9.12
 - [uv](https://docs.astral.sh/uv/) package manager
 - [nuPlan dataset](https://www.nuscenes.org/nuplan) (set `NUPLAN_DATA_ROOT` and `NUPLAN_MAPS_ROOT` environment variables)
-- [FlowDrive](https://github.com/KIT-MRT/FlowDrive) cloned at `../flowdrive` (local path dependency)
 
 ### Installation
 
