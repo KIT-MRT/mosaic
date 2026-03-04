@@ -40,6 +40,7 @@ class FlowDriveBehavior(Behavior):
         flow_drive_cfg.flow_drive.mlflow_exp_name = "None"
         flow_drive_cfg.flow_drive.load_run_name = "None"
         flow_drive_cfg.flow_drive.load_epoch = 0
+        flow_drive_cfg.flow_drive.emergency_brake_enabled = False
 
         self.planner = cast(AbstractPlanner, instantiate(flow_drive_cfg.flow_drive))
 

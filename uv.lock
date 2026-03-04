@@ -1416,7 +1416,7 @@ wheels = [
 [[package]]
 name = "flow-drive"
 version = "1.0.0"
-source = { directory = "../flowdrive" }
+source = { git = "https://github.com/ll-nick/flow_drive_planner?branch=configurable_emergency_brake#ee1ada7fddad777d86756902b73d93fb6ba1cb33" }
 dependencies = [
     { name = "catalyst" },
     { name = "config-box" },
@@ -1432,24 +1432,6 @@ dependencies = [
     { name = "torch" },
     { name = "torchvision" },
     { name = "wandb" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "catalyst", specifier = ">=22.4" },
-    { name = "config-box", specifier = ">=0.2.1600119743" },
-    { name = "diffusers", specifier = ">=0.36.0" },
-    { name = "imageio", extras = ["ffmpeg"], specifier = ">=2.37.2" },
-    { name = "mlflow", specifier = ">=3.1.4" },
-    { name = "mmengine", specifier = ">=0.10.7" },
-    { name = "python-box", specifier = ">=7.3.2" },
-    { name = "pytorch-lightning", specifier = "==2.0.1" },
-    { name = "seaborn", specifier = ">=0.13.2" },
-    { name = "tensorboard", specifier = "==2.11.2" },
-    { name = "timm", specifier = "==1.0.10" },
-    { name = "torch", specifier = ">=2.8.0" },
-    { name = "torchvision", specifier = ">=0.23.0" },
-    { name = "wandb", specifier = ">=0.24.1" },
 ]
 
 [[package]]
@@ -3014,7 +2996,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "arbitration-graphs", specifier = ">=2.0.0" },
-    { name = "flow-drive", directory = "../flowdrive" },
+    { name = "flow-drive", git = "https://github.com/ll-nick/flow_drive_planner?branch=configurable_emergency_brake" },
     { name = "interplan", git = "https://github.com/ll-nick/interPlan" },
     { name = "nuplan-devkit", git = "https://github.com/ll-nick/nuplan-devkit" },
     { name = "tuplan-garage", git = "https://github.com/ll-nick/tuplan_garage" },
