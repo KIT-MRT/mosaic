@@ -1416,7 +1416,7 @@ wheels = [
 [[package]]
 name = "flow-drive"
 version = "1.0.0"
-source = { git = "https://github.com/ll-nick/flow_drive_planner?branch=configurable_emergency_brake#ee1ada7fddad777d86756902b73d93fb6ba1cb33" }
+source = { git = "https://github.com/einsteinguang/flow_drive_planner#f95c7fb59e66e5ee3808eae7835f336184d5ca37" }
 dependencies = [
     { name = "catalyst" },
     { name = "config-box" },
@@ -2996,7 +2996,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "arbitration-graphs", specifier = ">=2.0.0" },
-    { name = "flow-drive", git = "https://github.com/ll-nick/flow_drive_planner?branch=configurable_emergency_brake" },
+    { name = "flow-drive", git = "https://github.com/einsteinguang/flow_drive_planner" },
     { name = "interplan", git = "https://github.com/ll-nick/interPlan" },
     { name = "nuplan-devkit", git = "https://github.com/ll-nick/nuplan-devkit" },
     { name = "tuplan-garage", git = "https://github.com/ll-nick/tuplan_garage" },
