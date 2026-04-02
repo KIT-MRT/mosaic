@@ -33,7 +33,7 @@ include = ["mosaic*"]
 [tool.uv.sources]
 nuplan-devkit = { git = "https://github.com/ll-nick/nuplan-devkit" }
 tuplan-garage = { git = "https://github.com/ll-nick/tuplan_garage" }
-flow-drive = { git = "https://github.com/ll-nick/flow_drive_planner", branch = "configurable_emergency_brake" }
+flow-drive = { git = "https://github.com/einsteinguang/flow_drive_planner" }
 interplan = { git = "https://github.com/ll-nick/interPlan" }
 
 [dependency-groups]
