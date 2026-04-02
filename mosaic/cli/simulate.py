@@ -128,7 +128,7 @@ def simulate(
         f"worker.threads_per_node={threads}",
         "distributed_mode=SINGLE_NODE",
         f"number_of_gpus_allocated_per_simulation={gpus_per_sim}",
-        "+callback.mosaic_logging_callback._target_=mosaic.callback.MosaicLoggingCallback",
+        "+callback.mosaic_logging_callback._target_=mosaic.cli.callback.MosaicLoggingCallback",
         "+callback.mosaic_logging_callback.output_directory=${output_dir}",
         f"hydra.searchpath=[{searchpath}]",
     ]
