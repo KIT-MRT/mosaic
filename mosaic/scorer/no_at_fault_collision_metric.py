@@ -11,7 +11,7 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_enums impor
 )
 from typing_extensions import override
 
-from mosaic.common.environment_model import EnvironmentModel
+from mosaic.core.environment_model import EnvironmentModel
 from mosaic.scorer.abstract_metric import MetricResult, MultiplicativeMetric
 from mosaic.scorer.scoring_input import ScoringInput
 

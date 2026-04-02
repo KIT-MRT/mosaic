@@ -21,10 +21,10 @@ from mosaic.ablation import Ablation
 from mosaic.behavior.emergency_stop_behavior import EmergencyStopBehavior
 from mosaic.behavior.flow_drive import FlowDriveBehavior
 from mosaic.behavior.pdm_closed import PDMClosedBehavior
-from mosaic.common.command import Command
-from mosaic.common.environment_model import EnvironmentModel
-from mosaic.cost_estimator import TrajectoryCostEstimator
-from mosaic.verifier import TrajectoryVerifier
+from mosaic.core.command import Command
+from mosaic.core.environment_model import EnvironmentModel
+from mosaic.core.cost_estimator import TrajectoryCostEstimator
+from mosaic.core.verifier import TrajectoryVerifier
 
 
 @final

@@ -4,7 +4,7 @@ from typing import Any
 
 import numpy.typing as npt
 
-from mosaic.common.environment_model import EnvironmentModel
+from mosaic.core.environment_model import EnvironmentModel
 from mosaic.scorer.scoring_input import ScoringInput
 
 

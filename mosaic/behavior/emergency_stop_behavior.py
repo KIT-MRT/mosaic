@@ -10,8 +10,8 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_emergency_b
 )
 from typing_extensions import cast, override
 
-from mosaic.common.command import Command
-from mosaic.common.environment_model import EnvironmentModel
+from mosaic.core.command import Command
+from mosaic.core.environment_model import EnvironmentModel
 
 
 @final

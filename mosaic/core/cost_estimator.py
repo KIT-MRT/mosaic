@@ -12,9 +12,9 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.simulation.pdm_simula
 )
 from typing_extensions import override
 
-import mosaic.common.utils.trajectory as trajectory_utils
-from mosaic.common.command import Command
-from mosaic.common.environment_model import EnvironmentModel
+import mosaic.utils.trajectory as trajectory_utils
+from mosaic.core.command import Command
+from mosaic.core.environment_model import EnvironmentModel
 from mosaic.scorer import (
     ComfortMetric,
     DrivableAreaComplianceMetric,
