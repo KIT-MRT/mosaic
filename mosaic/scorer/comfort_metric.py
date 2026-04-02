@@ -4,7 +4,7 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.scoring.pdm_comfort_m
 )
 from typing_extensions import override
 
-from mosaic.common.environment_model import EnvironmentModel
+from mosaic.core.environment_model import EnvironmentModel
 from mosaic.scorer.abstract_metric import MetricResult, WeightedMetric
 from mosaic.scorer.scoring_input import ScoringInput
 

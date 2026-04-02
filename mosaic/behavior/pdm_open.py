@@ -10,8 +10,8 @@ from nuplan.planning.simulation.trajectory.abstract_trajectory import AbstractTr
 from omegaconf import OmegaConf
 from typing_extensions import cast, final, override
 
-from mosaic.common.command import Command
-from mosaic.common.environment_model import EnvironmentModel
+from mosaic.core.command import Command
+from mosaic.core.environment_model import EnvironmentModel
 
 
 @final

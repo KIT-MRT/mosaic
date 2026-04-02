@@ -18,7 +18,7 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_enums impor
     StateIndex,
 )
 
-from mosaic.common.environment_model import EnvironmentModel
+from mosaic.core.environment_model import EnvironmentModel
 
 
 @dataclass(frozen=True)

@@ -33,8 +33,8 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.observation.pdm_occup
 )
 from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_path import PDMPath
 
-from mosaic.common.utils import map as map_utils
-from mosaic.common.utils.time_conversion import to_timedelta
+from mosaic.utils import map as map_utils
+from mosaic.utils.time_conversion import to_timedelta
 
 
 class EnvironmentModel:

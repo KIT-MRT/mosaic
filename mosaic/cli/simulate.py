@@ -162,7 +162,7 @@ def simulate(
     else:
         from nuplan.planning.script.run_simulation import run_simulation
 
-    from mosaic.mosaic_planner import Mosaic
+    from mosaic.core.mosaic_planner import Mosaic
 
     parameters = Mosaic.Parameters(
         ablation=Ablation(ablation),
