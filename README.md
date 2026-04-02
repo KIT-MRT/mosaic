@@ -46,40 +46,30 @@ The **Composer** verifies and scores candidate trajectories from both planners. 
 
 If neither planner produces a verified trajectory, **Mosaic** falls back to the **Emergency Stop** component.
 
-## Setup
+## Prerequisites
 
-### Prerequisites
-
-- [uv](https://docs.astral.sh/uv/) package manager
+- [uv](https://docs.astral.sh/uv/) package manager (dependencies are synced automatically on first `uv run`)
 - [nuPlan dataset](https://www.nuscenes.org/nuplan) (set `NUPLAN_DATA_ROOT` and `NUPLAN_MAPS_ROOT` environment variables)
-
-### Installation
-
-```bash
-uv sync
-```
-
-This installs all dependencies and makes the `mosaic` CLI available.
 
 ## Usage
 
 ```bash
-mosaic simulate          # Run simulation (default: Val14 CLS-R)
-mosaic analyze           # Print summary of latest experiment
-mosaic results           # Launch nuBoard to view results
-mosaic plot              # Generate behavior selection pie chart
+uv run mosaic simulate          # Run simulation (default: Val14 CLS-R)
+uv run mosaic analyze           # Print summary of latest experiment
+uv run mosaic results           # Launch nuBoard to view results
+uv run mosaic plot              # Generate behavior selection pie chart
 ```
 
 ### Quick test
 
 ```bash
-mosaic simulate -n 1     # Run a single scenario
+uv run mosaic simulate -n 1     # Run a single scenario
 ```
 
 ### CLI reference
 
 ```
-mosaic simulate [OPTIONS]
+uv run mosaic simulate [OPTIONS]
   -c, --challenge          closed_loop_reactive_agents (default) | closed_loop_nonreactive_agents | interplan
   --scenario-filter        Scenario filter preset (default: val14_split, or interplan10 for interplan)
   --ablation               none (default) | no_verifier | pdm_closed_only | flow_drive_only
@@ -89,16 +79,16 @@ mosaic simulate [OPTIONS]
   --gpus-per-sim           GPUs per simulation (default: 0.05)
   -o, --override           Arbitrary Hydra overrides (repeatable)
 
-mosaic analyze [OPTIONS]
+uv run mosaic analyze [OPTIONS]
   -p, --path               Path to experiment output dir (auto-detects latest)
   -b, --baseline           Path to baseline experiment dir for comparison
   --per-type / --no-per-type  Per-scenario-type breakdown (default: on)
 
-mosaic results [OPTIONS]
+uv run mosaic results [OPTIONS]
   -p, --path               Path to output dir or .nuboard file (auto-detects latest)
   --port                   Port number (default: 5006)
 
-mosaic plot [OPTIONS]
+uv run mosaic plot [OPTIONS]
   -p, --path               Path to experiment output dir (auto-detects latest)
   -o, --output             Output SVG path (default: behavior_selection.svg)
 ```
@@ -121,12 +111,12 @@ Individual experiments:
 
 | Experiment | Command |
 |---|---|
-| Val14 CLS-R | `mosaic simulate` |
-| Val14 CLS-NR | `mosaic simulate -c closed_loop_nonreactive_agents` |
-| interPlan CLS-R | `mosaic simulate -c interplan` |
-| Ablation: no verifier | `mosaic simulate --ablation no_verifier` |
-| Ablation: PDM-Closed only | `mosaic simulate --ablation pdm_closed_only` |
-| Ablation: FlowDrive* only | `mosaic simulate --ablation flow_drive_only` |
+| Val14 CLS-R | `uv run mosaic simulate` |
+| Val14 CLS-NR | `uv run mosaic simulate -c closed_loop_nonreactive_agents` |
+| interPlan CLS-R | `uv run mosaic simulate -c interplan` |
+| Ablation: no verifier | `uv run mosaic simulate --ablation no_verifier` |
+| Ablation: PDM-Closed only | `uv run mosaic simulate --ablation pdm_closed_only` |
+| Ablation: FlowDrive* only | `uv run mosaic simulate --ablation flow_drive_only` |
 
 ## Development
 
