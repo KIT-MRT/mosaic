@@ -78,7 +78,13 @@ ALL_CHALLENGES = NUPLAN_CHALLENGES + [INTERPLAN_CHALLENGE]
     "--override",
     "-o",
     multiple=True,
-    help="Arbitrary Hydra overrides (repeatable, e.g. -o worker.threads_per_node=80).",
+    help="Simulation framework (Hydra) overrides (repeatable, e.g. -o worker.threads_per_node=80).",
+)
+@click.option(
+    "--planner-override",
+    "-p",
+    multiple=True,
+    help="Planner parameter overrides (repeatable, e.g. -p cost_estimator.parameters.ttc.weight=10).",
 )
 def simulate(
     challenge: str,
@@ -89,6 +95,7 @@ def simulate(
     threads: int,
     gpus_per_sim: float,
     override: tuple[str, ...],
+    planner_override: tuple[str, ...],
 ) -> None:
     """Run nuplan simulation."""
     from mosaic.cli._env import setup_matplotlib, setup_uv_env
@@ -150,9 +157,7 @@ def simulate(
     if limit_scenarios is not None:
         overrides.append(f"scenario_filter.limit_total_scenarios={limit_scenarios}")
 
-    planner_overrides = [ov for ov in override if ov.startswith("planner.mosaic.")]
-    hydra_overrides = [ov for ov in override if not ov.startswith("planner.mosaic.")]
-    overrides.extend(hydra_overrides)
+    overrides.extend(override)
     cfg = _configure_hydra(overrides)
 
     if is_interplan:
@@ -173,10 +178,9 @@ def simulate(
 
     OmegaConf.update(planner_cfg, "mosaic.parameters.ablation", ablation)
 
-    for ov in override:
-        if ov.startswith("planner.mosaic."):
-            key, _, value = ov.removeprefix("planner.mosaic.").partition("=")
-            OmegaConf.update(planner_cfg, f"mosaic.{key}", value)
+    for ov in planner_override:
+        key, _, value = ov.partition("=")
+        OmegaConf.update(planner_cfg, f"mosaic.{key}", value)
 
     planner = instantiate(planner_cfg.mosaic)
 

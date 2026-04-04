@@ -77,7 +77,8 @@ uv run mosaic simulate [OPTIONS]
   --experiment-name        Experiment name (default: mosaic)
   --threads                Worker threads per node (default: 160)
   --gpus-per-sim           GPUs per simulation (default: 0.05)
-  -o, --override           Arbitrary Hydra overrides (repeatable)
+  -o, --override           Simulation framework overrides (repeatable, e.g. -o worker.threads_per_node=80)
+  -p, --planner-override   Planner parameter overrides (repeatable, e.g. -p cost_estimator.parameters.ttc.weight=10)
 
 uv run mosaic analyze [OPTIONS]
   -p, --path               Path to experiment output dir (auto-detects latest)
