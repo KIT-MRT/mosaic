@@ -163,11 +163,47 @@ def simulate(
         from nuplan.planning.script.run_simulation import run_simulation
 
     from mosaic.core.mosaic_planner import Mosaic
-
-    parameters = Mosaic.Parameters(
-        ablation=Ablation(ablation),
+    from mosaic.core.cost_estimator import TrajectoryCostEstimator
+    from mosaic.core.verifier import TrajectoryVerifier
+    from mosaic.behavior.emergency_stop_behavior import EmergencyStopBehavior
+    from mosaic.scorer import (
+        ComfortMetric,
+        DrivableAreaComplianceMetric,
+        DrivingDirectionComplianceMetric,
+        NoAtFaultCollisionMetric,
+        ProgressMetric,
+        TTCMetric,
     )
 
-    run_simulation(cfg, planners=Mosaic(parameters))
+    parameters = Mosaic.Parameters(ablation=Ablation(ablation))
+
+    scoring_sampling = parameters.scoring_sampling
+    cost_estimator = TrajectoryCostEstimator(
+        parameters=TrajectoryCostEstimator.Parameters(
+            trajectory_sampling=scoring_sampling,
+        ),
+        multiplicative_metrics=[
+            NoAtFaultCollisionMetric(),
+            DrivableAreaComplianceMetric(),
+            DrivingDirectionComplianceMetric(),
+        ],
+        weighted_metrics=[
+            ProgressMetric(),
+            TTCMetric(),
+            ComfortMetric(),
+        ],
+    )
+    verifier = TrajectoryVerifier(
+        TrajectoryVerifier.Parameters(proposal_sampling=scoring_sampling)
+    )
+    emergency_stop = EmergencyStopBehavior(
+        EmergencyStopBehavior.Parameters(
+            trajectory_sampling=parameters.trajectory_sampling
+        )
+    )
+
+    run_simulation(
+        cfg, planners=Mosaic(parameters, cost_estimator, verifier, emergency_stop)
+    )
 
     click.echo(f"Simulation results are saved in: {cfg.output_dir}")
