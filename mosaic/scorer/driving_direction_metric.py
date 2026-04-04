@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 import numpy as np
 from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_enums import (
     BBCoordsIndex,
@@ -11,13 +13,14 @@ from mosaic.scorer.scoring_input import ScoringInput
 
 
 class DrivingDirectionComplianceMetric(MultiplicativeMetric):
-    def __init__(
-        self,
-        compliance_threshold: float = 2.0,
-        violation_threshold: float = 6.0,
-    ) -> None:
-        self._compliance_threshold = compliance_threshold
-        self._violation_threshold = violation_threshold
+    @dataclass
+    class Parameters:
+        compliance_threshold: float = 2.0
+        violation_threshold: float = 6.0
+
+    def __init__(self, parameters: Parameters = Parameters()) -> None:
+        self._compliance_threshold = parameters.compliance_threshold
+        self._violation_threshold = parameters.violation_threshold
 
     @property
     @override

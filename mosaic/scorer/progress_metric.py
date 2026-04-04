@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Optional
 
 import numpy as np
@@ -17,19 +18,20 @@ from mosaic.scorer.scoring_input import ScoringInput
 
 
 class ProgressMetric(WeightedMetric):
-    def __init__(
-        self,
-        weight: float = 5.0,
-        ref_speed_factor: float = 1.0,
-        fallback_max_meters: float = 10.0,
-        min_expected_meters: float = 0.1,
-        cap_to_centerline: bool = True,
-    ) -> None:
-        super().__init__(weight)
-        self._ref_speed_factor = ref_speed_factor
-        self._fallback_max_meters = fallback_max_meters
-        self._min_expected_meters = min_expected_meters
-        self._cap_to_centerline = cap_to_centerline
+    @dataclass
+    class Parameters:
+        weight: float = 5.0
+        ref_speed_factor: float = 1.0
+        fallback_max_meters: float = 10.0
+        min_expected_meters: float = 0.1
+        cap_to_centerline: bool = True
+
+    def __init__(self, parameters: Parameters = Parameters()) -> None:
+        super().__init__(parameters.weight)
+        self._ref_speed_factor = parameters.ref_speed_factor
+        self._fallback_max_meters = parameters.fallback_max_meters
+        self._min_expected_meters = parameters.min_expected_meters
+        self._cap_to_centerline = parameters.cap_to_centerline
 
     @property
     @override
