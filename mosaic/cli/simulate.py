@@ -1,7 +1,8 @@
 from typing import Union
 
 import click
-from omegaconf import DictConfig
+from hydra.utils import instantiate
+from omegaconf import DictConfig, OmegaConf
 
 from mosaic.ablation import Ablation
 
@@ -149,7 +150,9 @@ def simulate(
     if limit_scenarios is not None:
         overrides.append(f"scenario_filter.limit_total_scenarios={limit_scenarios}")
 
-    overrides.extend(override)
+    planner_overrides = [ov for ov in override if ov.startswith("planner.mosaic.")]
+    hydra_overrides = [ov for ov in override if not ov.startswith("planner.mosaic.")]
+    overrides.extend(hydra_overrides)
     cfg = _configure_hydra(overrides)
 
     if is_interplan:
@@ -162,48 +165,21 @@ def simulate(
     else:
         from nuplan.planning.script.run_simulation import run_simulation
 
-    from mosaic.core.mosaic_planner import Mosaic
-    from mosaic.core.cost_estimator import TrajectoryCostEstimator
-    from mosaic.core.verifier import TrajectoryVerifier
-    from mosaic.behavior.emergency_stop_behavior import EmergencyStopBehavior
-    from mosaic.scorer import (
-        ComfortMetric,
-        DrivableAreaComplianceMetric,
-        DrivingDirectionComplianceMetric,
-        NoAtFaultCollisionMetric,
-        ProgressMetric,
-        TTCMetric,
-    )
+    from importlib import resources as pkg_resources
 
-    parameters = Mosaic.Parameters(ablation=Ablation(ablation))
+    planner_cfg_path = pkg_resources.files("mosaic.config.planner") / "mosaic.yaml"
+    with planner_cfg_path.open("r") as f:
+        planner_cfg = OmegaConf.load(f)
 
-    scoring_sampling = parameters.scoring_sampling
-    cost_estimator = TrajectoryCostEstimator(
-        parameters=TrajectoryCostEstimator.Parameters(
-            trajectory_sampling=scoring_sampling,
-        ),
-        multiplicative_metrics=[
-            NoAtFaultCollisionMetric(),
-            DrivableAreaComplianceMetric(),
-            DrivingDirectionComplianceMetric(),
-        ],
-        weighted_metrics=[
-            ProgressMetric(),
-            TTCMetric(),
-            ComfortMetric(),
-        ],
-    )
-    verifier = TrajectoryVerifier(
-        TrajectoryVerifier.Parameters(proposal_sampling=scoring_sampling)
-    )
-    emergency_stop = EmergencyStopBehavior(
-        EmergencyStopBehavior.Parameters(
-            trajectory_sampling=parameters.trajectory_sampling
-        )
-    )
+    OmegaConf.update(planner_cfg, "mosaic.parameters.ablation", ablation)
 
-    run_simulation(
-        cfg, planners=Mosaic(parameters, cost_estimator, verifier, emergency_stop)
-    )
+    for ov in override:
+        if ov.startswith("planner.mosaic."):
+            key, _, value = ov.removeprefix("planner.mosaic.").partition("=")
+            OmegaConf.update(planner_cfg, f"mosaic.{key}", value)
+
+    planner = instantiate(planner_cfg.mosaic)
+
+    run_simulation(cfg, planners=planner)
 
     click.echo(f"Simulation results are saved in: {cfg.output_dir}")
