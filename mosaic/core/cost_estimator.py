@@ -16,15 +16,10 @@ import mosaic.utils.trajectory as trajectory_utils
 from mosaic.core.command import Command
 from mosaic.core.environment_model import EnvironmentModel
 from mosaic.scorer import (
-    ComfortMetric,
-    DrivableAreaComplianceMetric,
-    DrivingDirectionComplianceMetric,
     MultiplicativeMetric,
-    NoAtFaultCollisionMetric,
     ProgressGateMetric,
     ProgressMetric,
     ScoringInput,
-    TTCMetric,
     WeightedMetric,
     aggregate_scores,
 )
@@ -35,9 +30,14 @@ class TrajectoryCostEstimator(BatchCostEstimator):
     @dataclass
     class Parameters:
         trajectory_sampling: TrajectorySampling
-        logging_enabled: bool
+        logging_enabled: bool = True
 
-    def __init__(self, parameters: Parameters) -> None:
+    def __init__(
+        self,
+        parameters: Parameters,
+        multiplicative_metrics: list[MultiplicativeMetric],
+        weighted_metrics: list[WeightedMetric],
+    ) -> None:
         super().__init__()
 
         self.parameters: TrajectoryCostEstimator.Parameters = parameters
@@ -45,18 +45,14 @@ class TrajectoryCostEstimator(BatchCostEstimator):
             self.parameters.trajectory_sampling
         )
 
-        progress_metric = ProgressMetric()
+        progress_metric = next(
+            m for m in weighted_metrics if isinstance(m, ProgressMetric)
+        )
         self._multiplicative_metrics: list[MultiplicativeMetric] = [
-            NoAtFaultCollisionMetric(),
-            DrivableAreaComplianceMetric(),
-            DrivingDirectionComplianceMetric(),
+            *multiplicative_metrics,
             ProgressGateMetric(progress_metric),
         ]
-        self._weighted_metrics: list[WeightedMetric] = [
-            progress_metric,
-            TTCMetric(),
-            ComfortMetric(),
-        ]
+        self._weighted_metrics: list[WeightedMetric] = weighted_metrics
 
         self._log_buffer: list[dict[str, object]] = []
 

@@ -25,6 +25,14 @@ from mosaic.core.command import Command
 from mosaic.core.environment_model import EnvironmentModel
 from mosaic.core.cost_estimator import TrajectoryCostEstimator
 from mosaic.core.verifier import TrajectoryVerifier
+from mosaic.scorer import (
+    ComfortMetric,
+    DrivableAreaComplianceMetric,
+    DrivingDirectionComplianceMetric,
+    NoAtFaultCollisionMetric,
+    ProgressMetric,
+    TTCMetric,
+)
 
 
 @final
@@ -81,7 +89,19 @@ class Mosaic(AbstractPlanner):
             self.parameters.emergency_stop_behavior
         )
 
-        self._cost_estimator = TrajectoryCostEstimator(self.parameters.cost_estimator)
+        self._cost_estimator = TrajectoryCostEstimator(
+            self.parameters.cost_estimator,
+            multiplicative_metrics=[
+                NoAtFaultCollisionMetric(),
+                DrivableAreaComplianceMetric(),
+                DrivingDirectionComplianceMetric(),
+            ],
+            weighted_metrics=[
+                ProgressMetric(),
+                TTCMetric(),
+                ComfortMetric(),
+            ],
+        )
         if self.parameters.ablation == Ablation.NO_VERIFIER:
             self.root_arbitrator: PriorityArbitrator = PriorityArbitrator("Mosaic")
             self.cost_arbitrator = CostArbitrator("Composer", self._cost_estimator)
