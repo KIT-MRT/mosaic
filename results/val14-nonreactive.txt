@@ -1,12 +1,12 @@
-Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-nonreactive/closed_loop_nonreactive_agents/2026.02.25.15.38.27
+Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-nonreactive/closed_loop_nonreactive_agents/2026.04.08.11.35.00
 
 ╭──────────────────────────────────────────────────────────╮
-│  2026.02.25.15.38.27                                     │
+│  2026.04.08.11.35.00                                     │
 ╰──────────────────────────────────────────────────────────╯
 
   Scenarios             1118
-  Overall score         0.9549
-  Duration              00:47:58 (2.6s/ea)
+  Overall score         0.9548
+  Duration              00:56:42 (3.0s/ea)
 
 
 ── Failures ────────────────────────────────────────────────
@@ -15,10 +15,10 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-nonreactive/
   ╭────────────────────────────────────────┬───────┬─────────╮
   │ Metric                                 │  Fail │    Rate │
   ├────────────────────────────────────────┼───────┼─────────┤
-  │ no_ego_at_fault_collisions             │     5 │    0.4% │ ◆
+  │ no_ego_at_fault_collisions             │     6 │    0.5% │ ◆
   │ drivable_area_compliance               │     2 │    0.2% │ ◆
   │ driving_direction_compliance           │     2 │    0.2% │ ◆
-  │ ego_is_making_progress                 │     7 │    0.6% │ ◆
+  │ ego_is_making_progress                 │     6 │    0.5% │ ◆
   ╰────────────────────────────────────────┴───────┴─────────╯
 
   Weighted Metrics
@@ -26,18 +26,19 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-nonreactive/
   │ Metric                                 │  Fail │    Rate │
   ├────────────────────────────────────────┼───────┼─────────┤
   │ ego_progress_along_expert_route (w=5)  │     0 │    0.0% │
-  │ time_to_collision_within_bound (w=5)   │    50 │    4.5% │ ◆
+  │ time_to_collision_within_bound (w=5)   │    51 │    4.6% │ ◆
   │ speed_limit_compliance (w=4)           │     0 │    0.0% │
-  │ ego_is_comfortable (w=2)               │    72 │    6.4% │ ◆
+  │ ego_is_comfortable (w=2)               │    74 │    6.6% │ ◆
   ╰────────────────────────────────────────┴───────┴─────────╯
 
   16 scenarios scored zero
 
 
-── Collisions (5) ──────────────────────────────────────────
+── Collisions (6) ──────────────────────────────────────────
   ╭────────────────────┬────────────────────────────────┬────────╮
   │ Scenario           │ Type                           │  Score │
   ├────────────────────┼────────────────────────────────┼────────┤
+  │ 6f247bc70fe3555e   │ starting_right_turn            │ 0.0000 │
   │ 4ce8319955305a2a   │ low_magnitude_speed            │ 0.0000 │
   │ 558d1c44968c5319   │ high_magnitude_speed           │ 0.0000 │
   │ 8fcf72fe99a4525a   │ starting_left_turn             │ 0.0000 │
@@ -50,11 +51,11 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-nonreactive/
   ╭──────────────────────────────────────┬──────┬────────┬──────┬──────┬──────╮
   │ Type                                 │    n │  Score │ Zero │  TTC │ Coll │
   ├──────────────────────────────────────┼──────┼────────┼──────┼──────┼──────┤
-  │ high_lateral_acceleration            │   96 │ 0.9176 │    5 │    5 │    1 │
-  │ traversing_pickup_dropoff            │   99 │ 0.9199 │    0 │    8 │    0 │
+  │ high_lateral_acceleration            │   96 │ 0.9163 │    5 │    5 │    1 │
+  │ traversing_pickup_dropoff            │   99 │ 0.9212 │    0 │    8 │    0 │
   │ starting_left_turn                   │  100 │ 0.9235 │    2 │    7 │    1 │
   │ low_magnitude_speed                  │  100 │ 0.9346 │    4 │    6 │    1 │
-  │ starting_right_turn                  │   98 │ 0.9399 │    1 │    7 │    0 │
+  │ starting_right_turn                  │   98 │ 0.9386 │    1 │    8 │    1 │
   │ changing_lane                        │   70 │ 0.9481 │    1 │    6 │    1 │
   │ following_lane_with_lead             │   15 │ 0.9624 │    0 │    1 │    0 │
   │ starting_straight_traffic_light_int… │   98 │ 0.9735 │    1 │    2 │    0 │
@@ -71,20 +72,20 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-nonreactive/
   ╭────────────────────┬────────┬───────────────┬─────────────────╮
   │ Command            │   Wins │  Of Decisions │  Of Appearances │
   ├────────────────────┼────────┼───────────────┼─────────────────┤
-  │ flow_drive         │  36551 │         22.0% │           22.0% │
-  │ pdm_closed         │  49517 │         29.8% │           29.8% │
+  │ flow_drive         │  36551 │         22.1% │           22.1% │
+  │ pdm_closed         │  48767 │         29.5% │           29.5% │
   ╰────────────────────┴────────┴───────────────┴─────────────────╯
 
-  Tied scores           80009 / 166077 (48.2%)
+  Tied scores           80038 / 165356 (48.4%)
 
 
 ── Verifier ────────────────────────────────────────────────
   ╭────────────────────┬────────┬──────────┬────────────╮
   │ Command            │  Fails │   Checks │  Fail Rate │
   ├────────────────────┼────────┼──────────┼────────────┤
-  │ EmergencyStop      │     36 │       49 │      73.5% │
-  │ flow_drive         │     84 │   166806 │       0.1% │
-  │ pdm_closed         │    694 │   166806 │       0.4% │
+  │ EmergencyStop      │     36 │      132 │      27.3% │
+  │ flow_drive         │    887 │   166806 │       0.5% │
+  │ pdm_closed         │    695 │   166806 │       0.4% │
   ╰────────────────────┴────────┴──────────┴────────────╯
 
-  Both failed           49 / 166806 (0.0%)
+  Both failed           132 / 166806 (0.1%)

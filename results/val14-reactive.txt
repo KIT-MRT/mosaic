@@ -1,12 +1,12 @@
-Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-reactive/closed_loop_reactive_agents/2026.02.25.14.46.14
+Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-reactive/closed_loop_reactive_agents/2026.04.08.10.32.53
 
 ╭──────────────────────────────────────────────────────────╮
-│  2026.02.25.14.46.14                                     │
+│  2026.04.08.10.32.53                                     │
 ╰──────────────────────────────────────────────────────────╯
 
   Scenarios             1118
-  Overall score         0.9397
-  Duration              00:50:59 (2.7s/ea)
+  Overall score         0.9398
+  Duration              01:00:38 (3.3s/ea)
 
 
 ── Failures ────────────────────────────────────────────────
@@ -15,10 +15,10 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-reactive/clo
   ╭────────────────────────────────────────┬───────┬─────────╮
   │ Metric                                 │  Fail │    Rate │
   ├────────────────────────────────────────┼───────┼─────────┤
-  │ no_ego_at_fault_collisions             │    15 │    1.3% │ ◆
+  │ no_ego_at_fault_collisions             │    14 │    1.3% │ ◆
   │ drivable_area_compliance               │     2 │    0.2% │ ◆
   │ driving_direction_compliance           │     1 │    0.1% │ ◆
-  │ ego_is_making_progress                 │     2 │    0.2% │ ◆
+  │ ego_is_making_progress                 │     3 │    0.3% │ ◆
   ╰────────────────────────────────────────┴───────┴─────────╯
 
   Weighted Metrics
@@ -28,13 +28,13 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-reactive/clo
   │ ego_progress_along_expert_route (w=5)  │     0 │    0.0% │
   │ time_to_collision_within_bound (w=5)   │    58 │    5.2% │ ◆
   │ speed_limit_compliance (w=4)           │     0 │    0.0% │
-  │ ego_is_comfortable (w=2)               │    90 │    8.1% │ ◆
+  │ ego_is_comfortable (w=2)               │    92 │    8.2% │ ◆
   ╰────────────────────────────────────────┴───────┴─────────╯
 
   20 scenarios scored zero
 
 
-── Collisions (15) ─────────────────────────────────────────
+── Collisions (14) ─────────────────────────────────────────
   ╭────────────────────┬────────────────────────────────┬────────╮
   │ Scenario           │ Type                           │  Score │
   ├────────────────────┼────────────────────────────────┼────────┤
@@ -42,7 +42,6 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-reactive/clo
   │ b1f369f514d95f4c   │ stationary_in_traffic          │ 0.0000 │
   │ 42dc17b3a3e551bc   │ starting_left_turn             │ 0.0000 │
   │ 1f82b16afa96569a   │ starting_left_turn             │ 0.0000 │
-  │ 0ebba0e8fbd3528f   │ starting_left_turn             │ 0.0000 │
   │ 00c202ab992e50aa   │ near_multiple_vehicles         │ 0.0000 │
   │ 558d1c44968c5319   │ high_magnitude_speed           │ 0.0000 │
   │ 1bb4a47dd9f155cd   │ near_multiple_vehicles         │ 0.0000 │
@@ -60,14 +59,14 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-reactive/clo
   ╭──────────────────────────────────────┬──────┬────────┬──────┬──────┬──────╮
   │ Type                                 │    n │  Score │ Zero │  TTC │ Coll │
   ├──────────────────────────────────────┼──────┼────────┼──────┼──────┼──────┤
-  │ near_multiple_vehicles               │   85 │ 0.8962 │    5 │    7 │    4 │
-  │ starting_left_turn                   │  100 │ 0.8998 │    4 │    8 │    4 │
+  │ near_multiple_vehicles               │   85 │ 0.8984 │    5 │    7 │    4 │
+  │ starting_left_turn                   │  100 │ 0.8998 │    4 │    8 │    3 │
   │ high_lateral_acceleration            │   96 │ 0.9228 │    2 │    5 │    0 │
   │ following_lane_with_lead             │   15 │ 0.9274 │    0 │    1 │    0 │
   │ changing_lane                        │   70 │ 0.9279 │    3 │    6 │    3 │
   │ traversing_pickup_dropoff            │   99 │ 0.9312 │    0 │    4 │    0 │
   │ starting_right_turn                  │   98 │ 0.9358 │    2 │    6 │    1 │
-  │ low_magnitude_speed                  │  100 │ 0.9412 │    1 │    6 │    0 │
+  │ low_magnitude_speed                  │  100 │ 0.9399 │    1 │    6 │    0 │
   │ starting_straight_traffic_light_int… │   98 │ 0.9441 │    0 │    6 │    0 │
   │ waiting_for_pedestrian_to_cross      │   53 │ 0.9594 │    0 │    3 │    0 │
   │ stationary_in_traffic                │   98 │ 0.9620 │    2 │    3 │    2 │
@@ -81,20 +80,20 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-reactive/clo
   ╭────────────────────┬────────┬───────────────┬─────────────────╮
   │ Command            │   Wins │  Of Decisions │  Of Appearances │
   ├────────────────────┼────────┼───────────────┼─────────────────┤
-  │ flow_drive         │  31027 │         18.7% │           18.7% │
-  │ pdm_closed         │  47989 │         28.9% │           28.9% │
+  │ flow_drive         │  31005 │         18.7% │           18.7% │
+  │ pdm_closed         │  47782 │         28.8% │           28.8% │
   ╰────────────────────┴────────┴───────────────┴─────────────────╯
 
-  Tied scores           87307 / 166323 (52.5%)
+  Tied scores           87180 / 165967 (52.5%)
 
 
 ── Verifier ────────────────────────────────────────────────
   ╭────────────────────┬────────┬──────────┬────────────╮
   │ Command            │  Fails │   Checks │  Fail Rate │
   ├────────────────────┼────────┼──────────┼────────────┤
-  │ EmergencyStop      │     43 │       68 │      63.2% │
-  │ flow_drive         │     80 │   166806 │       0.0% │
-  │ pdm_closed         │    471 │   166806 │       0.3% │
+  │ EmergencyStop      │     41 │      141 │      29.1% │
+  │ flow_drive         │    479 │   166806 │       0.3% │
+  │ pdm_closed         │    501 │   166806 │       0.3% │
   ╰────────────────────┴────────┴──────────┴────────────╯
 
-  Both failed           68 / 166806 (0.0%)
+  Both failed           141 / 166806 (0.1%)
