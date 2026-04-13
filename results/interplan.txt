@@ -1,12 +1,12 @@
-Using latest experiment: /home/lelarge/nuplan/experiments/exp/interplan/default_interplan_benchmark/2026.02.25.16.27.40
+Using latest experiment: /home/lelarge/nuplan/experiments/exp/interplan/default_interplan_benchmark/2026.04.08.12.33.01
 
 ╭──────────────────────────────────────────────────────────╮
-│  2026.02.25.16.27.40                                     │
+│  2026.04.08.12.33.01                                     │
 ╰──────────────────────────────────────────────────────────╯
 
   Scenarios             80
-  Overall score         0.5403
-  Duration              00:07:34 (5.7s/ea)
+  Overall score         0.5430
+  Duration              00:09:20 (7.0s/ea)
 
 
 ── Failures ────────────────────────────────────────────────
@@ -26,7 +26,7 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/interplan/default_
   │ Metric                                 │  Fail │    Rate │
   ├────────────────────────────────────────┼───────┼─────────┤
   │ ego_progress_along_expert_route (w=5)  │     0 │    0.0% │
-  │ time_to_collision_within_bound (w=5)   │     4 │    5.0% │ ◆
+  │ time_to_collision_within_bound (w=5)   │     3 │    3.8% │ ◆
   │ speed_limit_compliance (w=4)           │     0 │    0.0% │
   │ ego_is_comfortable (w=2)               │     8 │   10.0% │ ◆
   ╰────────────────────────────────────────┴───────┴─────────╯
@@ -47,12 +47,12 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/interplan/default_
   ╭──────────────────────────────────────┬──────┬────────┬──────┬──────┬──────╮
   │ Type                                 │    n │  Score │ Zero │  TTC │ Coll │
   ├──────────────────────────────────────┼──────┼────────┼──────┼──────┼──────┤
-  │ approaching_construction_zone        │   10 │ 0.1785 │    8 │    1 │    0 │
+  │ approaching_construction_zone        │   10 │ 0.1785 │    8 │    0 │    0 │
   │ overtake_parked_vehicle              │   10 │ 0.2685 │    7 │    0 │    0 │
   │ avoid_crashed_cars                   │   10 │ 0.2981 │    7 │    0 │    0 │
-  │ high_traffic_density                 │   10 │ 0.6198 │    1 │    0 │    0 │
-  │ medium_traffic_density               │   10 │ 0.6201 │    1 │    0 │    0 │
-  │ low_traffic_density                  │   10 │ 0.6612 │    1 │    0 │    0 │
+  │ high_traffic_density                 │   10 │ 0.6250 │    1 │    0 │    0 │
+  │ medium_traffic_density               │   10 │ 0.6305 │    1 │    0 │    0 │
+  │ low_traffic_density                  │   10 │ 0.6664 │    1 │    0 │    0 │
   │ nudge_around_parked_vehicle          │   10 │ 0.8151 │    1 │    2 │    1 │
   │ jaywalking_pedestrian                │   10 │ 0.8616 │    1 │    1 │    1 │
   ╰──────────────────────────────────────┴──────┴────────┴──────┴──────┴──────╯
@@ -62,20 +62,20 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/interplan/default_
   ╭────────────────────┬────────┬───────────────┬─────────────────╮
   │ Command            │   Wins │  Of Decisions │  Of Appearances │
   ├────────────────────┼────────┼───────────────┼─────────────────┤
-  │ flow_drive         │   7360 │         33.0% │           33.0% │
-  │ pdm_closed         │   5944 │         26.7% │           26.7% │
+  │ flow_drive         │   7233 │         33.9% │           33.9% │
+  │ pdm_closed         │   5155 │         24.1% │           24.1% │
   ╰────────────────────┴────────┴───────────────┴─────────────────╯
 
-  Tied scores           8969 / 22273 (40.3%)
+  Tied scores           8970 / 21358 (42.0%)
 
 
 ── Verifier ────────────────────────────────────────────────
   ╭────────────────────┬────────┬──────────┬────────────╮
   │ Command            │  Fails │   Checks │  Fail Rate │
   ├────────────────────┼────────┼──────────┼────────────┤
-  │ EmergencyStop      │      3 │        3 │     100.0% │
-  │ flow_drive         │      3 │    22312 │       0.0% │
-  │ pdm_closed         │     39 │    22312 │       0.2% │
+  │ EmergencyStop      │      0 │       12 │       0.0% │
+  │ flow_drive         │    933 │    22314 │       4.2% │
+  │ pdm_closed         │     35 │    22314 │       0.2% │
   ╰────────────────────┴────────┴──────────┴────────────╯
 
-  Both failed           3 / 22312 (0.0%)
+  Both failed           12 / 22314 (0.1%)

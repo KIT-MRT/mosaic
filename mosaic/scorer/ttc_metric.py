@@ -1,4 +1,5 @@
 import copy
+from dataclasses import dataclass
 
 import numpy as np
 from nuplan.common.actor_state.state_representation import StateSE2
@@ -20,15 +21,16 @@ from mosaic.scorer.scoring_input import ScoringInput
 
 
 class TTCMetric(WeightedMetric):
-    def __init__(
-        self,
-        weight: float = 7.0,
-        time_horizon: float = 3.0,
-        stopped_speed_threshold: float = 5e-03,
-    ) -> None:
-        super().__init__(weight)
-        self._time_horizon = time_horizon
-        self._stopped_speed_threshold = stopped_speed_threshold
+    @dataclass
+    class Parameters:
+        weight: float = 7.0
+        time_horizon: float = 3.0
+        stopped_speed_threshold: float = 5e-03
+
+    def __init__(self, parameters: Parameters = Parameters()) -> None:
+        super().__init__(parameters.weight)
+        self._time_horizon = parameters.time_horizon
+        self._stopped_speed_threshold = parameters.stopped_speed_threshold
 
     @property
     @override

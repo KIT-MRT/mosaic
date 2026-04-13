@@ -1,7 +1,8 @@
 from typing import Union
 
 import click
-from omegaconf import DictConfig
+from hydra.utils import instantiate
+from omegaconf import DictConfig, OmegaConf
 
 from mosaic.ablation import Ablation
 
@@ -77,7 +78,13 @@ ALL_CHALLENGES = NUPLAN_CHALLENGES + [INTERPLAN_CHALLENGE]
     "--override",
     "-o",
     multiple=True,
-    help="Arbitrary Hydra overrides (repeatable, e.g. -o worker.threads_per_node=80).",
+    help="Simulation framework (Hydra) overrides (repeatable, e.g. -o worker.threads_per_node=80).",
+)
+@click.option(
+    "--planner-override",
+    "-p",
+    multiple=True,
+    help="Planner parameter overrides (repeatable, e.g. -p cost_estimator.parameters.ttc.weight=10).",
 )
 def simulate(
     challenge: str,
@@ -88,6 +95,7 @@ def simulate(
     threads: int,
     gpus_per_sim: float,
     override: tuple[str, ...],
+    planner_override: tuple[str, ...],
 ) -> None:
     """Run nuplan simulation."""
     from mosaic.cli._env import setup_matplotlib, setup_uv_env
@@ -162,12 +170,20 @@ def simulate(
     else:
         from nuplan.planning.script.run_simulation import run_simulation
 
-    from mosaic.core.mosaic_planner import Mosaic
+    from importlib import resources as pkg_resources
 
-    parameters = Mosaic.Parameters(
-        ablation=Ablation(ablation),
-    )
+    planner_cfg_path = pkg_resources.files("mosaic.config.planner") / "mosaic.yaml"
+    with planner_cfg_path.open("r") as f:
+        planner_cfg = OmegaConf.load(f)
 
-    run_simulation(cfg, planners=Mosaic(parameters))
+    OmegaConf.update(planner_cfg, "mosaic.parameters.ablation", ablation)
+
+    for ov in planner_override:
+        key, _, value = ov.partition("=")
+        OmegaConf.update(planner_cfg, f"mosaic.{key}", value)
+
+    planner = instantiate(planner_cfg.mosaic)
+
+    run_simulation(cfg, planners=planner)
 
     click.echo(f"Simulation results are saved in: {cfg.output_dir}")

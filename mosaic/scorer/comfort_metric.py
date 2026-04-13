@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 import numpy as np
 from tuplan_garage.planning.simulation.planner.pdm_planner.scoring.pdm_comfort_metrics import (
     ego_is_comfortable,
@@ -10,8 +12,12 @@ from mosaic.scorer.scoring_input import ScoringInput
 
 
 class ComfortMetric(WeightedMetric):
-    def __init__(self, weight: float = 2.0) -> None:
-        super().__init__(weight)
+    @dataclass
+    class Parameters:
+        weight: float = 2.0
+
+    def __init__(self, parameters: Parameters = Parameters()) -> None:
+        super().__init__(parameters.weight)
 
     @property
     @override

@@ -1,7 +1,7 @@
 import json
 import os
 from dataclasses import dataclass
-from typing import Optional, cast, final
+from typing import cast, final
 
 from arbitration_graphs import CostArbitrator, PriorityArbitrator
 from nuplan.planning.simulation.observation.observation_type import (
@@ -34,7 +34,6 @@ class Mosaic(AbstractPlanner):
     @dataclass
     class Parameters:
         ablation: Ablation = Ablation.NONE
-
         trajectory_sampling: TrajectorySampling = TrajectorySampling(
             time_horizon=4.0, interval_length=0.1
         )
@@ -42,28 +41,18 @@ class Mosaic(AbstractPlanner):
             time_horizon=4.0, interval_length=0.1
         )
         map_radius: float = 50.0
-        cost_estimator: TrajectoryCostEstimator.Parameters = (
-            TrajectoryCostEstimator.Parameters(
-                trajectory_sampling=scoring_sampling,
-                logging_enabled=True,
-            )
-        )
-        emergency_stop_behavior: EmergencyStopBehavior.Parameters = (
-            EmergencyStopBehavior.Parameters(
-                trajectory_sampling=trajectory_sampling,
-            )
-        )
-        verifier: TrajectoryVerifier.Parameters = TrajectoryVerifier.Parameters(
-            proposal_sampling=scoring_sampling,
-        )
 
     def __init__(
         self,
-        parameters: Optional[Parameters] = None,
+        parameters: Parameters,
+        cost_estimator: TrajectoryCostEstimator,
+        verifier: TrajectoryVerifier,
+        emergency_stop_behavior: EmergencyStopBehavior,
     ) -> None:
-        if parameters is None:
-            parameters = Mosaic.Parameters()
         self.parameters: Mosaic.Parameters = parameters
+        self._cost_estimator = cost_estimator
+        self._verifier = verifier
+        self.emergency_stop_behavior = emergency_stop_behavior
 
         self.environment_model = EnvironmentModel(
             EnvironmentModel.Parameters(
@@ -72,21 +61,16 @@ class Mosaic(AbstractPlanner):
                 self.parameters.map_radius,
             )
         )
-        self.initialize_arbitration_graph()
+        self._build_arbitration_graph()
 
-    def initialize_arbitration_graph(self) -> None:
+    def _build_arbitration_graph(self) -> None:
         self.flow_drive_behavior = FlowDriveBehavior()
         self.pdm_closed_behavior = PDMClosedBehavior()
-        self.emergency_stop_behavior: EmergencyStopBehavior = EmergencyStopBehavior(
-            self.parameters.emergency_stop_behavior
-        )
 
-        self._cost_estimator = TrajectoryCostEstimator(self.parameters.cost_estimator)
         if self.parameters.ablation == Ablation.NO_VERIFIER:
             self.root_arbitrator: PriorityArbitrator = PriorityArbitrator("Mosaic")
             self.cost_arbitrator = CostArbitrator("Composer", self._cost_estimator)
         else:
-            self._verifier = TrajectoryVerifier(self.parameters.verifier)
             self.root_arbitrator: PriorityArbitrator = PriorityArbitrator(
                 "Mosaic", self._verifier
             )
@@ -176,4 +160,4 @@ class Mosaic(AbstractPlanner):
         Custom setstate to re-initialize the arbitration graph
         """
         self.__dict__.update(state)
-        self.initialize_arbitration_graph()
+        self._build_arbitration_graph()

@@ -1,0 +1,59 @@
+mosaic:
+  _target_: mosaic.core.mosaic_planner.Mosaic
+  _convert_: all
+
+  parameters:
+    _target_: mosaic.core.mosaic_planner.Mosaic.Parameters
+    _convert_: all
+    trajectory_sampling: &trajectory_sampling
+      _target_: nuplan.planning.simulation.trajectory.trajectory_sampling.TrajectorySampling
+      time_horizon: 4.0
+      interval_length: 0.1
+    scoring_sampling: &scoring_sampling
+      _target_: nuplan.planning.simulation.trajectory.trajectory_sampling.TrajectorySampling
+      time_horizon: 4.0
+      interval_length: 0.1
+
+  cost_estimator:
+    _target_: mosaic.core.cost_estimator.TrajectoryCostEstimator
+    _convert_: all
+    parameters:
+      _target_: mosaic.core.cost_estimator.TrajectoryCostEstimator.Parameters
+      _convert_: all
+      trajectory_sampling: *scoring_sampling
+    multiplicative_metrics:
+      - _target_: mosaic.scorer.NoAtFaultCollisionMetric
+      - _target_: mosaic.scorer.DrivableAreaComplianceMetric
+      - _target_: mosaic.scorer.DrivingDirectionComplianceMetric
+        parameters:
+          _target_: mosaic.scorer.DrivingDirectionComplianceMetric.Parameters
+          _convert_: all
+    weighted_metrics:
+      - _target_: mosaic.scorer.ProgressMetric
+        parameters:
+          _target_: mosaic.scorer.ProgressMetric.Parameters
+          _convert_: all
+      - _target_: mosaic.scorer.TTCMetric
+        parameters:
+          _target_: mosaic.scorer.TTCMetric.Parameters
+          _convert_: all
+      - _target_: mosaic.scorer.ComfortMetric
+        parameters:
+          _target_: mosaic.scorer.ComfortMetric.Parameters
+          _convert_: all
+
+  verifier:
+    _target_: mosaic.core.verifier.TrajectoryVerifier
+    _convert_: all
+    parameters:
+      _target_: mosaic.core.verifier.TrajectoryVerifier.Parameters
+      _convert_: all
+      proposal_sampling: *scoring_sampling
+
+  emergency_stop_behavior:
+    _target_: mosaic.behavior.emergency_stop_behavior.EmergencyStopBehavior
+    _convert_: all
+    parameters:
+      _target_: mosaic.behavior.emergency_stop_behavior.EmergencyStopBehavior.Parameters
+      _convert_: all
+      trajectory_sampling: *trajectory_sampling
