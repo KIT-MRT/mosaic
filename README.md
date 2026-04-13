@@ -21,15 +21,15 @@ Evaluated on [nuPlan](https://github.com/motional/nuplan-devkit), Mosaic achieve
 | Rule-based & Hybrid | PDM-Closed | 92.84 | 92.12 | 41.23 |
 | | FlowDrive* | 94.81 | 92.96 | 44.05 |
 | | GIGAFLOW | - | 93.80 | - |
-| | **Mosaic (ours)** | **95.49** | **93.97** | **54.03** |
+| | **Mosaic (ours)** | **95.48** | **93.98** | **54.30** |
 
 ### Ablation study (Val14 CLS-R)
 
 | Configuration | CLS-R | Collisions | Zero-score |
 |---|:---:|:---:|:---:|
-| **Mosaic (full)** | **93.97** | **15** | **20** |
-| w/o verifier | 93.33 | 27 | 31 |
-| FlowDrive* only | 92.91 | 19 | 31 |
+| **Mosaic (full)** | **93.98** | **14** | **20** |
+| w/o verifier | 92.82 | 35 | 38 |
+| FlowDrive* only | 92.96 | 18 | 30 |
 | PDM-Closed only | 92.15 | 17 | 33 |
 
 ## Architecture
