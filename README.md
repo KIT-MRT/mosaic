@@ -58,6 +58,7 @@ uv run mosaic simulate          # Run simulation (default: Val14 CLS-R)
 uv run mosaic analyze           # Print summary of latest experiment
 uv run mosaic results           # Launch nuBoard to view results
 uv run mosaic plot              # Generate behavior selection pie chart
+uv run mosaic cite              # Print BibTeX citation
 ```
 
 ### Quick test
@@ -92,6 +93,8 @@ uv run mosaic results [OPTIONS]
 uv run mosaic plot [OPTIONS]
   -p, --path               Path to experiment output dir (auto-detects latest)
   -o, --output             Output SVG path (default: behavior_selection.svg)
+
+uv run mosaic cite
 ```
 
 ## Reproducing paper experiments
@@ -130,4 +133,16 @@ uv run ruff format .             # Auto-format
 
 ## Citation
 
-TODO
+Please consider citing our paper if our work is helpful to your research:
+
+```bibtex
+@misc{lelarge2026mosaic,
+  title={Mosaic: An Extensible Framework for Composing Rule-Based and Learned Motion Planners},
+  author={Le Large, Nick and Steiner, Marlon and Wang, Lingguang and Poh, Willi and Pauls, Jan-Hendrik and Ta\c{s}, {\"{O}}mer {\c{S}}ahin and Stiller, Christoph},
+  year={2026},
+  eprint={2604.13853},
+  archivePrefix={arXiv},
+  primaryClass={cs.RO},
+  url={https://arxiv.org/abs/2604.13853},
+}
+```
