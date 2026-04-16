@@ -122,6 +122,16 @@ Individual experiments:
 | Ablation: PDM-Closed only | `uv run mosaic simulate --ablation pdm_closed_only` |
 | Ablation: FlowDrive* only | `uv run mosaic simulate --ablation flow_drive_only` |
 
+## Why the forks?
+
+Three dependencies are pinned to personal forks ([nuplan-devkit](https://github.com/ll-nick/nuplan-devkit), [tuplan-garage](https://github.com/ll-nick/tuplan_garage), [interPlan](https://github.com/ll-nick/interPlan)). The changes fall into three categories:
+
+**Packaging** (all three forks): The upstream repositories rely on conda and manual install steps. The forks replace `setup.py`/`requirements.txt` with `pyproject.toml`, pin dependency versions to resolve conflicts, and ensure non-editable installs work correctly by explicitly including config files (YAML, JSON, etc.) that the upstream packages omit.
+
+**Data paths** (nuplan-devkit, interPlan): Minor path configuration fixes required to locate dataset files correctly in a standard environment.
+
+**PDM-Closed prediction** (tuplan-garage): Switches from heading-based to velocity-based agent trajectory prediction, following a recommendation from the FlowDrive authors. This is the setup under which FlowDrive was trained and evaluated. Also adds an option to disable PDM-Closed's internal emergency brake fallback, allowing the arbitration graph to handle that decision instead.
+
 ## Development
 
 ```bash
