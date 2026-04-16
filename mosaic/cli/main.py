@@ -1,6 +1,7 @@
 import click
 
 from mosaic.cli.analyze import analyze
+from mosaic.cli.cite import cite
 from mosaic.cli.plot import plot
 from mosaic.cli.results import results
 from mosaic.cli.simulate import simulate
@@ -12,6 +13,7 @@ def cli() -> None:
 
 
 cli.add_command(analyze)
+cli.add_command(cite)
 cli.add_command(plot)
 cli.add_command(results)
 cli.add_command(simulate)

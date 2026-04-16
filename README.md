@@ -58,6 +58,7 @@ uv run mosaic simulate          # Run simulation (default: Val14 CLS-R)
 uv run mosaic analyze           # Print summary of latest experiment
 uv run mosaic results           # Launch nuBoard to view results
 uv run mosaic plot              # Generate behavior selection pie chart
+uv run mosaic cite              # Print BibTeX citation
 ```
 
 ### Quick test
@@ -92,6 +93,8 @@ uv run mosaic results [OPTIONS]
 uv run mosaic plot [OPTIONS]
   -p, --path               Path to experiment output dir (auto-detects latest)
   -o, --output             Output SVG path (default: behavior_selection.svg)
+
+uv run mosaic cite
 ```
 
 ## Reproducing paper experiments
