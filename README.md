@@ -18,9 +18,9 @@ Evaluated on [nuPlan](https://github.com/motional/nuplan-devkit), Mosaic achieve
 |---|---|:---:|:---:|:---:|
 | Expert | Log-replay | 93.53 | 80.32 | 14.76 |
 | Learning-based | FlowDrive | 91.21 | 85.37 | 36.96 |
+| | GIGAFLOW | - | 93.80 | - |
 | Rule-based & Hybrid | PDM-Closed | 92.84 | 92.12 | 41.23 |
 | | FlowDrive* | 94.81 | 92.96 | 44.05 |
-| | GIGAFLOW | - | 93.80 | - |
 | | **Mosaic (ours)** | **95.48** | **93.98** | **54.30** |
 
 ### Ablation study (Val14 CLS-R)
