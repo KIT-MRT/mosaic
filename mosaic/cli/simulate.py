@@ -1,6 +1,7 @@
 from typing import Union
 
 import click
+import yaml
 from hydra.utils import instantiate
 from omegaconf import DictConfig, OmegaConf
 
@@ -180,7 +181,7 @@ def simulate(
 
     for ov in planner_override:
         key, _, value = ov.partition("=")
-        OmegaConf.update(planner_cfg, f"mosaic.{key}", value)
+        OmegaConf.update(planner_cfg, f"mosaic.{key}", yaml.safe_load(value))
 
     planner = instantiate(planner_cfg.mosaic)
 
