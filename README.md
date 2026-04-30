@@ -14,23 +14,23 @@ Evaluated on [nuPlan](https://github.com/motional/nuplan-devkit), Mosaic achieve
 
 ### nuPlan Val14 and interPlan benchmarks
 
-| Type | Planner | Val14 CLS-NR | Val14 CLS-R | interPlan CLS-R |
-|---|---|:---:|:---:|:---:|
-| Expert | Log-replay | 93.53 | 80.32 | 14.76 |
-| Learning-based | FlowDrive | 91.21 | 85.37 | 36.96 |
-| Rule-based & Hybrid | PDM-Closed | 92.84 | 92.12 | 41.23 |
-| | FlowDrive* | 94.81 | 92.96 | 44.05 |
-| | GIGAFLOW | - | 93.80 | - |
-| | **Mosaic (ours)** | **95.48** | **93.98** | **54.30** |
+| Type                | Planner           | Val14 CLS-NR | Val14 CLS-R | interPlan CLS-R |
+| ------------------- | ----------------- | :----------: | :---------: | :-------------: |
+| Expert              | Log-replay        |    93.53     |    80.32    |      14.76      |
+| Learning-based      | FlowDrive         |    91.21     |    85.37    |      36.96      |
+|                     | GIGAFLOW          |      -       |    93.80    |        -        |
+| Rule-based & Hybrid | PDM-Closed        |    92.84     |    92.12    |      41.23      |
+|                     | FlowDrive*        |    94.81     |    92.96    |      44.05      |
+|                     | **Mosaic (ours)** |  **95.48**   |  **93.98**  |    **54.30**    |
 
 ### Ablation study (Val14 CLS-R)
 
-| Configuration | CLS-R | Collisions | Zero-score |
-|---|:---:|:---:|:---:|
-| **Mosaic (full)** | **93.98** | **14** | **20** |
-| w/o verifier | 92.82 | 35 | 38 |
-| FlowDrive* only | 92.96 | 18 | 30 |
-| PDM-Closed only | 92.15 | 17 | 33 |
+| Configuration     |   CLS-R   | Collisions | Zero-score |
+| ----------------- | :-------: | :--------: | :--------: |
+| **Mosaic (full)** | **93.98** |   **14**   |   **20**   |
+| w/o verifier      |   92.82   |     35     |     38     |
+| FlowDrive* only   |   92.96   |     18     |     30     |
+| PDM-Closed only   |   92.15   |     17     |     33     |
 
 ## Architecture
 
@@ -113,14 +113,14 @@ bash scripts/run_experiments.sh --quick
 
 Individual experiments:
 
-| Experiment | Command |
-|---|---|
-| Val14 CLS-R | `uv run mosaic simulate` |
-| Val14 CLS-NR | `uv run mosaic simulate -c closed_loop_nonreactive_agents` |
-| interPlan CLS-R | `uv run mosaic simulate -c interplan` |
-| Ablation: no verifier | `uv run mosaic simulate --ablation no_verifier` |
-| Ablation: PDM-Closed only | `uv run mosaic simulate --ablation pdm_closed_only` |
-| Ablation: FlowDrive* only | `uv run mosaic simulate --ablation flow_drive_only` |
+| Experiment                | Command                                                    |
+| ------------------------- | ---------------------------------------------------------- |
+| Val14 CLS-R               | `uv run mosaic simulate`                                   |
+| Val14 CLS-NR              | `uv run mosaic simulate -c closed_loop_nonreactive_agents` |
+| interPlan CLS-R           | `uv run mosaic simulate -c interplan`                      |
+| Ablation: no verifier     | `uv run mosaic simulate --ablation no_verifier`            |
+| Ablation: PDM-Closed only | `uv run mosaic simulate --ablation pdm_closed_only`        |
+| Ablation: FlowDrive* only | `uv run mosaic simulate --ablation flow_drive_only`        |
 
 ## Why the forks?
 
