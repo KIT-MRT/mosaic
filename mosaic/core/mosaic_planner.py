@@ -128,20 +128,10 @@ class Mosaic(AbstractPlanner):
         log_dir = os.path.join(output_dir, "mosaic_logs")
         os.makedirs(log_dir, exist_ok=True)
 
-        if self._cost_estimator._log_buffer:
-            path = os.path.join(log_dir, f"{scenario_name}_trajectory_costs.jsonl")
-            with open(path, "w") as f:
-                for entry in self._cost_estimator._log_buffer:
-                    f.write(json.dumps(entry) + "\n")
+        self._cost_estimator.flush_logs(log_dir, scenario_name)
 
-        if (
-            self.parameters.ablation != Ablation.NO_VERIFIER
-            and self._verifier._log_buffer
-        ):
-            path = os.path.join(log_dir, f"{scenario_name}_verification.jsonl")
-            with open(path, "w") as f:
-                for entry in self._verifier._log_buffer:
-                    f.write(json.dumps(entry) + "\n")
+        if self.parameters.ablation != Ablation.NO_VERIFIER:
+            self._verifier.flush_logs(log_dir, scenario_name)
 
     def __getstate__(self) -> dict[str, object]:
         """

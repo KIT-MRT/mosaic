@@ -1,3 +1,5 @@
+import json
+import os
 from dataclasses import dataclass
 from datetime import timedelta
 
@@ -108,6 +110,15 @@ class TrajectoryVerifier(Verifier):
 
         self._cache[command.name] = verification_result
         return verification_result
+
+    def flush_logs(self, log_dir: str, scenario_name: str) -> None:
+        if not self._log_buffer:
+            return
+
+        path = os.path.join(log_dir, f"{scenario_name}_verification.jsonl")
+        with open(path, "w") as f:
+            for entry in self._log_buffer:
+                _ = f.write(json.dumps(entry) + "\n")
 
     def _log_verification(
         self,
