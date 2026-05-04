@@ -5,8 +5,8 @@ import numpy as np
 import pytest
 from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
 
+from mosaic.core.verifier import TrajectoryVerifier
 from mosaic.scorer import MetricResult
-from mosaic.verifier import TrajectoryVerifier
 
 
 @pytest.fixture
@@ -34,10 +34,10 @@ def _make_command(name: str) -> MagicMock:
 
 
 @patch(
-    "mosaic.verifier.trajectory_utils.trajectory_to_state_array",
+    "mosaic.core.verifier.trajectory_utils.trajectory_to_state_array",
     return_value=np.zeros((40, 10)),
 )
-@patch("mosaic.verifier.ScoringInput.create")
+@patch("mosaic.core.verifier.ScoringInput.create")
 class TestVerifierCaching:
     def test_same_command_same_time_returns_cached_result(
         self, mock_si_create, mock_traj, verifier
