@@ -33,13 +33,10 @@ class Mosaic(AbstractPlanner):
 
     @dataclass
     class Parameters:
+        trajectory_sampling: TrajectorySampling
+        scoring_sampling: TrajectorySampling
+
         ablation: Ablation = Ablation.NONE
-        trajectory_sampling: TrajectorySampling = TrajectorySampling(
-            time_horizon=4.0, interval_length=0.1
-        )
-        scoring_sampling: TrajectorySampling = TrajectorySampling(
-            time_horizon=4.0, interval_length=0.1
-        )
         map_radius: float = 50.0
 
     def __init__(
