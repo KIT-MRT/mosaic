@@ -43,7 +43,7 @@ class TrajectoryVerifier(Verifier):
     class Parameters:
         proposal_sampling: TrajectorySampling
         time_to_infraction_threshold: float = 2.0
-        max_ego_speed: Optional[float] = 5.0  # None = disable speed check
+        max_ego_speed: Optional[float] = None  # None = disable speed check
         logging_enabled: bool = True
 
     def __init__(self, parameters: Parameters):
