@@ -43,7 +43,7 @@ class TrajectoryVerifier(Verifier):
     class Parameters:
         proposal_sampling: TrajectorySampling
         time_to_infraction_threshold: float = 2.0
-        max_ego_speed: float = 5.0
+        max_ego_speed: Optional[float] = 5.0  # None = disable speed check
         logging_enabled: bool = True
 
     def __init__(self, parameters: Parameters):
@@ -93,10 +93,14 @@ class TrajectoryVerifier(Verifier):
         )
         ego_speed: float = float(environment_model.ego_state.dynamic_car_state.speed)
 
-        is_ok = not (
+        imminent_collision = (
             time_to_infraction <= self.parameters.time_to_infraction_threshold
-            and ego_speed <= self.parameters.max_ego_speed
         )
+        speed_ok = (
+            self.parameters.max_ego_speed is None
+            or ego_speed <= self.parameters.max_ego_speed
+        )
+        is_ok = not (imminent_collision and speed_ok)
 
         collision_token: Optional[str] = collision_tokens[0] if not is_ok else None
 
@@ -110,8 +114,7 @@ class TrajectoryVerifier(Verifier):
         else:
             verification_result = VerificationResult(
                 False,
-                f"Imminent collision: time_to_infraction={time_to_infraction:.2f}s, "
-                f"ego_speed={ego_speed:.2f}m/s",
+                f"Imminent collision: time_to_infraction={time_to_infraction:.2f}s, ego_speed={ego_speed:.2f}m/s",
             )
 
         self._cache[command.name] = verification_result
