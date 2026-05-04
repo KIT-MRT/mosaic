@@ -22,8 +22,9 @@ from mosaic.behavior.emergency_stop_behavior import EmergencyStopBehavior
 from mosaic.behavior.flow_drive import FlowDriveBehavior
 from mosaic.behavior.pdm_closed import PDMClosedBehavior
 from mosaic.core.command import Command
-from mosaic.core.environment_model import EnvironmentModel
 from mosaic.core.cost_estimator import TrajectoryCostEstimator
+from mosaic.core.environment_model import EnvironmentModel
+from mosaic.core.scene_recorder import SceneRecorder
 from mosaic.core.verifier import TrajectoryVerifier
 
 
@@ -38,6 +39,7 @@ class Mosaic(AbstractPlanner):
 
         ablation: Ablation = Ablation.NONE
         map_radius: float = 50.0
+        record_scenes: bool = False
 
     def __init__(
         self,
@@ -45,6 +47,7 @@ class Mosaic(AbstractPlanner):
         cost_estimator: TrajectoryCostEstimator,
         verifier: TrajectoryVerifier,
         emergency_stop_behavior: EmergencyStopBehavior,
+        scene_recorder: SceneRecorder,
     ) -> None:
         self.parameters: Mosaic.Parameters = parameters
         self._cost_estimator = cost_estimator
@@ -59,6 +62,8 @@ class Mosaic(AbstractPlanner):
             )
         )
         self._build_arbitration_graph()
+
+        self._scene_recorder = scene_recorder
 
     def _build_arbitration_graph(self) -> None:
         self.flow_drive_behavior = FlowDriveBehavior()
@@ -101,6 +106,9 @@ class Mosaic(AbstractPlanner):
         self.flow_drive_behavior.initialize(self.environment_model)
         self.pdm_closed_behavior.initialize(self.environment_model)
 
+        if self.parameters.record_scenes:
+            self._scene_recorder.initialize_scenario(initialization.map_api)
+
     @override
     def name(self) -> str:
         return self.__class__.__name__
@@ -116,10 +124,28 @@ class Mosaic(AbstractPlanner):
         self.environment_model.update(current_input)
 
         current_time = self.environment_model.current_time_delta
+
         command = cast(
             Command,
             self.root_arbitrator.get_command(current_time, self.environment_model),
         )
+
+        if self.parameters.record_scenes:
+            recorded_commands = [
+                entry.command
+                for entry in [
+                    self.flow_drive_behavior.last_command,
+                    self.pdm_closed_behavior.last_command,
+                    self.emergency_stop_behavior.last_command,
+                ]
+                if entry is not None and entry.stamp == current_time
+            ]
+            self._scene_recorder.record_step(
+                current_time,
+                self.environment_model,
+                recorded_commands,
+                command.name,
+            )
 
         return command.trajectory
 
@@ -132,6 +158,9 @@ class Mosaic(AbstractPlanner):
 
         if self.parameters.ablation != Ablation.NO_VERIFIER:
             self._verifier.flush_logs(log_dir, scenario_name)
+
+        if self.parameters.record_scenes:
+            self._scene_recorder.flush_logs(log_dir, scenario_name)
 
     def __getstate__(self) -> dict[str, object]:
         """

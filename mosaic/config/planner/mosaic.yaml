@@ -57,3 +57,11 @@ mosaic:
       _target_: mosaic.behavior.emergency_stop_behavior.EmergencyStopBehavior.Parameters
       _convert_: all
       trajectory_sampling: *trajectory_sampling
+
+  scene_recorder:
+    _target_: mosaic.core.scene_recorder.SceneRecorder
+    _convert_: all
+    parameters:
+      _target_: mosaic.core.scene_recorder.SceneRecorder.Parameters
+      _convert_: all
+      proposal_sampling: *scoring_sampling
