@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import final
+from typing import Optional, final
 
 from arbitration_graphs import Behavior
 from arbitration_graphs.typing import Time
@@ -10,7 +10,7 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_emergency_b
 )
 from typing_extensions import cast, override
 
-from mosaic.core.command import Command
+from mosaic.core.command import Command, StampedCommand
 from mosaic.core.environment_model import EnvironmentModel
 
 
@@ -34,16 +34,16 @@ class EmergencyStopBehavior(Behavior):
             max_long_accel=parameters.max_long_accel,
             min_long_accel=parameters.min_long_accel,
         )
+        self.last_command: Optional[StampedCommand] = None
 
     @override
     def get_command(self, time: Time, environment_model: EnvironmentModel) -> Command:
         ego_state = environment_model.ego_state
         trajectory: AbstractTrajectory = self.planner._generate_trajectory(ego_state)
 
-        return Command(
-            name=self.name(),
-            trajectory=trajectory,
-        )
+        command = Command(name=self.name(), trajectory=trajectory)
+        self.last_command = StampedCommand(stamp=time, command=command)
+        return command
 
     @override
     def check_invocation_condition(

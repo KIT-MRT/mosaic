@@ -1,4 +1,5 @@
 from importlib import resources
+from typing import Optional
 
 from arbitration_graphs import Behavior
 from arbitration_graphs.typing import Time
@@ -10,7 +11,7 @@ from nuplan.planning.simulation.trajectory.abstract_trajectory import AbstractTr
 from omegaconf import OmegaConf
 from typing_extensions import cast, final, override
 
-from mosaic.core.command import Command
+from mosaic.core.command import Command, StampedCommand
 from mosaic.core.environment_model import EnvironmentModel
 
 
@@ -40,6 +41,7 @@ class PDMClosedBehavior(Behavior):
         self.planner = cast(
             AbstractPlanner, instantiate(pdm_closed_cfg.pdm_closed_planner)
         )
+        self.last_command: Optional[StampedCommand] = None
 
     def initialize(self, environment_model: EnvironmentModel) -> None:
         self.planner.initialize(environment_model.planner_initialization)
@@ -50,10 +52,9 @@ class PDMClosedBehavior(Behavior):
             environment_model.planner_input
         )
 
-        return Command(
-            name=self.name(),
-            trajectory=trajectory,
-        )
+        command = Command(name=self.name(), trajectory=trajectory)
+        self.last_command = StampedCommand(stamp=time, command=command)
+        return command
 
     @override
     def check_invocation_condition(
