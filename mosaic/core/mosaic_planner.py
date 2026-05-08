@@ -125,6 +125,10 @@ class Mosaic(AbstractPlanner):
 
         current_time = self.environment_model.current_time_delta
 
+        self.flow_drive_behavior.last_command = None
+        self.pdm_closed_behavior.last_command = None
+        self.emergency_stop_behavior.last_command = None
+
         command = cast(
             Command,
             self.root_arbitrator.get_command(current_time, self.environment_model),
@@ -138,7 +142,7 @@ class Mosaic(AbstractPlanner):
                     self.pdm_closed_behavior.last_command,
                     self.emergency_stop_behavior.last_command,
                 ]
-                if entry is not None and entry.stamp == current_time
+                if entry is not None
             ]
             self._scene_recorder.record_step(
                 current_time,
