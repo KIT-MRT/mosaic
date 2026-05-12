@@ -111,6 +111,12 @@ This runs 6 experiments sequentially and saves analysis outputs to `results/`. U
 bash scripts/run_experiments.sh --quick
 ```
 
+**Hardware configuration:**
+`scripts/config.sh` sets two machine-specific parameters, namely
+`GPUS_PER_SIM` (Ray resource allocation per simulation, controls GPU concurrency) and `THREADS` (CPU threads per Ray node).
+Adjust these based on your hardware before running the experiments.
+
+
 Individual experiments:
 
 | Experiment                | Command                                                    |

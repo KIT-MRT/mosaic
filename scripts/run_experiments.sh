@@ -12,6 +12,9 @@ if [[ "${1:-}" == "--quick" ]]; then
     echo "=== Quick mode: limiting each experiment to 1 scenario ==="
 fi
 
+# Load hardware configuration
+source "$SCRIPT_DIR/config.sh"
+
 # Install dependencies and activate venv
 echo "=== Installing dependencies ==="
 cd "$PROJECT_DIR"
@@ -22,6 +25,8 @@ run_experiment() {
     local name="$1"
     local challenge="$2"
     local ablation="$3"
+    shift 3
+    local extra_args=("$@")
 
     echo ""
     echo "========================================"
@@ -35,8 +40,11 @@ run_experiment() {
         -c "$challenge"
         --ablation "$ablation"
         --experiment-name "$name"
+        --gpus-per-sim "$GPUS_PER_SIM"
+        --threads "$THREADS"
     )
     sim_args+=("${QUICK_ARGS[@]}")
+    sim_args+=("${extra_args[@]}")
 
     mosaic simulate "${sim_args[@]}"
 
