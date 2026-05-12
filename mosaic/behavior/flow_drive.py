@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Optional
 
 import flow_drive
 from arbitration_graphs import Behavior
@@ -11,7 +12,7 @@ from nuplan.planning.simulation.trajectory.abstract_trajectory import AbstractTr
 from omegaconf import OmegaConf
 from typing_extensions import cast, final, override
 
-from mosaic.core.command import Command
+from mosaic.core.command import Command, StampedCommand
 from mosaic.core.environment_model import EnvironmentModel
 
 
@@ -43,6 +44,7 @@ class FlowDriveBehavior(Behavior):
         flow_drive_cfg.flow_drive.emergency_brake_enabled = False
 
         self.planner = cast(AbstractPlanner, instantiate(flow_drive_cfg.flow_drive))
+        self.last_command: Optional[StampedCommand] = None
 
     def initialize(self, environment_model: EnvironmentModel) -> None:
         self.planner.initialize(environment_model.planner_initialization)
@@ -53,10 +55,9 @@ class FlowDriveBehavior(Behavior):
             environment_model.planner_input
         )
 
-        return Command(
-            name=self.name(),
-            trajectory=trajectory,
-        )
+        command = Command(name=self.name(), trajectory=trajectory)
+        self.last_command = StampedCommand(stamp=time, command=command)
+        return command
 
     @override
     def check_invocation_condition(

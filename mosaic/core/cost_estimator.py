@@ -1,3 +1,5 @@
+import json
+import os
 from dataclasses import dataclass
 from datetime import timedelta
 from typing import cast, final
@@ -109,6 +111,15 @@ class TrajectoryCostEstimator(BatchCostEstimator):
         costs = [-score for score in scores]
 
         return costs
+
+    def flush_logs(self, log_dir: str, scenario_name: str) -> None:
+        if not self._log_buffer:
+            return
+
+        path = os.path.join(log_dir, f"{scenario_name}_trajectory_costs.jsonl")
+        with open(path, "w") as f:
+            for entry in self._log_buffer:
+                _ = f.write(json.dumps(entry) + "\n")
 
     def _log_scoring(
         self,

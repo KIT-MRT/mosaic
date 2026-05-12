@@ -22,8 +22,9 @@ from mosaic.behavior.emergency_stop_behavior import EmergencyStopBehavior
 from mosaic.behavior.flow_drive import FlowDriveBehavior
 from mosaic.behavior.pdm_closed import PDMClosedBehavior
 from mosaic.core.command import Command
-from mosaic.core.environment_model import EnvironmentModel
 from mosaic.core.cost_estimator import TrajectoryCostEstimator
+from mosaic.core.environment_model import EnvironmentModel
+from mosaic.core.scene_recorder import SceneRecorder
 from mosaic.core.verifier import TrajectoryVerifier
 
 
@@ -33,14 +34,12 @@ class Mosaic(AbstractPlanner):
 
     @dataclass
     class Parameters:
+        trajectory_sampling: TrajectorySampling
+        scoring_sampling: TrajectorySampling
+
         ablation: Ablation = Ablation.NONE
-        trajectory_sampling: TrajectorySampling = TrajectorySampling(
-            time_horizon=4.0, interval_length=0.1
-        )
-        scoring_sampling: TrajectorySampling = TrajectorySampling(
-            time_horizon=4.0, interval_length=0.1
-        )
         map_radius: float = 50.0
+        record_scenes: bool = False
 
     def __init__(
         self,
@@ -48,6 +47,7 @@ class Mosaic(AbstractPlanner):
         cost_estimator: TrajectoryCostEstimator,
         verifier: TrajectoryVerifier,
         emergency_stop_behavior: EmergencyStopBehavior,
+        scene_recorder: SceneRecorder,
     ) -> None:
         self.parameters: Mosaic.Parameters = parameters
         self._cost_estimator = cost_estimator
@@ -62,6 +62,8 @@ class Mosaic(AbstractPlanner):
             )
         )
         self._build_arbitration_graph()
+
+        self._scene_recorder = scene_recorder
 
     def _build_arbitration_graph(self) -> None:
         self.flow_drive_behavior = FlowDriveBehavior()
@@ -104,6 +106,9 @@ class Mosaic(AbstractPlanner):
         self.flow_drive_behavior.initialize(self.environment_model)
         self.pdm_closed_behavior.initialize(self.environment_model)
 
+        if self.parameters.record_scenes:
+            self._scene_recorder.initialize_scenario(initialization.map_api)
+
     @override
     def name(self) -> str:
         return self.__class__.__name__
@@ -119,10 +124,32 @@ class Mosaic(AbstractPlanner):
         self.environment_model.update(current_input)
 
         current_time = self.environment_model.current_time_delta
+
+        self.flow_drive_behavior.last_command = None
+        self.pdm_closed_behavior.last_command = None
+        self.emergency_stop_behavior.last_command = None
+
         command = cast(
             Command,
             self.root_arbitrator.get_command(current_time, self.environment_model),
         )
+
+        if self.parameters.record_scenes:
+            recorded_commands = [
+                entry.command
+                for entry in [
+                    self.flow_drive_behavior.last_command,
+                    self.pdm_closed_behavior.last_command,
+                    self.emergency_stop_behavior.last_command,
+                ]
+                if entry is not None
+            ]
+            self._scene_recorder.record_step(
+                current_time,
+                self.environment_model,
+                recorded_commands,
+                command.name,
+            )
 
         return command.trajectory
 
@@ -131,20 +158,13 @@ class Mosaic(AbstractPlanner):
         log_dir = os.path.join(output_dir, "mosaic_logs")
         os.makedirs(log_dir, exist_ok=True)
 
-        if self._cost_estimator._log_buffer:
-            path = os.path.join(log_dir, f"{scenario_name}_trajectory_costs.jsonl")
-            with open(path, "w") as f:
-                for entry in self._cost_estimator._log_buffer:
-                    f.write(json.dumps(entry) + "\n")
+        self._cost_estimator.flush_logs(log_dir, scenario_name)
 
-        if (
-            self.parameters.ablation != Ablation.NO_VERIFIER
-            and self._verifier._log_buffer
-        ):
-            path = os.path.join(log_dir, f"{scenario_name}_verification.jsonl")
-            with open(path, "w") as f:
-                for entry in self._verifier._log_buffer:
-                    f.write(json.dumps(entry) + "\n")
+        if self.parameters.ablation != Ablation.NO_VERIFIER:
+            self._verifier.flush_logs(log_dir, scenario_name)
+
+        if self.parameters.record_scenes:
+            self._scene_recorder.flush_logs(log_dir, scenario_name)
 
     def __getstate__(self) -> dict[str, object]:
         """
