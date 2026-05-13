@@ -1,4 +1,5 @@
 import copy
+from typing import Optional
 
 import numpy as np
 from nuplan.common.actor_state.tracked_objects_types import AGENT_TYPES
@@ -31,6 +32,7 @@ class NoAtFaultCollisionMetric(MultiplicativeMetric):
 
         no_collision_scores = np.ones(n, dtype=np.float64)
         collision_time_idcs = np.full(n, np.inf, dtype=np.float64)
+        collision_tokens: list[Optional[str]] = [None] * n
 
         proposal_collided_track_ids = {
             proposal_idx: copy.deepcopy(observation.collided_track_ids)
@@ -97,13 +99,16 @@ class NoAtFaultCollisionMetric(MultiplicativeMetric):
                         no_collision_scores[proposal_idx],
                         float(np.clip(collision_score, 0.0, 1.0)),
                     )
-                    collision_time_idcs[proposal_idx] = min(
-                        time_idx, collision_time_idcs[proposal_idx]
-                    )
+                    if time_idx < collision_time_idcs[proposal_idx]:
+                        collision_time_idcs[proposal_idx] = time_idx
+                        collision_tokens[proposal_idx] = token
                 else:
                     proposal_collided_track_ids[proposal_idx].append(token)
 
         return MetricResult(
             scores=no_collision_scores,
-            metadata={"collision_time_idcs": collision_time_idcs},
+            metadata={
+                "collision_time_idcs": collision_time_idcs,
+                "collision_tokens": collision_tokens,
+            },
         )
