@@ -64,12 +64,24 @@ def print_failures(df: DataFrame) -> None:
     click.echo(f"\n  {zero_score} scenarios scored zero")
 
 
+def _collision_kind(row) -> str:
+    has_static = row.get("collision_with_objects", 0) > 0
+    has_dynamic = (row.get("collision_with_vrus", 0) + row.get("collision_with_vehicles", 0)) > 0
+    if has_static and has_dynamic:
+        return "both"
+    if has_static:
+        return "static"
+    if has_dynamic:
+        return "dynamic"
+    return "?"
+
+
 def print_collision_scenarios(df: DataFrame) -> None:
     """List all scenarios where the ego caused a collision."""
     if "no_ego_at_fault_collisions" not in df.columns:
         return
 
-    collision_df = df[df["no_ego_at_fault_collisions"] == 0.0].copy()
+    collision_df = df[df["no_ego_at_fault_collisions"] < 1.0].copy()
     if collision_df.empty:
         section("Collisions")
         click.echo("\n  None.")
@@ -79,10 +91,18 @@ def print_collision_scenarios(df: DataFrame) -> None:
 
     section(f"Collisions ({len(collision_df)})")
 
-    t = Table(["Scenario", "Type", "Score"], [18, 30, 6], ["<", "<", ">"])
+    has_kind = "collision_with_objects" in collision_df.columns
+    if has_kind:
+        t = Table(["Scenario", "Type", "Kind", "Score"], [18, 24, 7, 6], ["<", "<", "<", ">"])
+    else:
+        t = Table(["Scenario", "Type", "Score"], [18, 30, 6], ["<", "<", ">"])
     for _, row in collision_df.iterrows():
-        stype = truncate(str(row.get("scenario_type", "")), 30)
-        t.row([str(row["scenario"]), stype, f"{row['score']:.4f}"])
+        if has_kind:
+            stype = truncate(str(row.get("scenario_type", "")), 24)
+            t.row([str(row["scenario"]), stype, _collision_kind(row), f"{row['score']:.4f}"])
+        else:
+            stype = truncate(str(row.get("scenario_type", "")), 30)
+            t.row([str(row["scenario"]), stype, f"{row['score']:.4f}"])
     t.render()
 
 
