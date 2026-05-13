@@ -1,12 +1,12 @@
-Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-reactive/closed_loop_reactive_agents/2026.05.13.13.35.16
+Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-reactive/closed_loop_reactive_agents/2026.05.19.18.02.45
 
 ╭──────────────────────────────────────────────────────────╮
-│  2026.05.13.13.35.16                                     │
+│  2026.05.19.18.02.45                                     │
 ╰──────────────────────────────────────────────────────────╯
 
   Scenarios             1118
-  Overall score         0.9398
-  Duration              00:54:54 (2.9s/ea)
+  Overall score         0.9418
+  Duration              01:03:28 (3.4s/ea)
 
 
 ── Failures ────────────────────────────────────────────────
@@ -15,9 +15,9 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-reactive/clo
   ╭────────────────────────────────────────┬───────┬─────────╮
   │ Metric                                 │  Fail │    Rate │
   ├────────────────────────────────────────┼───────┼─────────┤
-  │ no_ego_at_fault_collisions             │    19 │    1.7% │ ◆
+  │ no_ego_at_fault_collisions             │    16 │    1.4% │ ◆
   │ drivable_area_compliance               │     2 │    0.2% │ ◆
-  │ driving_direction_compliance           │     2 │    0.2% │ ◆
+  │ driving_direction_compliance           │     1 │    0.1% │ ◆
   │ ego_is_making_progress                 │     3 │    0.3% │ ◆
   ╰────────────────────────────────────────┴───────┴─────────╯
 
@@ -26,37 +26,34 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-reactive/clo
   │ Metric                                 │  Fail │    Rate │
   ├────────────────────────────────────────┼───────┼─────────┤
   │ ego_progress_along_expert_route (w=5)  │     0 │    0.0% │
-  │ time_to_collision_within_bound (w=5)   │    58 │    5.2% │ ◆
+  │ time_to_collision_within_bound (w=5)   │    55 │    4.9% │ ◆
   │ speed_limit_compliance (w=4)           │     0 │    0.0% │
-  │ ego_is_comfortable (w=2)               │    92 │    8.2% │ ◆
+  │ ego_is_comfortable (w=2)               │    97 │    8.7% │ ◆
   ╰────────────────────────────────────────┴───────┴─────────╯
 
-  20 scenarios scored zero
+  17 scenarios scored zero
 
 
-── Collisions (19) ─────────────────────────────────────────
+── Collisions (16) ─────────────────────────────────────────
   ╭────────────────────┬──────────────────────────┬─────────┬────────╮
   │ Scenario           │ Type                     │ Kind    │  Score │
   ├────────────────────┼──────────────────────────┼─────────┼────────┤
-  │ d1233a44bda8587d   │ stationary_in_traffic    │ dynamic │ 0.0000 │
-  │ 6badb2820fd251fd   │ starting_right_turn      │ dynamic │ 0.0000 │
-  │ ce9a8994426651f9   │ starting_left_turn       │ dynamic │ 0.0000 │
-  │ caaab29c36ef5bee   │ changing_lane            │ dynamic │ 0.0000 │
-  │ 83a18a11bf9b5baa   │ near_multiple_vehicles   │ dynamic │ 0.0000 │
-  │ 59bb3fec07495d87   │ near_multiple_vehicles   │ dynamic │ 0.0000 │
-  │ 1bb4a47dd9f155cd   │ near_multiple_vehicles   │ dynamic │ 0.0000 │
-  │ f958ec121f5a5287   │ changing_lane            │ dynamic │ 0.0000 │
-  │ 558d1c44968c5319   │ high_magnitude_speed     │ dynamic │ 0.0000 │
-  │ 00c202ab992e50aa   │ near_multiple_vehicles   │ dynamic │ 0.0000 │
-  │ 1f82b16afa96569a   │ starting_left_turn       │ dynamic │ 0.0000 │
-  │ 42dc17b3a3e551bc   │ starting_left_turn       │ dynamic │ 0.0000 │
   │ b1f369f514d95f4c   │ stationary_in_traffic    │ dynamic │ 0.0000 │
+  │ 42dc17b3a3e551bc   │ starting_left_turn       │ dynamic │ 0.0000 │
+  │ 1f82b16afa96569a   │ starting_left_turn       │ dynamic │ 0.0000 │
+  │ 00c202ab992e50aa   │ near_multiple_vehicles   │ dynamic │ 0.0000 │
+  │ 558d1c44968c5319   │ high_magnitude_speed     │ dynamic │ 0.0000 │
+  │ 1bb4a47dd9f155cd   │ near_multiple_vehicles   │ dynamic │ 0.0000 │
+  │ 59bb3fec07495d87   │ near_multiple_vehicles   │ dynamic │ 0.0000 │
+  │ caaab29c36ef5bee   │ changing_lane            │ dynamic │ 0.0000 │
+  │ 6badb2820fd251fd   │ starting_right_turn      │ dynamic │ 0.0000 │
+  │ f958ec121f5a5287   │ changing_lane            │ dynamic │ 0.0000 │
   │ b2ab7d150c1f5fa4   │ changing_lane            │ dynamic │ 0.0000 │
   │ e3e2933994835eba   │ high_magnitude_speed     │ static  │ 0.2478 │
   │ 81f2464a004e54d0   │ traversing_pickup_dropo… │ static  │ 0.2768 │
-  │ f36c397ff1125e10   │ stationary_in_traffic    │ static  │ 0.3438 │
+  │ bbc7bb010c275ea4   │ starting_straight_traff… │ static  │ 0.2812 │
   │ 74f33e65028d5917   │ starting_straight_traff… │ static  │ 0.3438 │
-  │ bbc7bb010c275ea4   │ starting_straight_traff… │ static  │ 0.3438 │
+  │ f36c397ff1125e10   │ stationary_in_traffic    │ static  │ 0.3438 │
   ╰────────────────────┴──────────────────────────┴─────────┴────────╯
 
 
@@ -64,18 +61,18 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-reactive/clo
   ╭──────────────────────────────────────┬──────┬────────┬──────┬──────┬──────╮
   │ Type                                 │    n │  Score │ Zero │  TTC │ Coll │
   ├──────────────────────────────────────┼──────┼────────┼──────┼──────┼──────┤
-  │ near_multiple_vehicles               │   85 │ 0.8984 │    5 │    7 │    4 │
-  │ starting_left_turn                   │  100 │ 0.8998 │    4 │    8 │    3 │
+  │ near_multiple_vehicles               │   85 │ 0.9063 │    4 │    6 │    3 │
+  │ starting_left_turn                   │  100 │ 0.9078 │    3 │    7 │    2 │
   │ high_lateral_acceleration            │   96 │ 0.9228 │    2 │    5 │    0 │
   │ following_lane_with_lead             │   15 │ 0.9274 │    0 │    1 │    0 │
   │ changing_lane                        │   70 │ 0.9279 │    3 │    6 │    3 │
   │ traversing_pickup_dropoff            │   99 │ 0.9312 │    0 │    4 │    1 │
   │ starting_right_turn                  │   98 │ 0.9358 │    2 │    6 │    1 │
-  │ low_magnitude_speed                  │  100 │ 0.9399 │    1 │    6 │    0 │
-  │ starting_straight_traffic_light_int… │   98 │ 0.9441 │    0 │    6 │    2 │
+  │ low_magnitude_speed                  │  100 │ 0.9431 │    1 │    5 │    0 │
+  │ starting_straight_traffic_light_int… │   98 │ 0.9434 │    0 │    6 │    2 │
   │ waiting_for_pedestrian_to_cross      │   53 │ 0.9594 │    0 │    3 │    0 │
-  │ stationary_in_traffic                │   98 │ 0.9620 │    2 │    3 │    3 │
   │ high_magnitude_speed                 │   99 │ 0.9627 │    1 │    2 │    2 │
+  │ stationary_in_traffic                │   98 │ 0.9677 │    1 │    3 │    2 │
   │ stopping_with_lead                   │   93 │ 0.9896 │    0 │    1 │    0 │
   │ behind_long_vehicle                  │   14 │ 1.0000 │    0 │    0 │    0 │
   ╰──────────────────────────────────────┴──────┴────────┴──────┴──────┴──────╯
@@ -85,20 +82,20 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-reactive/clo
   ╭────────────────────┬────────┬───────────────┬─────────────────╮
   │ Command            │   Wins │  Of Decisions │  Of Appearances │
   ├────────────────────┼────────┼───────────────┼─────────────────┤
-  │ flow_drive         │  31005 │         18.7% │           18.7% │
-  │ pdm_closed         │  47782 │         28.8% │           28.8% │
+  │ flow_drive         │  30755 │         18.6% │           18.6% │
+  │ pdm_closed         │  47771 │         28.8% │           28.8% │
   ╰────────────────────┴────────┴───────────────┴─────────────────╯
 
-  Tied scores           87180 / 165967 (52.5%)
+  Tied scores           87106 / 165632 (52.6%)
 
 
 ── Verifier ────────────────────────────────────────────────
   ╭────────────────────┬────────┬──────────┬────────────╮
   │ Command            │  Fails │   Checks │  Fail Rate │
   ├────────────────────┼────────┼──────────┼────────────┤
-  │ EmergencyStop      │     41 │      141 │      29.1% │
-  │ flow_drive         │    479 │   166806 │       0.3% │
-  │ pdm_closed         │    501 │   166806 │       0.3% │
+  │ EmergencyStop      │     92 │      197 │      46.7% │
+  │ flow_drive         │    614 │   166806 │       0.4% │
+  │ pdm_closed         │    757 │   166806 │       0.5% │
   ╰────────────────────┴────────┴──────────┴────────────╯
 
-  Both failed           141 / 166806 (0.1%)
+  Both failed           197 / 166806 (0.1%)
