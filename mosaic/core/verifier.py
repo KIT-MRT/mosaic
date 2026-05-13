@@ -2,6 +2,7 @@ import json
 import os
 from dataclasses import dataclass
 from datetime import timedelta
+from typing import Optional
 
 import numpy as np
 from arbitration_graphs.typing import Time
@@ -85,6 +86,7 @@ class TrajectoryVerifier(Verifier):
 
         result = self._collision_metric.compute(scoring_input, environment_model)
         collision_time_idcs = result.metadata["collision_time_idcs"]
+        collision_tokens = result.metadata["collision_tokens"]
 
         time_to_infraction = float(
             collision_time_idcs[0] * self.parameters.proposal_sampling.interval_length
@@ -96,8 +98,12 @@ class TrajectoryVerifier(Verifier):
             and ego_speed <= self.parameters.max_ego_speed
         )
 
+        collision_token: Optional[str] = collision_tokens[0] if not is_ok else None
+
         if self.parameters.logging_enabled:
-            self._log_verification(time, command, time_to_infraction, ego_speed, is_ok)
+            self._log_verification(
+                time, command, time_to_infraction, ego_speed, is_ok, collision_token
+            )
 
         if is_ok:
             verification_result = VerificationResult(True)
@@ -127,6 +133,7 @@ class TrajectoryVerifier(Verifier):
         time_to_infraction: float,
         ego_speed: float,
         is_ok: bool,
+        collision_token: Optional[str] = None,
     ) -> None:
         assert isinstance(time, timedelta)
         entry: dict[str, object] = {
@@ -136,6 +143,8 @@ class TrajectoryVerifier(Verifier):
             "ego_speed": float(ego_speed),
             "result": "pass" if is_ok else "fail",
         }
+        if collision_token is not None:
+            entry["collision_token"] = collision_token
         self._log_buffer.append(entry)
 
     def __getstate__(self) -> dict[str, object]:
