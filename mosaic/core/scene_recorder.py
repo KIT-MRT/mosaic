@@ -149,21 +149,40 @@ class SceneRecorder:
 
         history = environment_model.planner_input.history
         _, detections = history.current_state
+        observation = environment_model.observation
+        interval = self.parameters.proposal_sampling.interval_length
+        num_steps = self.parameters.proposal_sampling.num_poses + 1
         tracked_objects: list[dict[str, Any]] = []
         for obj in detections.tracked_objects:
             box = obj.box
             velocity = getattr(obj, "velocity", None)
+            token = obj.metadata.track_token
+            heading = float(box.center.heading)
+            predicted_poses: list[dict[str, float]] = []
+            for step_idx in range(num_steps):
+                occ_map = observation[step_idx]
+                if token in occ_map.tokens:
+                    geom = occ_map[token]
+                    predicted_poses.append(
+                        {
+                            "t": float(step_idx * interval),
+                            "x": float(geom.centroid.x),
+                            "y": float(geom.centroid.y),
+                            "heading": heading,
+                        }
+                    )
             tracked_objects.append(
                 {
-                    "track_token": obj.metadata.track_token,
+                    "track_token": token,
                     "type": obj.tracked_object_type.name,
                     "x": float(box.center.x),
                     "y": float(box.center.y),
-                    "heading": float(box.center.heading),
+                    "heading": heading,
                     "vx": float(velocity.x) if velocity is not None else 0.0,
                     "vy": float(velocity.y) if velocity is not None else 0.0,
                     "length": float(box.length),
                     "width": float(box.width),
+                    "predicted_poses": predicted_poses,
                 }
             )
 
