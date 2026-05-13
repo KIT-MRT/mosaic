@@ -6,7 +6,7 @@ from typing import Union
 import click
 
 from mosaic.cli.analyze.comparison import print_comparison
-from mosaic.cli.analyze.data import find_latest_experiment, load_results
+from mosaic.cli.analyze.data import find_latest_experiment, load_collision_details, load_results
 from mosaic.cli.analyze.logs import analyze_cost_estimator_logs, analyze_verifier_logs
 from mosaic.cli.analyze.runtime import get_runtime
 from mosaic.cli.analyze.summary import (
@@ -46,6 +46,7 @@ def analyze(path: Union[str, None], baseline: Union[str, None], per_type: bool) 
         experiment_dir = Path(path)
 
     df = load_results(experiment_dir)
+    df = load_collision_details(experiment_dir, df)
     runtime = get_runtime(experiment_dir, len(df))
 
     print_header(df, experiment_dir.name, runtime)

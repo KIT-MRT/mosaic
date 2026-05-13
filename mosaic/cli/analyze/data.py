@@ -44,6 +44,32 @@ def find_latest_experiment() -> Path:
     return max(candidates, key=lambda p: p.stat().st_mtime)
 
 
+def load_collision_details(experiment_dir: Path, df: DataFrame) -> DataFrame:
+    """Merge per-type at-fault collision counts into df from the metrics parquet."""
+    import pandas as pd
+
+    metrics_path = experiment_dir / "metrics" / "no_ego_at_fault_collisions.parquet"
+    if not metrics_path.exists():
+        return df
+
+    coll_df = pd.read_parquet(metrics_path)[
+        [
+            "scenario_name",
+            "number_of_at_fault_collisions_with_VRUs_stat_value",
+            "number_of_at_fault_collisions_with_vehicles_stat_value",
+            "number_of_at_fault_collisions_with_objects_stat_value",
+        ]
+    ].rename(
+        columns={
+            "scenario_name": "scenario",
+            "number_of_at_fault_collisions_with_VRUs_stat_value": "collision_with_vrus",
+            "number_of_at_fault_collisions_with_vehicles_stat_value": "collision_with_vehicles",
+            "number_of_at_fault_collisions_with_objects_stat_value": "collision_with_objects",
+        }
+    )
+    return df.merge(coll_df, on="scenario", how="left")
+
+
 def load_results(experiment_dir: Path) -> DataFrame:
     """Load per-scenario results from aggregator_metric parquet files."""
     import pandas as pd
