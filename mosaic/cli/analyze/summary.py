@@ -44,7 +44,7 @@ def print_failures(df: DataFrame) -> None:
     for metric in HARD_GATES:
         if metric not in df.columns:
             continue
-        fails = int((df[metric] == 0.0).sum())
+        fails = int((df[metric] < 1.0).sum())
         rate = f"{fails / len(df) * 100:.1f}%"
         t.row([metric, str(fails), rate], fail_marker(fails))
     t.render()
@@ -107,7 +107,7 @@ def print_per_type(df: DataFrame) -> None:
             else 0
         )
         coll_fail = (
-            int((group["no_ego_at_fault_collisions"] == 0.0).sum())
+            int((group["no_ego_at_fault_collisions"] < 1.0).sum())
             if "no_ego_at_fault_collisions" in group.columns
             else 0
         )
