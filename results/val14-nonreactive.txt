@@ -1,12 +1,12 @@
-Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-nonreactive/closed_loop_nonreactive_agents/2026.04.08.11.35.00
+Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-nonreactive/closed_loop_nonreactive_agents/2026.05.13.14.31.25
 
 ╭──────────────────────────────────────────────────────────╮
-│  2026.04.08.11.35.00                                     │
+│  2026.05.13.14.31.25                                     │
 ╰──────────────────────────────────────────────────────────╯
 
   Scenarios             1118
   Overall score         0.9548
-  Duration              00:56:42 (3.0s/ea)
+  Duration              00:51:06 (2.7s/ea)
 
 
 ── Failures ────────────────────────────────────────────────
@@ -15,7 +15,7 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-nonreactive/
   ╭────────────────────────────────────────┬───────┬─────────╮
   │ Metric                                 │  Fail │    Rate │
   ├────────────────────────────────────────┼───────┼─────────┤
-  │ no_ego_at_fault_collisions             │     6 │    0.5% │ ◆
+  │ no_ego_at_fault_collisions             │    11 │    1.0% │ ◆
   │ drivable_area_compliance               │     2 │    0.2% │ ◆
   │ driving_direction_compliance           │     2 │    0.2% │ ◆
   │ ego_is_making_progress                 │     6 │    0.5% │ ◆
@@ -34,17 +34,22 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-nonreactive/
   16 scenarios scored zero
 
 
-── Collisions (6) ──────────────────────────────────────────
-  ╭────────────────────┬────────────────────────────────┬────────╮
-  │ Scenario           │ Type                           │  Score │
-  ├────────────────────┼────────────────────────────────┼────────┤
-  │ 6f247bc70fe3555e   │ starting_right_turn            │ 0.0000 │
-  │ 4ce8319955305a2a   │ low_magnitude_speed            │ 0.0000 │
-  │ 558d1c44968c5319   │ high_magnitude_speed           │ 0.0000 │
-  │ 8fcf72fe99a4525a   │ starting_left_turn             │ 0.0000 │
-  │ 0338779ea8ba5128   │ high_lateral_acceleration      │ 0.0000 │
-  │ b2ab7d150c1f5fa4   │ changing_lane                  │ 0.0000 │
-  ╰────────────────────┴────────────────────────────────┴────────╯
+── Collisions (11) ─────────────────────────────────────────
+  ╭────────────────────┬──────────────────────────┬─────────┬────────╮
+  │ Scenario           │ Type                     │ Kind    │  Score │
+  ├────────────────────┼──────────────────────────┼─────────┼────────┤
+  │ 6f247bc70fe3555e   │ starting_right_turn      │ dynamic │ 0.0000 │
+  │ 4ce8319955305a2a   │ low_magnitude_speed      │ dynamic │ 0.0000 │
+  │ 558d1c44968c5319   │ high_magnitude_speed     │ dynamic │ 0.0000 │
+  │ 8fcf72fe99a4525a   │ starting_left_turn       │ dynamic │ 0.0000 │
+  │ 0338779ea8ba5128   │ high_lateral_accelerati… │ dynamic │ 0.0000 │
+  │ b2ab7d150c1f5fa4   │ changing_lane            │ dynamic │ 0.0000 │
+  │ d9af410284a9558a   │ traversing_pickup_dropo… │ static  │ 0.3414 │
+  │ bbc7bb010c275ea4   │ starting_straight_traff… │ static  │ 0.3438 │
+  │ d2d0152ca8b45448   │ starting_right_turn      │ static  │ 0.3438 │
+  │ 6545d57f36cb59cf   │ starting_left_turn       │ static  │ 0.3438 │
+  │ c3c3362c0698581b   │ traversing_pickup_dropo… │ static  │ 0.3438 │
+  ╰────────────────────┴──────────────────────────┴─────────┴────────╯
 
 
 ── Per Scenario Type ───────────────────────────────────────
@@ -52,13 +57,13 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-nonreactive/
   │ Type                                 │    n │  Score │ Zero │  TTC │ Coll │
   ├──────────────────────────────────────┼──────┼────────┼──────┼──────┼──────┤
   │ high_lateral_acceleration            │   96 │ 0.9163 │    5 │    5 │    1 │
-  │ traversing_pickup_dropoff            │   99 │ 0.9212 │    0 │    8 │    0 │
-  │ starting_left_turn                   │  100 │ 0.9235 │    2 │    7 │    1 │
+  │ traversing_pickup_dropoff            │   99 │ 0.9212 │    0 │    8 │    2 │
+  │ starting_left_turn                   │  100 │ 0.9235 │    2 │    7 │    2 │
   │ low_magnitude_speed                  │  100 │ 0.9346 │    4 │    6 │    1 │
-  │ starting_right_turn                  │   98 │ 0.9386 │    1 │    8 │    1 │
+  │ starting_right_turn                  │   98 │ 0.9386 │    1 │    8 │    2 │
   │ changing_lane                        │   70 │ 0.9481 │    1 │    6 │    1 │
   │ following_lane_with_lead             │   15 │ 0.9624 │    0 │    1 │    0 │
-  │ starting_straight_traffic_light_int… │   98 │ 0.9735 │    1 │    2 │    0 │
+  │ starting_straight_traffic_light_int… │   98 │ 0.9735 │    1 │    2 │    1 │
   │ waiting_for_pedestrian_to_cross      │   53 │ 0.9744 │    0 │    2 │    0 │
   │ near_multiple_vehicles               │   85 │ 0.9745 │    0 │    4 │    0 │
   │ high_magnitude_speed                 │   99 │ 0.9788 │    1 │    2 │    1 │
