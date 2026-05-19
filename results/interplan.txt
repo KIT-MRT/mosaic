@@ -1,12 +1,12 @@
-Using latest experiment: /home/lelarge/nuplan/experiments/exp/interplan/default_interplan_benchmark/2026.04.08.12.33.01
+Using latest experiment: /home/lelarge/nuplan/experiments/exp/interplan/default_interplan_benchmark/2026.05.13.15.23.51
 
 ╭──────────────────────────────────────────────────────────╮
-│  2026.04.08.12.33.01                                     │
+│  2026.05.13.15.23.51                                     │
 ╰──────────────────────────────────────────────────────────╯
 
   Scenarios             80
-  Overall score         0.5430
-  Duration              00:09:20 (7.0s/ea)
+  Overall score         0.5403
+  Duration              00:07:49 (5.9s/ea)
 
 
 ── Failures ────────────────────────────────────────────────
@@ -35,12 +35,12 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/interplan/default_
 
 
 ── Collisions (2) ──────────────────────────────────────────
-  ╭────────────────────┬────────────────────────────────┬────────╮
-  │ Scenario           │ Type                           │  Score │
-  ├────────────────────┼────────────────────────────────┼────────┤
-  │ 71f182558ee95100-s1 │ nudge_around_parked_vehicle    │ 0.0000 │
-  │ 71f182558ee95100-s8 │ jaywalking_pedestrian          │ 0.0000 │
-  ╰────────────────────┴────────────────────────────────┴────────╯
+  ╭────────────────────┬──────────────────────────┬─────────┬────────╮
+  │ Scenario           │ Type                     │ Kind    │  Score │
+  ├────────────────────┼──────────────────────────┼─────────┼────────┤
+  │ 71f182558ee95100-s1 │ nudge_around_parked_veh… │ dynamic │ 0.0000 │
+  │ 71f182558ee95100-s8 │ jaywalking_pedestrian    │ dynamic │ 0.0000 │
+  ╰────────────────────┴──────────────────────────┴─────────┴────────╯
 
 
 ── Per Scenario Type ───────────────────────────────────────
@@ -50,9 +50,9 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/interplan/default_
   │ approaching_construction_zone        │   10 │ 0.1785 │    8 │    0 │    0 │
   │ overtake_parked_vehicle              │   10 │ 0.2685 │    7 │    0 │    0 │
   │ avoid_crashed_cars                   │   10 │ 0.2981 │    7 │    0 │    0 │
-  │ high_traffic_density                 │   10 │ 0.6250 │    1 │    0 │    0 │
-  │ medium_traffic_density               │   10 │ 0.6305 │    1 │    0 │    0 │
-  │ low_traffic_density                  │   10 │ 0.6664 │    1 │    0 │    0 │
+  │ high_traffic_density                 │   10 │ 0.6198 │    1 │    0 │    0 │
+  │ medium_traffic_density               │   10 │ 0.6201 │    1 │    0 │    0 │
+  │ low_traffic_density                  │   10 │ 0.6612 │    1 │    0 │    0 │
   │ nudge_around_parked_vehicle          │   10 │ 0.8151 │    1 │    2 │    1 │
   │ jaywalking_pedestrian                │   10 │ 0.8616 │    1 │    1 │    1 │
   ╰──────────────────────────────────────┴──────┴────────┴──────┴──────┴──────╯
@@ -62,20 +62,20 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/interplan/default_
   ╭────────────────────┬────────┬───────────────┬─────────────────╮
   │ Command            │   Wins │  Of Decisions │  Of Appearances │
   ├────────────────────┼────────┼───────────────┼─────────────────┤
-  │ flow_drive         │   7233 │         33.9% │           33.9% │
-  │ pdm_closed         │   5155 │         24.1% │           24.1% │
+  │ flow_drive         │   7227 │         33.9% │           33.9% │
+  │ pdm_closed         │   5141 │         24.1% │           24.1% │
   ╰────────────────────┴────────┴───────────────┴─────────────────╯
 
-  Tied scores           8970 / 21358 (42.0%)
+  Tied scores           8969 / 21337 (42.0%)
 
 
 ── Verifier ────────────────────────────────────────────────
   ╭────────────────────┬────────┬──────────┬────────────╮
   │ Command            │  Fails │   Checks │  Fail Rate │
   ├────────────────────┼────────┼──────────┼────────────┤
-  │ EmergencyStop      │      0 │       12 │       0.0% │
-  │ flow_drive         │    933 │    22314 │       4.2% │
-  │ pdm_closed         │     35 │    22314 │       0.2% │
+  │ EmergencyStop      │      0 │       17 │       0.0% │
+  │ flow_drive         │    954 │    22314 │       4.3% │
+  │ pdm_closed         │     40 │    22314 │       0.2% │
   ╰────────────────────┴────────┴──────────┴────────────╯
 
-  Both failed           12 / 22314 (0.1%)
+  Both failed           17 / 22314 (0.1%)
