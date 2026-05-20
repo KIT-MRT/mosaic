@@ -1,0 +1,103 @@
+Using latest experiment: /home/lelarge/nuplan/experiments/exp/baseline-flowdrive/closed_loop_reactive_agents/2026.05.19.23.13.00
+
+╭──────────────────────────────────────────────────────────╮
+│  2026.05.19.23.13.00                                     │
+╰──────────────────────────────────────────────────────────╯
+
+  Scenarios             1118
+  Overall score         0.9296
+  Duration              00:45:19 (2.4s/ea)
+
+
+── Failures ────────────────────────────────────────────────
+
+  Hard Gates
+  ╭────────────────────────────────────────┬───────┬─────────╮
+  │ Metric                                 │  Fail │    Rate │
+  ├────────────────────────────────────────┼───────┼─────────┤
+  │ no_ego_at_fault_collisions             │    25 │    2.2% │ ◆
+  │ drivable_area_compliance               │     6 │    0.5% │ ◆
+  │ driving_direction_compliance           │     3 │    0.3% │ ◆
+  │ ego_is_making_progress                 │     6 │    0.5% │ ◆
+  ╰────────────────────────────────────────┴───────┴─────────╯
+
+  Weighted Metrics
+  ╭────────────────────────────────────────┬───────┬─────────╮
+  │ Metric                                 │  Fail │    Rate │
+  ├────────────────────────────────────────┼───────┼─────────┤
+  │ ego_progress_along_expert_route (w=5)  │     0 │    0.0% │
+  │ time_to_collision_within_bound (w=5)   │    64 │    5.7% │ ◆
+  │ speed_limit_compliance (w=4)           │     0 │    0.0% │
+  │ ego_is_comfortable (w=2)               │    96 │    8.6% │ ◆
+  ╰────────────────────────────────────────┴───────┴─────────╯
+
+  32 scenarios scored zero
+
+
+── Collisions (25) ─────────────────────────────────────────
+  ╭────────────────────┬──────────────────────────┬─────────┬────────╮
+  │ Scenario           │ Type                     │ Kind    │  Score │
+  ├────────────────────┼──────────────────────────┼─────────┼────────┤
+  │ d1233a44bda8587d   │ stationary_in_traffic    │ dynamic │ 0.0000 │
+  │ 05abec5c2a67537b   │ near_multiple_vehicles   │ dynamic │ 0.0000 │
+  │ ce9a8994426651f9   │ starting_left_turn       │ dynamic │ 0.0000 │
+  │ caaab29c36ef5bee   │ changing_lane            │ dynamic │ 0.0000 │
+  │ 83a18a11bf9b5baa   │ near_multiple_vehicles   │ dynamic │ 0.0000 │
+  │ 59bb3fec07495d87   │ near_multiple_vehicles   │ dynamic │ 0.0000 │
+  │ c2f0546ea2565af3   │ starting_left_turn       │ dynamic │ 0.0000 │
+  │ 90c1f6c5e89352be   │ starting_straight_traff… │ dynamic │ 0.0000 │
+  │ 1bb4a47dd9f155cd   │ near_multiple_vehicles   │ dynamic │ 0.0000 │
+  │ 558d1c44968c5319   │ high_magnitude_speed     │ dynamic │ 0.0000 │
+  │ c7468120b03a56e7   │ waiting_for_pedestrian_… │ dynamic │ 0.0000 │
+  │ 0cb3e00568cd5056   │ near_multiple_vehicles   │ dynamic │ 0.0000 │
+  │ b2ab7d150c1f5fa4   │ changing_lane            │ dynamic │ 0.0000 │
+  │ 1f82b16afa96569a   │ starting_left_turn       │ dynamic │ 0.0000 │
+  │ 42dc17b3a3e551bc   │ starting_left_turn       │ dynamic │ 0.0000 │
+  │ 0b23f003881e5a2f   │ high_magnitude_speed     │ dynamic │ 0.0000 │
+  │ f1c0b066cfca5c81   │ near_multiple_vehicles   │ dynamic │ 0.0000 │
+  │ b1f369f514d95f4c   │ stationary_in_traffic    │ dynamic │ 0.0000 │
+  │ a7d5055f7958550f   │ near_multiple_vehicles   │ dynamic │ 0.0000 │
+  │ 00c202ab992e50aa   │ near_multiple_vehicles   │ dynamic │ 0.0000 │
+  │ 81f2464a004e54d0   │ traversing_pickup_dropo… │ static  │ 0.2773 │
+  │ f36c397ff1125e10   │ stationary_in_traffic    │ static  │ 0.3438 │
+  │ 74f33e65028d5917   │ starting_straight_traff… │ static  │ 0.3438 │
+  │ c556f4bc6f165a76   │ changing_lane            │ static  │ 0.3438 │
+  │ bbc7bb010c275ea4   │ starting_straight_traff… │ static  │ 0.3438 │
+  ╰────────────────────┴──────────────────────────┴─────────┴────────╯
+
+
+── Per Scenario Type ───────────────────────────────────────
+  ╭──────────────────────────────────────┬──────┬────────┬──────┬──────┬──────╮
+  │ Type                                 │    n │  Score │ Zero │  TTC │ Coll │
+  ├──────────────────────────────────────┼──────┼────────┼──────┼──────┼──────┤
+  │ near_multiple_vehicles               │   85 │ 0.8695 │    8 │   10 │    8 │
+  │ starting_left_turn                   │  100 │ 0.8862 │    6 │    7 │    4 │
+  │ changing_lane                        │   70 │ 0.9127 │    3 │    6 │    3 │
+  │ high_lateral_acceleration            │   96 │ 0.9144 │    4 │    2 │    0 │
+  │ traversing_pickup_dropoff            │   99 │ 0.9193 │    0 │    8 │    1 │
+  │ low_magnitude_speed                  │  100 │ 0.9213 │    2 │    8 │    0 │
+  │ waiting_for_pedestrian_to_cross      │   53 │ 0.9241 │    2 │    3 │    1 │
+  │ starting_straight_traffic_light_int… │   98 │ 0.9370 │    1 │    8 │    3 │
+  │ starting_right_turn                  │   98 │ 0.9463 │    1 │    6 │    0 │
+  │ following_lane_with_lead             │   15 │ 0.9510 │    0 │    0 │    0 │
+  │ stationary_in_traffic                │   98 │ 0.9577 │    2 │    4 │    3 │
+  │ high_magnitude_speed                 │   99 │ 0.9604 │    2 │    2 │    2 │
+  │ stopping_with_lead                   │   93 │ 0.9824 │    1 │    0 │    0 │
+  │ behind_long_vehicle                  │   14 │ 0.9911 │    0 │    0 │    0 │
+  ╰──────────────────────────────────────┴──────┴────────┴──────┴──────┴──────╯
+
+
+── Cost Estimator ──────────────────────────────────────────
+
+  No estimator entries found.
+
+
+── Verifier ────────────────────────────────────────────────
+  ╭────────────────────┬────────┬──────────┬────────────╮
+  │ Command            │  Fails │   Checks │  Fail Rate │
+  ├────────────────────┼────────┼──────────┼────────────┤
+  │ EmergencyStop      │    100 │      478 │      20.9% │
+  │ flow_drive         │    478 │   166806 │       0.3% │
+  ╰────────────────────┴────────┴──────────┴────────────╯
+
+  Both failed           100 / 166806 (0.1%)
