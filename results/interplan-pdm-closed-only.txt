@@ -1,0 +1,77 @@
+Using latest experiment: /home/lelarge/nuplan/experiments/exp/interplan-pdm-closed-only/default_interplan_benchmark/2026.05.20.11.03.10
+
+╭──────────────────────────────────────────────────────────╮
+│  2026.05.20.11.03.10                                     │
+╰──────────────────────────────────────────────────────────╯
+
+  Scenarios             80
+  Overall score         0.4249
+  Duration              00:04:32 (3.4s/ea)
+
+
+── Failures ────────────────────────────────────────────────
+
+  Hard Gates
+  ╭────────────────────────────────────────┬───────┬─────────╮
+  │ Metric                                 │  Fail │    Rate │
+  ├────────────────────────────────────────┼───────┼─────────┤
+  │ no_ego_at_fault_collisions             │     5 │    6.2% │ ◆
+  │ drivable_area_compliance               │     0 │    0.0% │
+  │ driving_direction_compliance           │     0 │    0.0% │
+  │ ego_is_making_progress                 │    16 │   20.0% │ ◆
+  ╰────────────────────────────────────────┴───────┴─────────╯
+
+  Weighted Metrics
+  ╭────────────────────────────────────────┬───────┬─────────╮
+  │ Metric                                 │  Fail │    Rate │
+  ├────────────────────────────────────────┼───────┼─────────┤
+  │ ego_progress_along_expert_route (w=5)  │     0 │    0.0% │
+  │ time_to_collision_within_bound (w=5)   │     8 │   10.0% │ ◆
+  │ speed_limit_compliance (w=4)           │     0 │    0.0% │
+  │ ego_is_comfortable (w=2)               │     9 │   11.2% │ ◆
+  ╰────────────────────────────────────────┴───────┴─────────╯
+
+  36 scenarios scored zero
+
+
+── Collisions (5) ──────────────────────────────────────────
+  ╭────────────────────┬──────────────────────────┬─────────┬────────╮
+  │ Scenario           │ Type                     │ Kind    │  Score │
+  ├────────────────────┼──────────────────────────┼─────────┼────────┤
+  │ 71f182558ee95100-s1 │ nudge_around_parked_veh… │ dynamic │ 0.0000 │
+  │ 2d62c3139aa95007-s9 │ jaywalking_pedestrian    │ dynamic │ 0.0000 │
+  │ 71f182558ee95100-s9 │ jaywalking_pedestrian    │ dynamic │ 0.0000 │
+  │ 2d62c3139aa95007-s8 │ jaywalking_pedestrian    │ dynamic │ 0.0000 │
+  │ 71f182558ee95100-s8 │ jaywalking_pedestrian    │ dynamic │ 0.0000 │
+  ╰────────────────────┴──────────────────────────┴─────────┴────────╯
+
+
+── Per Scenario Type ───────────────────────────────────────
+  ╭──────────────────────────────────────┬──────┬────────┬──────┬──────┬──────╮
+  │ Type                                 │    n │  Score │ Zero │  TTC │ Coll │
+  ├──────────────────────────────────────┼──────┼────────┼──────┼──────┼──────┤
+  │ avoid_crashed_cars                   │   10 │ 0.0000 │   10 │    0 │    0 │
+  │ overtake_parked_vehicle              │   10 │ 0.0919 │    9 │    1 │    0 │
+  │ approaching_construction_zone        │   10 │ 0.1812 │    8 │    0 │    0 │
+  │ jaywalking_pedestrian                │   10 │ 0.5363 │    4 │    5 │    4 │
+  │ medium_traffic_density               │   10 │ 0.6120 │    1 │    0 │    0 │
+  │ high_traffic_density                 │   10 │ 0.6172 │    1 │    0 │    0 │
+  │ low_traffic_density                  │   10 │ 0.6226 │    1 │    0 │    0 │
+  │ nudge_around_parked_vehicle          │   10 │ 0.7376 │    2 │    2 │    1 │
+  ╰──────────────────────────────────────┴──────┴────────┴──────┴──────┴──────╯
+
+
+── Cost Estimator ──────────────────────────────────────────
+
+  No estimator entries found.
+
+
+── Verifier ────────────────────────────────────────────────
+  ╭────────────────────┬────────┬──────────┬────────────╮
+  │ Command            │  Fails │   Checks │  Fail Rate │
+  ├────────────────────┼────────┼──────────┼────────────┤
+  │ EmergencyStop      │     27 │       37 │      73.0% │
+  │ pdm_closed         │     37 │    21297 │       0.2% │
+  ╰────────────────────┴────────┴──────────┴────────────╯
+
+  Both failed           27 / 21297 (0.1%)
