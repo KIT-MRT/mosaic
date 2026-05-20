@@ -1,12 +1,12 @@
-Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-nonreactive/closed_loop_nonreactive_agents/2026.05.13.14.31.25
+Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-nonreactive/closed_loop_nonreactive_agents/2026.05.19.19.07.43
 
 ╭──────────────────────────────────────────────────────────╮
-│  2026.05.13.14.31.25                                     │
+│  2026.05.19.19.07.43                                     │
 ╰──────────────────────────────────────────────────────────╯
 
   Scenarios             1118
-  Overall score         0.9548
-  Duration              00:51:06 (2.7s/ea)
+  Overall score         0.9556
+  Duration              01:05:59 (3.5s/ea)
 
 
 ── Failures ────────────────────────────────────────────────
@@ -15,7 +15,7 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-nonreactive/
   ╭────────────────────────────────────────┬───────┬─────────╮
   │ Metric                                 │  Fail │    Rate │
   ├────────────────────────────────────────┼───────┼─────────┤
-  │ no_ego_at_fault_collisions             │    11 │    1.0% │ ◆
+  │ no_ego_at_fault_collisions             │     8 │    0.7% │ ◆
   │ drivable_area_compliance               │     2 │    0.2% │ ◆
   │ driving_direction_compliance           │     2 │    0.2% │ ◆
   │ ego_is_making_progress                 │     6 │    0.5% │ ◆
@@ -28,24 +28,21 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-nonreactive/
   │ ego_progress_along_expert_route (w=5)  │     0 │    0.0% │
   │ time_to_collision_within_bound (w=5)   │    51 │    4.6% │ ◆
   │ speed_limit_compliance (w=4)           │     0 │    0.0% │
-  │ ego_is_comfortable (w=2)               │    74 │    6.6% │ ◆
+  │ ego_is_comfortable (w=2)               │    81 │    7.2% │ ◆
   ╰────────────────────────────────────────┴───────┴─────────╯
 
-  16 scenarios scored zero
+  13 scenarios scored zero
 
 
-── Collisions (11) ─────────────────────────────────────────
+── Collisions (8) ──────────────────────────────────────────
   ╭────────────────────┬──────────────────────────┬─────────┬────────╮
   │ Scenario           │ Type                     │ Kind    │  Score │
   ├────────────────────┼──────────────────────────┼─────────┼────────┤
-  │ 6f247bc70fe3555e   │ starting_right_turn      │ dynamic │ 0.0000 │
   │ 4ce8319955305a2a   │ low_magnitude_speed      │ dynamic │ 0.0000 │
-  │ 558d1c44968c5319   │ high_magnitude_speed     │ dynamic │ 0.0000 │
   │ 8fcf72fe99a4525a   │ starting_left_turn       │ dynamic │ 0.0000 │
-  │ 0338779ea8ba5128   │ high_lateral_accelerati… │ dynamic │ 0.0000 │
   │ b2ab7d150c1f5fa4   │ changing_lane            │ dynamic │ 0.0000 │
+  │ bbc7bb010c275ea4   │ starting_straight_traff… │ static  │ 0.2812 │
   │ d9af410284a9558a   │ traversing_pickup_dropo… │ static  │ 0.3414 │
-  │ bbc7bb010c275ea4   │ starting_straight_traff… │ static  │ 0.3438 │
   │ d2d0152ca8b45448   │ starting_right_turn      │ static  │ 0.3438 │
   │ 6545d57f36cb59cf   │ starting_left_turn       │ static  │ 0.3438 │
   │ c3c3362c0698581b   │ traversing_pickup_dropo… │ static  │ 0.3438 │
@@ -56,17 +53,17 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-nonreactive/
   ╭──────────────────────────────────────┬──────┬────────┬──────┬──────┬──────╮
   │ Type                                 │    n │  Score │ Zero │  TTC │ Coll │
   ├──────────────────────────────────────┼──────┼────────┼──────┼──────┼──────┤
-  │ high_lateral_acceleration            │   96 │ 0.9163 │    5 │    5 │    1 │
+  │ high_lateral_acceleration            │   96 │ 0.9167 │    4 │    6 │    0 │
+  │ starting_left_turn                   │  100 │ 0.9210 │    2 │    7 │    2 │
   │ traversing_pickup_dropoff            │   99 │ 0.9212 │    0 │    8 │    2 │
-  │ starting_left_turn                   │  100 │ 0.9235 │    2 │    7 │    2 │
   │ low_magnitude_speed                  │  100 │ 0.9346 │    4 │    6 │    1 │
-  │ starting_right_turn                  │   98 │ 0.9386 │    1 │    8 │    2 │
+  │ starting_right_turn                  │   98 │ 0.9445 │    0 │    7 │    1 │
   │ changing_lane                        │   70 │ 0.9481 │    1 │    6 │    1 │
   │ following_lane_with_lead             │   15 │ 0.9624 │    0 │    1 │    0 │
-  │ starting_straight_traffic_light_int… │   98 │ 0.9735 │    1 │    2 │    1 │
+  │ starting_straight_traffic_light_int… │   98 │ 0.9729 │    1 │    2 │    1 │
   │ waiting_for_pedestrian_to_cross      │   53 │ 0.9744 │    0 │    2 │    0 │
   │ near_multiple_vehicles               │   85 │ 0.9745 │    0 │    4 │    0 │
-  │ high_magnitude_speed                 │   99 │ 0.9788 │    1 │    2 │    1 │
+  │ high_magnitude_speed                 │   99 │ 0.9845 │    0 │    2 │    0 │
   │ stationary_in_traffic                │   98 │ 0.9845 │    1 │    0 │    0 │
   │ stopping_with_lead                   │   93 │ 0.9941 │    0 │    0 │    0 │
   │ behind_long_vehicle                  │   14 │ 1.0000 │    0 │    0 │    0 │
@@ -77,20 +74,20 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-nonreactive/
   ╭────────────────────┬────────┬───────────────┬─────────────────╮
   │ Command            │   Wins │  Of Decisions │  Of Appearances │
   ├────────────────────┼────────┼───────────────┼─────────────────┤
-  │ flow_drive         │  36551 │         22.1% │           22.1% │
-  │ pdm_closed         │  48767 │         29.5% │           29.5% │
+  │ flow_drive         │  36107 │         21.9% │           21.9% │
+  │ pdm_closed         │  48724 │         29.6% │           29.6% │
   ╰────────────────────┴────────┴───────────────┴─────────────────╯
 
-  Tied scores           80038 / 165356 (48.4%)
+  Tied scores           79934 / 164765 (48.5%)
 
 
 ── Verifier ────────────────────────────────────────────────
   ╭────────────────────┬────────┬──────────┬────────────╮
   │ Command            │  Fails │   Checks │  Fail Rate │
   ├────────────────────┼────────┼──────────┼────────────┤
-  │ EmergencyStop      │     36 │      132 │      27.3% │
-  │ flow_drive         │    887 │   166806 │       0.5% │
-  │ pdm_closed         │    695 │   166806 │       0.4% │
+  │ EmergencyStop      │     66 │      181 │      36.5% │
+  │ flow_drive         │   1012 │   166806 │       0.6% │
+  │ pdm_closed         │   1210 │   166806 │       0.7% │
   ╰────────────────────┴────────┴──────────┴────────────╯
 
-  Both failed           132 / 166806 (0.1%)
+  Both failed           181 / 166806 (0.1%)

@@ -1,0 +1,94 @@
+# Union of all scenarios where any experiment (val14 reactive/nonreactive, baselines, ablations)
+# produced an at-fault collision.
+
+_target_: nuplan.planning.scenario_builder.scenario_filter.ScenarioFilter
+_convert_: 'all'
+
+scenario_types:
+  - starting_left_turn
+  - starting_right_turn
+  - starting_straight_traffic_light_intersection_traversal
+  - stopping_with_lead
+  - high_lateral_acceleration
+  - high_magnitude_speed
+  - low_magnitude_speed
+  - traversing_pickup_dropoff
+  - waiting_for_pedestrian_to_cross
+  - behind_long_vehicle
+  - stationary_in_traffic
+  - near_multiple_vehicles
+  - changing_lane
+  - following_lane_with_lead
+scenario_tokens:
+  - '00c202ab992e50aa'
+  - '05abec5c2a67537b'
+  - '06f3e1d3f9df598a'
+  - '0b23f003881e5a2f'
+  - '0cb3e00568cd5056'
+  - '0ebba0e8fbd3528f'
+  - '1bb4a47dd9f155cd'
+  - '1c7d81d771715ba6'
+  - '1c83f8728505588c'
+  - '1f82b16afa96569a'
+  - '2315ca6fdcf65ce0'
+  - '2ba56b194be35170'
+  - '30e0f8ea46375f52'
+  - '3b21090dafc054b9'
+  - '42dc17b3a3e551bc'
+  - '4b3b50a9f58b5d79'
+  - '4ce8319955305a2a'
+  - '558d1c44968c5319'
+  - '5873cf0a63c65c9d'
+  - '59bb3fec07495d87'
+  - '6545d57f36cb59cf'
+  - '6744a91db9485d20'
+  - '6badb2820fd251fd'
+  - '738efdf625b35ff9'
+  - '74f33e65028d5917'
+  - '7736cf1972215f9a'
+  - '81f2464a004e54d0'
+  - '83a18a11bf9b5baa'
+  - '8b4daccc76555c6c'
+  - '8bd63e2b025d5e38'
+  - '8fcf72fe99a4525a'
+  - '90c1f6c5e89352be'
+  - '99ac1ec87510556d'
+  - 'a47a238ed8be578b'
+  - 'a7d5055f7958550f'
+  - 'b1f369f514d95f4c'
+  - 'b2ab7d150c1f5fa4'
+  - 'b4fea136b474504e'
+  - 'bbc7bb010c275ea4'
+  - 'c1567e02a98e53e5'
+  - 'c2f0546ea2565af3'
+  - 'c3c3362c0698581b'
+  - 'c556f4bc6f165a76'
+  - 'c7468120b03a56e7'
+  - 'caaab29c36ef5bee'
+  - 'ce9a8994426651f9'
+  - 'd1233a44bda8587d'
+  - 'd2d0152ca8b45448'
+  - 'd9af410284a9558a'
+  - 'e3e2933994835eba'
+  - 'e6f40cb278175bd0'
+  - 'f1c0b066cfca5c81'
+  - 'f36c397ff1125e10'
+  - 'f545b79ff3d553a0'
+  - 'f958ec121f5a5287'
+  - 'ff9f884349e65234'
+
+log_names: null
+map_names: null
+
+num_scenarios_per_type: null
+limit_total_scenarios: null
+timestamp_threshold_s: null
+
+ego_displacement_minimum_m: null
+ego_start_speed_threshold: null
+ego_stop_speed_threshold: null
+speed_noise_tolerance: null
+
+expand_scenarios: false
+remove_invalid_goals: true
+shuffle: false
