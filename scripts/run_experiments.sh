@@ -58,5 +58,14 @@ run_experiment ablation-no-verifier closed_loop_reactive_agents no_verifier
 run_experiment ablation-pdm-closed-only closed_loop_reactive_agents pdm_closed_only
 run_experiment ablation-flowdrive-only closed_loop_reactive_agents flow_drive_only
 
+# Baselines: each planner stand-alone with its native internal verifier
+# and emergency-brake fallback
+run_experiment baseline-pdm-closed closed_loop_reactive_agents pdm_closed_only \
+    -p verifier.parameters.max_ego_speed=5.0 \
+    -p emergency_stop_behavior.parameters.min_long_accel=-4.05
+run_experiment baseline-flowdrive closed_loop_reactive_agents flow_drive_only \
+    -p verifier.parameters.max_ego_speed=5.0 \
+    -p emergency_stop_behavior.parameters.min_long_accel=-4.05
+
 echo ""
 echo "=== All experiments complete. Results saved in $RESULTS_DIR ==="
