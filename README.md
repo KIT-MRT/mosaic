@@ -25,16 +25,24 @@ Evaluated on [nuPlan](https://github.com/motional/nuplan-devkit), Mosaic achieve
 |                     | GIGAFLOW          |      -       |    93.80    |        -        |
 | Rule-based & Hybrid | PDM-Closed        |    92.84     |    92.12    |      41.23      |
 |                     | FlowDrive*        |    94.81     |    92.96    |      44.05      |
-|                     | **Mosaic (ours)** |  **95.48**   |  **93.98**  |    **54.03**    |
+|                     | **Mosaic (ours)** |  **95.56**   |  **94.18**  |    **53.90**    |
+
+Mosaic achieves state-of-the-art closed-loop performance on nuPlan Val14 and improves substantially over both constituent planners on interPlan (+22% CLS-R over FlowDrive\*).
 
 ### Ablation study (Val14 CLS-R)
 
-| Configuration     |   CLS-R   | Collisions | Zero-score |
-| ----------------- | :-------: | :--------: | :--------: |
-| **Mosaic (full)** | **93.98** |   **19**   |   **20**   |
-| w/o verifier      |   92.82   |     40     |     38     |
-| FlowDrive* only   |   92.96   |     23     |     30     |
-| PDM-Closed only   |   92.15   |     22     |     33     |
+| Configuration          |   CLS-R   | Collisions | Zero-score |
+| ---------------------- | :-------: | :--------: | :--------: |
+| PDM-Closed (baseline)  |   92.18   |     25     |     35     |
+| FlowDrive\* (baseline) |   92.96   |     25     |     32     |
+| PDM-Closed only        |   92.37   |     17     |     28     |
+| FlowDrive\* only       |   93.37   |   **15**   |     23     |
+| w/o verifier           |   92.82   |     40     |     38     |
+| **Mosaic (full)**      | **94.18** |     16     |   **17**   |
+
+Baselines run each planner stand-alone with their respective native verifier.
+The remaining rows run within Mosaic's arbitration layer (stricter centralized verifier, harder emergency brake).
+Verification reduces collisions ~36% over the baselines while composition adds an additional +0.81 CLS-R at the same collision floor.
 
 ## Architecture
 
@@ -109,7 +117,7 @@ Run all benchmarks and ablations with a single script:
 bash scripts/run_experiments.sh
 ```
 
-This runs 6 experiments sequentially and saves analysis outputs to `results/`. Use `--quick` for a smoke test with one scenario per experiment:
+This runs 8 experiments sequentially and saves analysis outputs to `results/`. Use `--quick` for a smoke test with one scenario per experiment:
 
 ```bash
 bash scripts/run_experiments.sh --quick
@@ -131,6 +139,11 @@ Individual experiments:
 | Ablation: no verifier     | `uv run mosaic simulate --ablation no_verifier`            |
 | Ablation: PDM-Closed only | `uv run mosaic simulate --ablation pdm_closed_only`        |
 | Ablation: FlowDrive* only | `uv run mosaic simulate --ablation flow_drive_only`        |
+| Baseline: PDM-Closed      | `uv run mosaic simulate --ablation pdm_closed_only -p verifier.parameters.max_ego_speed=5.0 -p emergency_stop_behavior.parameters.min_long_accel=-4.05` |
+| Baseline: FlowDrive*      | `uv run mosaic simulate --ablation flow_drive_only -p verifier.parameters.max_ego_speed=5.0 -p emergency_stop_behavior.parameters.min_long_accel=-4.05` |
+
+The two baseline experiments run each planner stand-alone with its native internal verifier and emergency-brake fallback reproduced and without arbitration.
+They are measured using the velocity-based agent prediction suggested by the FlowDrive authors and therefore differ marginally from the upstream-published numbers.
 
 ## Why the forks?
 
