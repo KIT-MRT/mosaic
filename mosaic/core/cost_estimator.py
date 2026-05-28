@@ -8,13 +8,8 @@ import numpy as np
 import numpy.typing as npt
 from arbitration_graphs import BatchCostEstimator
 from arbitration_graphs.typing import Time
-from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
-from tuplan_garage.planning.simulation.planner.pdm_planner.simulation.pdm_simulator import (
-    PDMSimulator,
-)
 from typing_extensions import override
 
-import mosaic.utils.trajectory as trajectory_utils
 from mosaic.core.command import Command
 from mosaic.core.environment_model import EnvironmentModel
 from mosaic.scorer import (
@@ -31,7 +26,6 @@ from mosaic.scorer import (
 class TrajectoryCostEstimator(BatchCostEstimator):
     @dataclass
     class Parameters:
-        trajectory_sampling: TrajectorySampling
         logging_enabled: bool = True
 
     def __init__(
@@ -43,9 +37,6 @@ class TrajectoryCostEstimator(BatchCostEstimator):
         super().__init__()
 
         self.parameters: TrajectoryCostEstimator.Parameters = parameters
-        self._simulator: PDMSimulator = PDMSimulator(
-            self.parameters.trajectory_sampling
-        )
 
         progress_metric = next(
             m for m in weighted_metrics if isinstance(m, ProgressMetric)
@@ -65,18 +56,9 @@ class TrajectoryCostEstimator(BatchCostEstimator):
         environment_model: EnvironmentModel,
         candidates: list[BatchCostEstimator.Candidate],
     ) -> list[float]:
-        trajectories_list = [cast(Command, c.command).trajectory for c in candidates]
-
-        states_list = [
-            trajectory_utils.trajectory_to_state_array(
-                traj, environment_model.parameters.proposal_sampling
-            )
-            for traj in trajectories_list
-        ]
-
-        states = np.stack(states_list, axis=0)
-
-        states = self._simulator.simulate_proposals(states, environment_model.ego_state)
+        states = np.stack(
+            [cast(Command, c.command).simulated_states for c in candidates], axis=0
+        )
 
         scoring_input = ScoringInput.create(
             states,

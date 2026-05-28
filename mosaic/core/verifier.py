@@ -8,12 +8,8 @@ import numpy as np
 from arbitration_graphs.typing import Time
 from arbitration_graphs.verification import Result, Verifier
 from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
-from tuplan_garage.planning.simulation.planner.pdm_planner.simulation.pdm_simulator import (
-    PDMSimulator,
-)
 from typing_extensions import override
 
-import mosaic.utils.trajectory as trajectory_utils
 from mosaic.core.command import Command
 from mosaic.core.environment_model import EnvironmentModel
 from mosaic.scorer import NoAtFaultCollisionMetric, ScoringInput
@@ -50,7 +46,6 @@ class TrajectoryVerifier(Verifier):
         super().__init__()
 
         self.parameters: TrajectoryVerifier.Parameters = parameters
-        self._simulator: PDMSimulator = PDMSimulator(self.parameters.proposal_sampling)
         self._collision_metric: NoAtFaultCollisionMetric = NoAtFaultCollisionMetric()
 
         self._log_buffer: list[dict[str, object]] = []
@@ -72,14 +67,7 @@ class TrajectoryVerifier(Verifier):
         if command.name in self._cache:
             return self._cache[command.name]
 
-        # Convert trajectory to state array (1, T, state_dim)
-        states = trajectory_utils.trajectory_to_state_array(
-            command.trajectory, environment_model.parameters.proposal_sampling
-        )
-        states = np.expand_dims(states, axis=0)
-
-        # Simulate closed-loop
-        states = self._simulator.simulate_proposals(states, environment_model.ego_state)
+        states = np.expand_dims(command.simulated_states, axis=0)
 
         # Create scoring input and run only collision metric
         scoring_input = ScoringInput.create(states, environment_model)
