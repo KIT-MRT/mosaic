@@ -20,7 +20,6 @@ mosaic:
     parameters:
       _target_: mosaic.core.cost_estimator.TrajectoryCostEstimator.Parameters
       _convert_: all
-      trajectory_sampling: *scoring_sampling
     multiplicative_metrics:
       - _target_: mosaic.scorer.NoAtFaultCollisionMetric
       - _target_: mosaic.scorer.DrivableAreaComplianceMetric

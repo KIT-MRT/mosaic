@@ -1,15 +1,20 @@
 from dataclasses import dataclass
 from typing import Optional, final
 
+import numpy as np
 from arbitration_graphs import Behavior
 from arbitration_graphs.typing import Time
 from nuplan.planning.simulation.trajectory.abstract_trajectory import AbstractTrajectory
 from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
+from tuplan_garage.planning.simulation.planner.pdm_planner.simulation.pdm_simulator import (
+    PDMSimulator,
+)
 from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_emergency_brake import (
     PDMEmergencyBrake,
 )
 from typing_extensions import cast, override
 
+import mosaic.utils.trajectory as trajectory_utils
 from mosaic.core.command import Command, StampedCommand
 from mosaic.core.environment_model import EnvironmentModel
 
@@ -35,13 +40,26 @@ class EmergencyStopBehavior(Behavior):
             min_long_accel=parameters.min_long_accel,
         )
         self.last_command: Optional[StampedCommand] = None
+        self._simulator: Optional[PDMSimulator] = None
+
+    def initialize(self, environment_model: EnvironmentModel) -> None:
+        self._simulator = PDMSimulator(environment_model.parameters.proposal_sampling)
 
     @override
     def get_command(self, time: Time, environment_model: EnvironmentModel) -> Command:
+        assert self._simulator is not None
         ego_state = environment_model.ego_state
         trajectory: AbstractTrajectory = self.planner._generate_trajectory(ego_state)
 
-        command = Command(name=self.name(), trajectory=trajectory)
+        states = trajectory_utils.trajectory_to_state_array(
+            trajectory, environment_model.parameters.proposal_sampling
+        )
+        simulated = self._simulator.simulate_proposals(
+            np.expand_dims(states, axis=0), environment_model.ego_state
+        )
+        command = Command(
+            name=self.name(), trajectory=trajectory, simulated_states=simulated[0]
+        )
         self.last_command = StampedCommand(stamp=time, command=command)
         return command
 

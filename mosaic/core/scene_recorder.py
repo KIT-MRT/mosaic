@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from datetime import timedelta
 from typing import Any, Optional, cast
 
+import numpy.typing as npt
 from arbitration_graphs.typing import Time
 from nuplan.common.actor_state.state_representation import (
     Point2D,
@@ -43,6 +44,30 @@ def _polygon_to_list(polygon: Polygon) -> list[list[float]]:
 
 def _linestring_to_list(linestring: LineString) -> list[list[float]]:
     return [[float(x), float(y)] for x, y in linestring.coords]
+
+
+def _simulated_states_to_waypoints(
+    states: npt.NDArray,
+    interval_length: float,
+    rear_axle_to_center: float,
+) -> list[dict[str, float]]:
+    """Convert a simulated state array (T, state_dim) to center-position waypoint dicts.
+
+    State layout (rear axle frame): X=0, Y=1, HEADING=2, VELOCITY_X=3, VELOCITY_Y=4.
+    """
+    waypoints: list[dict[str, float]] = []
+    for i in range(len(states)):
+        heading = float(states[i, 2])
+        waypoints.append(
+            {
+                "t": float(i * interval_length),
+                "x": float(states[i, 0]) + rear_axle_to_center * math.cos(heading),
+                "y": float(states[i, 1]) + rear_axle_to_center * math.sin(heading),
+                "heading": heading,
+                "v": math.hypot(float(states[i, 3]), float(states[i, 4])),
+            }
+        )
+    return waypoints
 
 
 def _trajectory_to_waypoints(
@@ -93,10 +118,12 @@ class SceneRecorder:
 
         self._map_api: Optional[AbstractMap] = None
         self._ego_dimensions: Optional[dict[str, float]] = None
+        self._rear_axle_to_center: Optional[float] = None
 
     def initialize_scenario(self, map_api: AbstractMap) -> None:
         self._map_api = map_api
         self._ego_dimensions = None
+        self._rear_axle_to_center = None
         self._ego_trail = []
         self._proposals_buffer = []
         self._observations_buffer = []
@@ -117,6 +144,7 @@ class SceneRecorder:
                 "length": float(footprint.length),
                 "width": float(footprint.width),
             }
+            self._rear_axle_to_center = float(footprint.rear_axle_to_center_dist)
 
         ego_state = environment_model.ego_state
         ego_entry = {
@@ -127,6 +155,7 @@ class SceneRecorder:
         }
         self._ego_trail.append((ego_entry["x"], ego_entry["y"]))
 
+        assert self._rear_axle_to_center is not None
         proposals: list[dict[str, Any]] = []
         for command in commands:
             proposals.append(
@@ -134,6 +163,11 @@ class SceneRecorder:
                     "command": command.name,
                     "waypoints": _trajectory_to_waypoints(
                         command.trajectory, self.parameters.proposal_sampling
+                    ),
+                    "simulated_waypoints": _simulated_states_to_waypoints(
+                        command.simulated_states,
+                        self.parameters.proposal_sampling.interval_length,
+                        self._rear_axle_to_center,
                     ),
                 }
             )

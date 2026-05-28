@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import Optional
 
 import flow_drive
+import numpy as np
 from arbitration_graphs import Behavior
 from arbitration_graphs.typing import Time
 from hydra.utils import instantiate
@@ -10,8 +11,12 @@ from nuplan.planning.simulation.planner.abstract_planner import (
 )
 from nuplan.planning.simulation.trajectory.abstract_trajectory import AbstractTrajectory
 from omegaconf import OmegaConf
+from tuplan_garage.planning.simulation.planner.pdm_planner.simulation.pdm_simulator import (
+    PDMSimulator,
+)
 from typing_extensions import cast, final, override
 
+import mosaic.utils.trajectory as trajectory_utils
 from mosaic.core.command import Command, StampedCommand
 from mosaic.core.environment_model import EnvironmentModel
 
@@ -45,17 +50,28 @@ class FlowDriveBehavior(Behavior):
 
         self.planner = cast(AbstractPlanner, instantiate(flow_drive_cfg.flow_drive))
         self.last_command: Optional[StampedCommand] = None
+        self._simulator: Optional[PDMSimulator] = None
 
     def initialize(self, environment_model: EnvironmentModel) -> None:
         self.planner.initialize(environment_model.planner_initialization)
+        self._simulator = PDMSimulator(environment_model.parameters.proposal_sampling)
 
     @override
     def get_command(self, time: Time, environment_model: EnvironmentModel) -> Command:
+        assert self._simulator is not None
         trajectory: AbstractTrajectory = self.planner.compute_planner_trajectory(
             environment_model.planner_input
         )
 
-        command = Command(name=self.name(), trajectory=trajectory)
+        states = trajectory_utils.trajectory_to_state_array(
+            trajectory, environment_model.parameters.proposal_sampling
+        )
+        simulated = self._simulator.simulate_proposals(
+            np.expand_dims(states, axis=0), environment_model.ego_state
+        )
+        command = Command(
+            name=self.name(), trajectory=trajectory, simulated_states=simulated[0]
+        )
         self.last_command = StampedCommand(stamp=time, command=command)
         return command
 
