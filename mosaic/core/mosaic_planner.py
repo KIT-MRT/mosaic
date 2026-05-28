@@ -105,6 +105,7 @@ class Mosaic(AbstractPlanner):
         self.environment_model.initialize(initialization)
         self.flow_drive_behavior.initialize(self.environment_model)
         self.pdm_closed_behavior.initialize(self.environment_model)
+        self.emergency_stop_behavior.initialize(self.environment_model)
 
         if self.parameters.record_scenes:
             self._scene_recorder.initialize_scenario(initialization.map_api)
