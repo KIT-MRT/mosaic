@@ -5,7 +5,11 @@ from typing import Optional, Tuple
 import click
 from pandas import DataFrame
 
-from mosaic.cli.analyze.data import HARD_GATES, WEIGHTED_METRICS
+from mosaic.cli.analyze.data import (
+    HARD_GATES,
+    WEIGHTED_METRICS,
+    detect_benchmark_extras,
+)
 from mosaic.cli.analyze.formatting import (
     Table,
     fail_marker,
@@ -39,9 +43,11 @@ def print_failures(df: DataFrame) -> None:
     widths = [38, 5, 7]
     aligns = ["<", ">", ">"]
 
+    extra_gates, extra_weighted = detect_benchmark_extras(df)
+
     subsection("Hard Gates")
     t = Table(["Metric", "Fail", "Rate"], widths, aligns)
-    for metric in HARD_GATES:
+    for metric in HARD_GATES + extra_gates:
         if metric not in df.columns:
             continue
         fails = int((df[metric] < 1.0).sum())
@@ -51,7 +57,7 @@ def print_failures(df: DataFrame) -> None:
 
     subsection("Weighted Metrics")
     t = Table(["Metric", "Fail", "Rate"], widths, aligns)
-    for metric, weight in WEIGHTED_METRICS.items():
+    for metric, weight in {**WEIGHTED_METRICS, **extra_weighted}.items():
         if metric not in df.columns:
             continue
         fails = int((df[metric] == 0.0).sum())
@@ -66,7 +72,9 @@ def print_failures(df: DataFrame) -> None:
 
 def _collision_kind(row) -> str:
     has_static = row.get("collision_with_objects", 0) > 0
-    has_dynamic = (row.get("collision_with_vrus", 0) + row.get("collision_with_vehicles", 0)) > 0
+    has_dynamic = (
+        row.get("collision_with_vrus", 0) + row.get("collision_with_vehicles", 0)
+    ) > 0
     if has_static and has_dynamic:
         return "both"
     if has_static:
@@ -93,13 +101,22 @@ def print_collision_scenarios(df: DataFrame) -> None:
 
     has_kind = "collision_with_objects" in collision_df.columns
     if has_kind:
-        t = Table(["Scenario", "Type", "Kind", "Score"], [18, 24, 7, 6], ["<", "<", "<", ">"])
+        t = Table(
+            ["Scenario", "Type", "Kind", "Score"], [18, 24, 7, 6], ["<", "<", "<", ">"]
+        )
     else:
         t = Table(["Scenario", "Type", "Score"], [18, 30, 6], ["<", "<", ">"])
     for _, row in collision_df.iterrows():
         if has_kind:
             stype = truncate(str(row.get("scenario_type", "")), 24)
-            t.row([str(row["scenario"]), stype, _collision_kind(row), f"{row['score']:.4f}"])
+            t.row(
+                [
+                    str(row["scenario"]),
+                    stype,
+                    _collision_kind(row),
+                    f"{row['score']:.4f}",
+                ]
+            )
         else:
             stype = truncate(str(row.get("scenario_type", "")), 30)
             t.row([str(row["scenario"]), stype, f"{row['score']:.4f}"])

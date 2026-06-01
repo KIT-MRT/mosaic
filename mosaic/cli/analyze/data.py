@@ -20,6 +20,27 @@ WEIGHTED_METRICS = {
     "ego_is_comfortable": 2,
 }
 
+INTERPLAN_EXTRA_WEIGHTED = {"lane_changes_to_goal": 4}
+
+INTERPLAN_EXTRA_GATES = [
+    "ego_sorts_construction_zone",
+    "ego_sorts_stopped_vehicle",
+    "ego_sorts_jaywalking_pedestrian",
+]
+
+
+def detect_benchmark_extras(df: DataFrame) -> tuple[list[str], dict[str, int]]:
+    """Return (extra_gates, extra_weighted) present and non-NaN in df."""
+    extra_gates = [
+        g for g in INTERPLAN_EXTRA_GATES if g in df.columns and df[g].notna().any()
+    ]
+    extra_weighted = {
+        m: w
+        for m, w in INTERPLAN_EXTRA_WEIGHTED.items()
+        if m in df.columns and df[m].notna().any()
+    }
+    return extra_gates, extra_weighted
+
 
 def find_latest_experiment() -> Path:
     """Locate the most recent experiment directory with aggregator_metric/ results."""
