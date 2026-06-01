@@ -1,5 +1,6 @@
 """Summary, failure breakdown, collision, and per-type reports."""
 
+from pathlib import Path
 from typing import Optional
 
 import click
@@ -19,6 +20,7 @@ from mosaic.cli.analyze.formatting import (
     title_box,
     truncate,
 )
+from mosaic.cli.analyze.logs import analyze_cost_estimator_logs, analyze_verifier_logs
 from mosaic.cli.analyze.runtime import RuntimeInfo
 
 
@@ -166,3 +168,23 @@ def print_per_type(df: DataFrame) -> None:
         )
 
     t.render()
+
+
+def print_report(
+    df: DataFrame,
+    label: str,
+    runtime: Optional[RuntimeInfo],
+    mosaic_dir: Path,
+    per_type: bool = True,
+) -> None:
+    """Print the full human-readable analysis report."""
+    print_header(df, label, runtime)
+    print_failures(df)
+    print_collision_scenarios(df)
+
+    if per_type:
+        print_per_type(df)
+
+    if mosaic_dir.exists():
+        analyze_cost_estimator_logs(mosaic_dir)
+        analyze_verifier_logs(mosaic_dir)
