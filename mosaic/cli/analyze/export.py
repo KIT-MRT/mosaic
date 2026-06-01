@@ -8,6 +8,7 @@ from pandas import DataFrame
 from mosaic.cli.analyze.data import (
     HARD_GATES,
     WEIGHTED_METRICS,
+    collision_kind,
     detect_benchmark_extras,
 )
 from mosaic.cli.analyze.logs import load_cost_estimator_counts, load_verifier_counts
@@ -42,7 +43,18 @@ def build_export(
     result["zero_score_count"] = zero_score_count
 
     if "no_ego_at_fault_collisions" in df.columns:
-        result["collision_count"] = int((df["no_ego_at_fault_collisions"] < 1.0).sum())
+        collision_df = df[df["no_ego_at_fault_collisions"] < 1.0].sort_values("score")
+        has_kind = "collision_with_objects" in collision_df.columns
+        result["collision_count"] = len(collision_df)
+        result["collisions"] = [
+            {
+                "scenario": str(row["scenario"]),
+                "type": str(row.get("scenario_type", "")),
+                **({"kind": collision_kind(row)} if has_kind else {}),
+                "score": round(float(row["score"]) * 100, 2),
+            }
+            for _, row in collision_df.iterrows()
+        ]
 
     if mosaic_dir.exists():
         verifier = load_verifier_counts(mosaic_dir)
@@ -68,18 +80,23 @@ def build_export(
 
         estimator = load_cost_estimator_counts(mosaic_dir)
         command_wins = estimator["command_wins"]
+        command_appearances = estimator["command_appearances"]
         all_commands = estimator["all_commands"]
         tie_count = estimator["tie_count"]
         total_decisions = sum(command_wins.values()) + tie_count
+        total_appearances = sum(command_appearances.values())
 
         if total_decisions > 0:
-            win_pcts = {
-                cmd: round(command_wins[cmd] / total_decisions * 100, 2)
-                for cmd in sorted(all_commands)
-            }
             result["selection"] = {
                 "tie_pct": round(tie_count / total_decisions * 100, 2),
-                "command_win_pcts": win_pcts,
+                "command_win_pcts": {
+                    cmd: round(command_wins[cmd] / total_decisions * 100, 2)
+                    for cmd in sorted(all_commands)
+                },
+                "command_appearance_pcts": {
+                    cmd: round(command_appearances[cmd] / total_appearances * 100, 2)
+                    for cmd in sorted(all_commands)
+                } if total_appearances > 0 else {},
             }
 
     extra_gates, extra_weighted = detect_benchmark_extras(df)
@@ -98,13 +115,21 @@ def build_export(
 
     per_scenario = []
     for stype, group in df.groupby("scenario_type"):
-        per_scenario.append(
-            {
-                "name": str(stype),
-                "n": len(group),
-                "cls_r": round(group["score"].mean() * 100, 2),
-            }
-        )
+        entry: dict = {
+            "name": str(stype),
+            "n": len(group),
+            "cls_r": round(group["score"].mean() * 100, 2),
+            "zero_score_count": int((group["score"] == 0.0).sum()),
+        }
+        if "time_to_collision_within_bound" in group.columns:
+            entry["ttc_fail_count"] = int(
+                (group["time_to_collision_within_bound"] == 0.0).sum()
+            )
+        if "no_ego_at_fault_collisions" in group.columns:
+            entry["collision_count"] = int(
+                (group["no_ego_at_fault_collisions"] < 1.0).sum()
+            )
+        per_scenario.append(entry)
     per_scenario.sort(key=lambda x: x["cls_r"])
     result["per_scenario"] = per_scenario
 
