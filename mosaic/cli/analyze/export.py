@@ -64,18 +64,24 @@ def build_export(
         total_timesteps = verifier["total_timesteps"]
 
         if command_checks:
-            rejection_rates = {
-                cmd: round(command_fails[cmd] / command_checks[cmd] * 100, 2)
-                for cmd in sorted(command_checks)
-            }
-            simultaneous_pct = (
-                round(both_failures / total_timesteps * 100, 2)
-                if total_timesteps > 0
-                else 0.0
-            )
             result["verification"] = {
-                "rejection_rates_pct": rejection_rates,
-                "simultaneous_failure_pct": simultaneous_pct,
+                "total_timesteps": total_timesteps,
+                "simultaneous_failure_count": both_failures,
+                "simultaneous_failure_pct": (
+                    round(both_failures / total_timesteps * 100, 2)
+                    if total_timesteps > 0
+                    else 0.0
+                ),
+                "per_command": {
+                    cmd: {
+                        "checks": command_checks[cmd],
+                        "rejections": command_fails[cmd],
+                        "rejection_rate_pct": round(
+                            command_fails[cmd] / command_checks[cmd] * 100, 2
+                        ),
+                    }
+                    for cmd in sorted(command_checks)
+                },
             }
 
         estimator = load_cost_estimator_counts(mosaic_dir)
