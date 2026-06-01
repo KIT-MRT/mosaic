@@ -1,6 +1,6 @@
 """Summary, failure breakdown, collision, and per-type reports."""
 
-from typing import Optional, Tuple
+from typing import Optional
 
 import click
 from pandas import DataFrame
@@ -19,12 +19,13 @@ from mosaic.cli.analyze.formatting import (
     title_box,
     truncate,
 )
+from mosaic.cli.analyze.runtime import RuntimeInfo
 
 
 def print_header(
     df: DataFrame,
     label: str,
-    runtime: Optional[Tuple[str, Optional[str]]],
+    runtime: Optional[RuntimeInfo],
 ) -> None:
     """Print the title box and key stats underneath."""
     title_box(label)
@@ -32,8 +33,8 @@ def print_header(
     kv("Scenarios", str(len(df)))
     kv("Overall score", f"{df['score'].mean():.4f}")
     if runtime:
-        duration, per_scenario = runtime
-        kv("Duration", duration + (f" ({per_scenario})" if per_scenario else ""))
+        suffix = f" ({runtime.per_scenario_str})" if runtime.per_scenario_str else ""
+        kv("Duration", runtime.duration_str + suffix)
 
 
 def print_failures(df: DataFrame) -> None:
