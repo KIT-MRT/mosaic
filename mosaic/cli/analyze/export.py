@@ -94,15 +94,20 @@ def build_export(
 
         if total_decisions > 0:
             result["selection"] = {
+                "total_decisions": total_decisions,
+                "tie_count": tie_count,
                 "tie_pct": round(tie_count / total_decisions * 100, 2),
-                "command_win_pcts": {
-                    cmd: round(command_wins[cmd] / total_decisions * 100, 2)
+                "per_command": {
+                    cmd: {
+                        "wins": command_wins[cmd],
+                        "win_pct": round(command_wins[cmd] / total_decisions * 100, 2),
+                        "appearances": command_appearances[cmd],
+                        "appearance_pct": round(
+                            command_appearances[cmd] / total_appearances * 100, 2
+                        ) if total_appearances > 0 else 0.0,
+                    }
                     for cmd in sorted(all_commands)
                 },
-                "command_appearance_pcts": {
-                    cmd: round(command_appearances[cmd] / total_appearances * 100, 2)
-                    for cmd in sorted(all_commands)
-                } if total_appearances > 0 else {},
             }
 
     extra_gates, extra_weighted = detect_benchmark_extras(df)
