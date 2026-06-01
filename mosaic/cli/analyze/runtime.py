@@ -8,7 +8,7 @@ from typing import Optional, Tuple
 _TIMING_PATTERN = re.compile(r"(Simulation duration):\s+(\d{2}:\d{2}:\d{2})")
 
 
-def _parse_duration(duration_str: str) -> float:
+def parse_duration(duration_str: str) -> float:
     """Parse 'HH:MM:SS' into total seconds."""
     parts = duration_str.strip().split(":")
     return int(parts[0]) * 3600 + int(parts[1]) * 60 + int(parts[2])
@@ -38,7 +38,7 @@ def get_runtime(
     duration = timings["Simulation duration"]
     per_scenario = None
     if num_scenarios > 0:
-        secs = _parse_duration(duration) / num_scenarios
+        secs = parse_duration(duration) / num_scenarios
         per_scenario = f"{secs:.1f}s/ea"
 
     return duration, per_scenario
