@@ -20,6 +20,42 @@ WEIGHTED_METRICS = {
     "ego_is_comfortable": 2,
 }
 
+INTERPLAN_EXTRA_WEIGHTED = {"lane_changes_to_goal": 4}
+
+INTERPLAN_EXTRA_GATES = [
+    "ego_sorts_construction_zone",
+    "ego_sorts_stopped_vehicle",
+    "ego_sorts_jaywalking_pedestrian",
+]
+
+
+def collision_kind(row) -> str:
+    """Classify a collision row as 'static', 'dynamic', 'both', or '?'."""
+    has_static = row.get("collision_with_objects", 0) > 0
+    has_dynamic = (
+        row.get("collision_with_vrus", 0) + row.get("collision_with_vehicles", 0)
+    ) > 0
+    if has_static and has_dynamic:
+        return "both"
+    if has_static:
+        return "static"
+    if has_dynamic:
+        return "dynamic"
+    return "?"
+
+
+def detect_benchmark_extras(df: DataFrame) -> tuple[list[str], dict[str, int]]:
+    """Return (extra_gates, extra_weighted) present and non-NaN in df."""
+    extra_gates = [
+        g for g in INTERPLAN_EXTRA_GATES if g in df.columns and df[g].notna().any()
+    ]
+    extra_weighted = {
+        m: w
+        for m, w in INTERPLAN_EXTRA_WEIGHTED.items()
+        if m in df.columns and df[m].notna().any()
+    }
+    return extra_gates, extra_weighted
+
 
 def find_latest_experiment() -> Path:
     """Locate the most recent experiment directory with aggregator_metric/ results."""

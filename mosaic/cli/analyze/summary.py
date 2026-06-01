@@ -1,11 +1,17 @@
 """Summary, failure breakdown, collision, and per-type reports."""
 
-from typing import Optional, Tuple
+from pathlib import Path
+from typing import Optional
 
 import click
 from pandas import DataFrame
 
-from mosaic.cli.analyze.data import HARD_GATES, WEIGHTED_METRICS
+from mosaic.cli.analyze.data import (
+    HARD_GATES,
+    WEIGHTED_METRICS,
+    collision_kind,
+    detect_benchmark_extras,
+)
 from mosaic.cli.analyze.formatting import (
     Table,
     fail_marker,
@@ -15,12 +21,14 @@ from mosaic.cli.analyze.formatting import (
     title_box,
     truncate,
 )
+from mosaic.cli.analyze.logs import analyze_cost_estimator_logs, analyze_verifier_logs
+from mosaic.cli.analyze.runtime import RuntimeInfo
 
 
 def print_header(
     df: DataFrame,
     label: str,
-    runtime: Optional[Tuple[str, Optional[str]]],
+    runtime: Optional[RuntimeInfo],
 ) -> None:
     """Print the title box and key stats underneath."""
     title_box(label)
@@ -28,8 +36,8 @@ def print_header(
     kv("Scenarios", str(len(df)))
     kv("Overall score", f"{df['score'].mean():.4f}")
     if runtime:
-        duration, per_scenario = runtime
-        kv("Duration", duration + (f" ({per_scenario})" if per_scenario else ""))
+        suffix = f" ({runtime.per_scenario_str})" if runtime.per_scenario_str else ""
+        kv("Duration", runtime.duration_str + suffix)
 
 
 def print_failures(df: DataFrame) -> None:
@@ -39,9 +47,11 @@ def print_failures(df: DataFrame) -> None:
     widths = [38, 5, 7]
     aligns = ["<", ">", ">"]
 
+    extra_gates, extra_weighted = detect_benchmark_extras(df)
+
     subsection("Hard Gates")
     t = Table(["Metric", "Fail", "Rate"], widths, aligns)
-    for metric in HARD_GATES:
+    for metric in HARD_GATES + extra_gates:
         if metric not in df.columns:
             continue
         fails = int((df[metric] < 1.0).sum())
@@ -51,7 +61,7 @@ def print_failures(df: DataFrame) -> None:
 
     subsection("Weighted Metrics")
     t = Table(["Metric", "Fail", "Rate"], widths, aligns)
-    for metric, weight in WEIGHTED_METRICS.items():
+    for metric, weight in {**WEIGHTED_METRICS, **extra_weighted}.items():
         if metric not in df.columns:
             continue
         fails = int((df[metric] == 0.0).sum())
@@ -63,17 +73,6 @@ def print_failures(df: DataFrame) -> None:
     zero_score = int((df["score"] == 0.0).sum())
     click.echo(f"\n  {zero_score} scenarios scored zero")
 
-
-def _collision_kind(row) -> str:
-    has_static = row.get("collision_with_objects", 0) > 0
-    has_dynamic = (row.get("collision_with_vrus", 0) + row.get("collision_with_vehicles", 0)) > 0
-    if has_static and has_dynamic:
-        return "both"
-    if has_static:
-        return "static"
-    if has_dynamic:
-        return "dynamic"
-    return "?"
 
 
 def print_collision_scenarios(df: DataFrame) -> None:
@@ -93,13 +92,22 @@ def print_collision_scenarios(df: DataFrame) -> None:
 
     has_kind = "collision_with_objects" in collision_df.columns
     if has_kind:
-        t = Table(["Scenario", "Type", "Kind", "Score"], [18, 24, 7, 6], ["<", "<", "<", ">"])
+        t = Table(
+            ["Scenario", "Type", "Kind", "Score"], [18, 24, 7, 6], ["<", "<", "<", ">"]
+        )
     else:
         t = Table(["Scenario", "Type", "Score"], [18, 30, 6], ["<", "<", ">"])
     for _, row in collision_df.iterrows():
         if has_kind:
             stype = truncate(str(row.get("scenario_type", "")), 24)
-            t.row([str(row["scenario"]), stype, _collision_kind(row), f"{row['score']:.4f}"])
+            t.row(
+                [
+                    str(row["scenario"]),
+                    stype,
+                    collision_kind(row),
+                    f"{row['score']:.4f}",
+                ]
+            )
         else:
             stype = truncate(str(row.get("scenario_type", "")), 30)
             t.row([str(row["scenario"]), stype, f"{row['score']:.4f}"])
@@ -148,3 +156,23 @@ def print_per_type(df: DataFrame) -> None:
         )
 
     t.render()
+
+
+def print_report(
+    df: DataFrame,
+    label: str,
+    runtime: Optional[RuntimeInfo],
+    mosaic_dir: Path,
+    per_type: bool = True,
+) -> None:
+    """Print the full human-readable analysis report."""
+    print_header(df, label, runtime)
+    print_failures(df)
+    print_collision_scenarios(df)
+
+    if per_type:
+        print_per_type(df)
+
+    if mosaic_dir.exists():
+        analyze_cost_estimator_logs(mosaic_dir)
+        analyze_verifier_logs(mosaic_dir)
