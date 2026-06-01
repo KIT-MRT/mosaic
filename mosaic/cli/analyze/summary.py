@@ -9,6 +9,7 @@ from pandas import DataFrame
 from mosaic.cli.analyze.data import (
     HARD_GATES,
     WEIGHTED_METRICS,
+    collision_kind,
     detect_benchmark_extras,
 )
 from mosaic.cli.analyze.formatting import (
@@ -73,19 +74,6 @@ def print_failures(df: DataFrame) -> None:
     click.echo(f"\n  {zero_score} scenarios scored zero")
 
 
-def _collision_kind(row) -> str:
-    has_static = row.get("collision_with_objects", 0) > 0
-    has_dynamic = (
-        row.get("collision_with_vrus", 0) + row.get("collision_with_vehicles", 0)
-    ) > 0
-    if has_static and has_dynamic:
-        return "both"
-    if has_static:
-        return "static"
-    if has_dynamic:
-        return "dynamic"
-    return "?"
-
 
 def print_collision_scenarios(df: DataFrame) -> None:
     """List all scenarios where the ego caused a collision."""
@@ -116,7 +104,7 @@ def print_collision_scenarios(df: DataFrame) -> None:
                 [
                     str(row["scenario"]),
                     stype,
-                    _collision_kind(row),
+                    collision_kind(row),
                     f"{row['score']:.4f}",
                 ]
             )

@@ -29,6 +29,21 @@ INTERPLAN_EXTRA_GATES = [
 ]
 
 
+def collision_kind(row) -> str:
+    """Classify a collision row as 'static', 'dynamic', 'both', or '?'."""
+    has_static = row.get("collision_with_objects", 0) > 0
+    has_dynamic = (
+        row.get("collision_with_vrus", 0) + row.get("collision_with_vehicles", 0)
+    ) > 0
+    if has_static and has_dynamic:
+        return "both"
+    if has_static:
+        return "static"
+    if has_dynamic:
+        return "dynamic"
+    return "?"
+
+
 def detect_benchmark_extras(df: DataFrame) -> tuple[list[str], dict[str, int]]:
     """Return (extra_gates, extra_weighted) present and non-NaN in df."""
     extra_gates = [
