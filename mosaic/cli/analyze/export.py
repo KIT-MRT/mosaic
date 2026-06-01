@@ -16,7 +16,7 @@ from mosaic.cli.analyze.runtime import RuntimeInfo
 
 def build_export(
     df: DataFrame,
-    experiment_name: str,
+    experiment_dir: Path,
     runtime: Optional[RuntimeInfo],
     mosaic_dir: Path,
 ) -> dict:
@@ -26,7 +26,8 @@ def build_export(
     zero_score_count = int((df["score"] == 0.0).sum())
 
     result: dict = {
-        "experiment": experiment_name,
+        "experiment": experiment_dir.name,
+        "path": str(experiment_dir),
         "num_scenarios": num_scenarios,
     }
 

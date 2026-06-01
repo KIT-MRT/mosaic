@@ -51,6 +51,6 @@ def analyze(
     mosaic_dir = experiment_dir / "mosaic_logs"
 
     if output_json:
-        click.echo(json_mod.dumps(build_export(df, experiment_dir.name, runtime, mosaic_dir), indent=2))
+        click.echo(json_mod.dumps(build_export(df, experiment_dir, runtime, mosaic_dir), indent=2))
     else:
         print_report(df, experiment_dir.name, runtime, mosaic_dir, per_type)
