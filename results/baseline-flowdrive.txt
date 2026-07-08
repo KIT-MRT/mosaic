@@ -1,12 +1,12 @@
-Using latest experiment: /home/lelarge/nuplan/experiments/exp/baseline-flowdrive/closed_loop_reactive_agents/2026.05.19.23.13.00
+Using latest experiment: /home/lelarge/nuplan/experiments/exp/baseline-flowdrive/closed_loop_reactive_agents/2026.07.08.15.14.30
 
 ╭──────────────────────────────────────────────────────────╮
-│  2026.05.19.23.13.00                                     │
+│  2026.07.08.15.14.30                                     │
 ╰──────────────────────────────────────────────────────────╯
 
   Scenarios             1118
   Overall score         0.9296
-  Duration              00:45:19 (2.4s/ea)
+  Duration              00:31:15 (1.7s/ea)
 
 
 ── Failures ────────────────────────────────────────────────

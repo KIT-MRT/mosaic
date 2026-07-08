@@ -1,12 +1,12 @@
-Using latest experiment: /home/lelarge/nuplan/experiments/exp/ablation-pdm-closed-only/closed_loop_reactive_agents/2026.05.19.21.22.37
+Using latest experiment: /home/lelarge/nuplan/experiments/exp/ablation-pdm-closed-only/closed_loop_reactive_agents/2026.07.08.13.48.47
 
 ╭──────────────────────────────────────────────────────────╮
-│  2026.05.19.21.22.37                                     │
+│  2026.07.08.13.48.47                                     │
 ╰──────────────────────────────────────────────────────────╯
 
   Scenarios             1118
   Overall score         0.9237
-  Duration              00:29:18 (1.6s/ea)
+  Duration              00:25:27 (1.4s/ea)
 
 
 ── Failures ────────────────────────────────────────────────
