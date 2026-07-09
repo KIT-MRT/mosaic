@@ -1,12 +1,12 @@
-Using latest experiment: /home/lelarge/nuplan/experiments/exp/ablation-flowdrive-only/closed_loop_reactive_agents/2026.05.19.21.53.14
+Using latest experiment: /home/lelarge/nuplan/experiments/exp/ablation-flowdrive-only/closed_loop_reactive_agents/2026.07.08.14.15.21
 
 ╭──────────────────────────────────────────────────────────╮
-│  2026.05.19.21.53.14                                     │
+│  2026.07.08.14.15.21                                     │
 ╰──────────────────────────────────────────────────────────╯
 
   Scenarios             1118
   Overall score         0.9337
-  Duration              00:47:49 (2.6s/ea)
+  Duration              00:31:24 (1.7s/ea)
 
 
 ── Failures ────────────────────────────────────────────────

@@ -1,12 +1,12 @@
-Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-reactive/closed_loop_reactive_agents/2026.05.19.18.02.45
+Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-reactive/closed_loop_reactive_agents/2026.07.08.11.47.19
 
 ╭──────────────────────────────────────────────────────────╮
-│  2026.05.19.18.02.45                                     │
+│  2026.07.08.11.47.19                                     │
 ╰──────────────────────────────────────────────────────────╯
 
   Scenarios             1118
   Overall score         0.9418
-  Duration              01:03:28 (3.4s/ea)
+  Duration              00:37:45 (2.0s/ea)
 
 
 ── Failures ────────────────────────────────────────────────

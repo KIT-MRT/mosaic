@@ -1,12 +1,12 @@
-Using latest experiment: /home/lelarge/nuplan/experiments/exp/baseline-pdm-closed/closed_loop_reactive_agents/2026.05.19.22.42.21
+Using latest experiment: /home/lelarge/nuplan/experiments/exp/baseline-pdm-closed/closed_loop_reactive_agents/2026.07.08.14.47.56
 
 ╭──────────────────────────────────────────────────────────╮
-│  2026.05.19.22.42.21                                     │
+│  2026.07.08.14.47.56                                     │
 ╰──────────────────────────────────────────────────────────╯
 
   Scenarios             1118
   Overall score         0.9218
-  Duration              00:29:20 (1.6s/ea)
+  Duration              00:25:24 (1.4s/ea)
 
 
 ── Failures ────────────────────────────────────────────────

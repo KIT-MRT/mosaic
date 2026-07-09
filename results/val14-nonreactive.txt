@@ -1,12 +1,12 @@
-Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-nonreactive/closed_loop_nonreactive_agents/2026.05.19.19.07.43
+Using latest experiment: /home/lelarge/nuplan/experiments/exp/val14-nonreactive/closed_loop_nonreactive_agents/2026.07.08.12.26.11
 
 ╭──────────────────────────────────────────────────────────╮
-│  2026.05.19.19.07.43                                     │
+│  2026.07.08.12.26.11                                     │
 ╰──────────────────────────────────────────────────────────╯
 
   Scenarios             1118
   Overall score         0.9556
-  Duration              01:05:59 (3.5s/ea)
+  Duration              00:34:47 (1.9s/ea)
 
 
 ── Failures ────────────────────────────────────────────────

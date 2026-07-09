@@ -1,12 +1,12 @@
-Using latest experiment: /home/lelarge/nuplan/experiments/exp/interplan-pdm-closed-only/default_interplan_benchmark/2026.05.20.11.03.10
+Using latest experiment: /home/lelarge/nuplan/experiments/exp/interplan-pdm-closed-only/default_interplan_benchmark/2026.07.08.15.46.56
 
 ╭──────────────────────────────────────────────────────────╮
-│  2026.05.20.11.03.10                                     │
+│  2026.07.08.15.46.56                                     │
 ╰──────────────────────────────────────────────────────────╯
 
   Scenarios             80
-  Overall score         0.4249
-  Duration              00:04:32 (3.4s/ea)
+  Overall score         0.4268
+  Duration              00:04:28 (3.4s/ea)
 
 
 ── Failures ────────────────────────────────────────────────
@@ -19,6 +19,9 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/interplan-pdm-clos
   │ drivable_area_compliance               │     0 │    0.0% │
   │ driving_direction_compliance           │     0 │    0.0% │
   │ ego_is_making_progress                 │    16 │   20.0% │ ◆
+  │ ego_sorts_construction_zone            │    78 │   97.5% │ ◆
+  │ ego_sorts_stopped_vehicle              │    70 │   87.5% │ ◆
+  │ ego_sorts_jaywalking_pedestrian        │    70 │   87.5% │ ◆
   ╰────────────────────────────────────────┴───────┴─────────╯
 
   Weighted Metrics
@@ -29,6 +32,7 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/interplan-pdm-clos
   │ time_to_collision_within_bound (w=5)   │     8 │   10.0% │ ◆
   │ speed_limit_compliance (w=4)           │     0 │    0.0% │
   │ ego_is_comfortable (w=2)               │     9 │   11.2% │ ◆
+  │ lane_changes_to_goal (w=4)             │    15 │   18.8% │ ◆
   ╰────────────────────────────────────────┴───────┴─────────╯
 
   36 scenarios scored zero
@@ -54,9 +58,9 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/interplan-pdm-clos
   │ overtake_parked_vehicle              │   10 │ 0.0919 │    9 │    1 │    0 │
   │ approaching_construction_zone        │   10 │ 0.1812 │    8 │    0 │    0 │
   │ jaywalking_pedestrian                │   10 │ 0.5363 │    4 │    5 │    4 │
-  │ medium_traffic_density               │   10 │ 0.6120 │    1 │    0 │    0 │
   │ high_traffic_density                 │   10 │ 0.6172 │    1 │    0 │    0 │
   │ low_traffic_density                  │   10 │ 0.6226 │    1 │    0 │    0 │
+  │ medium_traffic_density               │   10 │ 0.6276 │    1 │    0 │    0 │
   │ nudge_around_parked_vehicle          │   10 │ 0.7376 │    2 │    2 │    1 │
   ╰──────────────────────────────────────┴──────┴────────┴──────┴──────┴──────╯
 
