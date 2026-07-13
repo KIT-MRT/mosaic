@@ -100,6 +100,8 @@ class TrajectoryCostEstimator(BatchCostEstimator):
 
         path = os.path.join(log_dir, f"{scenario_name}_trajectory_costs.jsonl")
         with open(path, "w") as f:
+            config_entry = {"type": "config", "weights": {m.name: m.weight for m in self._weighted_metrics}}
+            _ = f.write(json.dumps(config_entry) + "\n")
             for entry in self._log_buffer:
                 _ = f.write(json.dumps(entry) + "\n")
 
