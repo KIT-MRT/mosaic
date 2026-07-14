@@ -10,7 +10,13 @@ Mosaic is an autonomous driving motion planning framework that uses [arbitration
 
 Evaluated on [nuPlan](https://github.com/motional/nuplan-devkit), Mosaic achieves state-of-the-art closed-loop performance — outperforming all existing methods without retraining either planner or requiring additional data.
 
-> **Note:** This repository is under active development. To reproduce the results from the paper, make sure to check out the matching tag:
+---
+
+> **Note:**  
+> Tagged releases match specific paper revisions.
+> Check out the matching tag to reproduce those results.
+
+[![arXiv v2](https://img.shields.io/badge/arXiv-v2-b31b1b?logo=arxiv)](https://arxiv.org/abs/2604.13853v2) [![Code v0.2.0](https://img.shields.io/badge/code-v0.2.0-blue?logo=github)](https://github.com/KIT-MRT/mosaic/tree/v0.2.0)
 
 [![arXiv v1](https://img.shields.io/badge/arXiv-v1-b31b1b?logo=arxiv)](https://arxiv.org/abs/2604.13853v1) [![Code v0.1.0](https://img.shields.io/badge/code-v0.1.0-blue?logo=github)](https://github.com/KIT-MRT/mosaic/tree/v0.1.0)
 
