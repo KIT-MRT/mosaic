@@ -31,9 +31,9 @@ Evaluated on [nuPlan](https://github.com/motional/nuplan-devkit), Mosaic achieve
 |                     | GIGAFLOW          |      -       |    93.80    |        -        |
 | Rule-based & Hybrid | PDM-Closed        |    92.84     |    92.12    |      41.23      |
 |                     | FlowDrive*        |    94.81     |    92.96    |      44.05      |
-|                     | **Mosaic (ours)** |  **95.56**   |  **94.18**  |    **53.90**    |
+|                     | **Mosaic (ours)** |  **95.56**   |  **94.18**  |    **54.10**    |
 
-Mosaic achieves state-of-the-art closed-loop performance on nuPlan Val14 and improves substantially over both constituent planners on interPlan (+22% CLS-R over FlowDrive\*).
+Mosaic achieves state-of-the-art closed-loop performance on nuPlan Val14 and improves substantially over both constituent planners on interPlan (+23% CLS-R over FlowDrive\*).
 
 ### Ablation study (Val14 CLS-R)
 
