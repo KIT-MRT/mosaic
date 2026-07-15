@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mosaic"
-version = "0.1.0"
+version = "0.2.0"
 description = "Arbitration Graphs meet PDM trajectory planning"
 authors = [
     {name = "Marlon Steiner", email = "marlon.steiner@kit.edu" },
