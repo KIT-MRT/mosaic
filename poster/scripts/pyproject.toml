@@ -1,0 +1,45 @@
+[project]
+name = "poster-figures"
+version = "0.1.0"
+description = "Generators for the derived figures on the IROS 2026 Mosaic poster."
+requires-python = ">=3.12"
+dependencies = [
+  "matplotlib>=3.9",
+  "numpy>=2.0",
+  "segno>=1.6",
+]
+
+[dependency-groups]
+dev = [
+  "basedpyright>=1.39.5",
+  "poethepoet>=0.46.0",
+  "pytest>=9.0.3",
+  "ruff>=0.15.13",
+]
+
+[tool.poe.tasks]
+lint = "ruff check ."
+fmt = "ruff format --check ."
+typecheck = "basedpyright"
+test = "pytest"
+
+[tool.poe.tasks.check]
+sequence = ["lint", "fmt", "typecheck", "test"]
+
+[tool.pyright]
+# Suppress noise from matplotlib's incomplete stubs
+reportUnknownMemberType = "none"
+reportUnknownArgumentType = "none"
+reportUnknownVariableType = "none"
+reportUnknownParameterType = "none"
+# Matplotlib plotting calls return Line2D / Polygon objects we never need
+reportUnusedCallResult = "none"
+# Any propagates from argparse
+reportAny = "none"
+reportExplicitAny = "none"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
