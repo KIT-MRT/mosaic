@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Final
 
 SCRIPTS_DIR: Final = Path(__file__).resolve().parent
+# Assets are shared with the presentation; single source of truth at the repo root.
 FIGURES_DIR: Final = SCRIPTS_DIR.parent / "assets" / "figures"
 
 INK: Final = "#1e1e2e"
