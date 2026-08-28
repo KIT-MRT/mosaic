@@ -23,8 +23,8 @@ Evaluated on [nuPlan](https://github.com/motional/nuplan-devkit), Mosaic achieve
 ---
 
 <p align="center">
-  <a href="poster/poster.pdf">
-    <img src="poster/poster_preview.png" alt="Mosaic IROS 2026 poster" width="800">
+  <a href="iros2026/poster/poster.pdf">
+    <img src="iros2026/assets/figures/poster_preview.png" alt="Mosaic IROS 2026 poster" width="800">
   </a>
 </p>
 

@@ -4,12 +4,12 @@ from pathlib import Path
 from typing import Final
 
 SCRIPTS_DIR: Final = Path(__file__).resolve().parent
+# Assets are shared with the presentation; single source of truth at the repo root.
 FIGURES_DIR: Final = SCRIPTS_DIR.parent / "assets" / "figures"
 
 INK: Final = "#1e1e2e"
 PEACH: Final = "#fe640b"
 BLUE: Final = "#1e66f5"
-TEXT: Final = "#4c4f69"
 SURFACE: Final = "#ccd0da"
 TEAL: Final = "#179299"
 
@@ -20,11 +20,11 @@ def matplotlib_rc_params() -> dict[str, object]:
     return {
         "font.family": "sans-serif",
         "font.sans-serif": [FONT_NAME],
-        "text.color": TEXT,
-        "axes.labelcolor": TEXT,
-        "xtick.color": TEXT,
-        "ytick.color": TEXT,
-        "axes.edgecolor": TEXT,
+        "text.color": INK,
+        "axes.labelcolor": INK,
+        "xtick.color": INK,
+        "ytick.color": INK,
+        "axes.edgecolor": INK,
         # Glyphs as paths so the SVG renders without the font installed.
         "svg.fonttype": "path",
     }
