@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 1920 1080"
+   width="1920"
+   height="1080"
+   version="2.0"
+   id="svg1"
+   inkscape:version="1.5-dev (d2b9be1, 2026-08-26)"
+   sodipodi:docname="mosaic-base.svg"
+   standalone="no"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.1"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.3293095251"
+     inkscape:cx="866.9655089"
+     inkscape:cy="945.918585"
+     inkscape:window-width="1920"
+     inkscape:window-height="1331"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid1"
+       units="px"
+       originx="0"
+       originy="0"
+       spacingx="1"
+       spacingy="1"
+       empcolor="#0099e5"
+       empopacity="0.3019607843"
+       color="#0099e5"
+       opacity="0.1490196078"
+       empspacing="5"
+       enabled="true"
+       visible="false" />
+  </sodipodi:namedview>
+  <!-- The ground is a fixed colour rather than the inkflow-fill-bg token: the
+       arbitration graph and the BEV renders are fixed-palette artwork that only
+       reads on a dark ground, so the deck is deliberately mode-invariant. -->
+  <rect
+     width="1920"
+     height="1080"
+     fill="#1e1e2e"
+     id="rect1" />
+  <!-- Institutional mark, top-right. The bottom edge carries slide labels
+       (four-jobs / arbitration-graph), so the mark sits in the one corner that
+       is clear on every slide. Project-root-relative href so inkflow build
+       resolves and copies it; see the slides/assets symlink note. -->
+  <image
+     href="../assets/logos/kit-logo-white.svg"
+     x="1709.591585"
+     y="985.4718442"
+     width="185.4084154"
+     height="69.52815577"
+     opacity="0.8"
+     preserveAspectRatio="xMaxYMin"
+     id="image1" />
+</svg>

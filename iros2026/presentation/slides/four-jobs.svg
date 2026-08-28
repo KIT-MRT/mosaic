@@ -1,0 +1,99 @@
+<svg xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" xmlns:inkflow="urn:inkflow" inkflow:parent="base" viewBox="0 0 1920 1080" width="1920" height="1080" font-family="DejaVu Sans" version="2.0" id="svg12" inkscape:version="1.5-dev (d2b9be1, 2026-08-26)" sodipodi:docname="four-jobs.svg" standalone="no">
+  <g inkscape:groupmode="layer" inkscape:label="__inkflow:layout:base__" sodipodi:insensitive="true" inkflow:layout-src="base" inkflow:layout-hash="de607986"><sodipodi:namedview id="namedview1" pagecolor="#ffffff" bordercolor="#000000" borderopacity="0.1" inkscape:showpageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1" inkscape:zoom="0.3293095251" inkscape:cx="866.9655089" inkscape:cy="945.918585" inkscape:window-width="1920" inkscape:window-height="1331" inkscape:window-maximized="0" inkscape:current-layer="svg1">
+    <inkscape:grid type="xygrid" id="grid1" units="px" originx="0" originy="0" spacingx="1" spacingy="1" empcolor="#0099e5" empopacity="0.3019607843" color="#0099e5" opacity="0.1490196078" empspacing="5" enabled="true" visible="false"/>
+  </sodipodi:namedview>
+  <!-- The ground is a fixed colour rather than the inkflow-fill-bg token: the
+       arbitration graph and the BEV renders are fixed-palette artwork that only
+       reads on a dark ground, so the deck is deliberately mode-invariant. -->
+  <rect width="1920" height="1080" fill="#1e1e2e" id="rect1"/>
+  <image href="../assets/logos/kit-logo-white.svg" x="1709.591585" y="985.4718442" width="185.4084154" height="69.52815577" opacity="0.8" preserveAspectRatio="xMaxYMin" id="image1"/>
+</g><sodipodi:namedview id="namedview12" pagecolor="#ffffff" bordercolor="#000000" borderopacity="0.1" inkscape:showpageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1" inkscape:zoom="0.5253400975" inkscape:cx="1009.822023" inkscape:cy="686.2221287" inkscape:window-width="1920" inkscape:window-height="1331" inkscape:window-maximized="0" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid13" units="px" originx="0" originy="0" spacingx="1" spacingy="1" empcolor="#0099e5" empopacity="0.3019607843" color="#0099e5" opacity="0.14902" empspacing="5" enabled="true" visible="false"/>
+  </sodipodi:namedview>
+  <defs id="defs1">
+    <marker id="tip" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 11 6 L 0 11 z" fill="#a6adc8" id="path1"/>
+    </marker>
+    <marker style="overflow:visible" id="ConcaveTriangle-9" refX="0" refY="0" orient="auto-start-reverse" inkscape:stockid="Concave triangle arrow" markerWidth="1" markerHeight="1" viewBox="0 0 1 1" inkscape:isstock="true" inkscape:collect="always" preserveAspectRatio="xMidYMid">
+      <path transform="scale(0.7)" d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z" style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round" id="path7-0"/>
+    </marker>
+    <marker id="ConcaveTriangle-1" style="overflow:visible" refX="0" refY="0" orient="auto-start-reverse" markerWidth="1" markerHeight="1" viewBox="0 0 1 1" preserveAspectRatio="xMidYMid">
+      <path d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z" style="fill:context-stroke;fill-rule:evenodd;stroke:none" transform="scale(0.7)" id="path1-5"/>
+    </marker>
+    <style id="inkflow-preview">.inkflow-fill-bg { fill: #1e1e2e; }
+.inkflow-stroke-bg { stroke: #1e1e2e; }
+.inkflow-fill-surface { fill: #313244; }
+.inkflow-stroke-surface { stroke: #313244; }
+.inkflow-fill-border { fill: #585b70; }
+.inkflow-stroke-border { stroke: #585b70; }
+.inkflow-fill-text { fill: #cdd6f4; }
+.inkflow-stroke-text { stroke: #cdd6f4; }
+.inkflow-fill-text-muted { fill: #a6adc8; }
+.inkflow-stroke-text-muted { stroke: #a6adc8; }
+.inkflow-fill-accent { fill: #cba6f7; }
+.inkflow-stroke-accent { stroke: #cba6f7; }
+.inkflow-fill-accent-fg { fill: #11111b; }
+.inkflow-stroke-accent-fg { stroke: #11111b; }
+.inkflow-fill-code-bg { fill: #181825; }
+.inkflow-stroke-code-bg { stroke: #181825; }
+.inkflow-fill-code-text { fill: #cdd6f4; }
+.inkflow-stroke-code-text { stroke: #cdd6f4; }
+.inkflow-fill-red { fill: #f38ba8; }
+.inkflow-stroke-red { stroke: #f38ba8; }
+.inkflow-fill-orange { fill: #fab387; }
+.inkflow-stroke-orange { stroke: #fab387; }
+.inkflow-fill-yellow { fill: #f9e2af; }
+.inkflow-stroke-yellow { stroke: #f9e2af; }
+.inkflow-fill-green { fill: #a6e3a1; }
+.inkflow-stroke-green { stroke: #a6e3a1; }
+.inkflow-fill-teal { fill: #94e2d5; }
+.inkflow-stroke-teal { stroke: #94e2d5; }
+.inkflow-fill-blue { fill: #89b4fa; }
+.inkflow-stroke-blue { stroke: #89b4fa; }
+.inkflow-fill-purple { fill: #cba6f7; }
+.inkflow-stroke-purple { stroke: #cba6f7; }
+.inkflow-fill-pink { fill: #f5c2e7; }
+.inkflow-stroke-pink { stroke: #f5c2e7; }
+.inkflow-fill-grey { fill: #6c7086; }
+.inkflow-stroke-grey { stroke: #6c7086; }</style></defs>
+  <g inkscape:groupmode="layer" id="main" inkscape:label="main" inkscape:highlight-color="#3b80eeff">
+    <g id="pipeline" transform="matrix(0.7185110888,0,0,0.7185110888,270.037034,1.388663301)">
+      <g id="learned" transform="translate(-579.7630834,200)" inkscape:label="learned">
+        <rect x="663.0251935" y="114.8636775" width="421.8608567" height="450.272645" rx="28.12405711" fill="#94e2d5" id="rect2" style="stroke-width:2.56818"/>
+        <text x="873.7280834" y="324.3303037" font-size="62.1327px" fill="#1e1e2e" text-anchor="middle" id="text2" style="stroke-width:2.21902"><tspan sodipodi:role="line" id="tspan12" x="873.7280897" y="324.3303037" style="stroke-width:2.21902">Learned</tspan><tspan sodipodi:role="line" id="tspan13" x="873.7280886" y="401.9961787" style="stroke-width:2.21902">Planner</tspan></text>
+      </g>
+      <g id="g-trajectory" transform="translate(314.0281568)">
+        <path d="M 984.9084965,539.7787418 H 1169.23435" stroke="#a6adc8" stroke-width="7.56129" marker-end="url(#tip)" id="a-trajectory" style="stroke-width:8.45678;stroke-dasharray:none;marker-end:url(#ConcaveTriangle-1)" sodipodi:nodetypes="cc" inkscape:label="a-trajectory"/>
+        <text x="1249.344517" y="556.8803284" font-size="56.2453px" fill="#a6adc8" id="trajectory" style="fill:#cdd6f4;stroke-width:1.75767" inkscape:label="trajectory">trajectory</text>
+      </g>
+      <g id="post-process" transform="translate(90.98396892,200)" inkscape:label="post-process">
+        <g id="g18" transform="translate(56.12204585)">
+          <rect x="624.9949785" y="253.5893901" width="497.9212868" height="172.8212197" rx="33.19475245" fill="#94e2d5" id="rect16" style="fill:#fab387;stroke-width:1.72854"/>
+          <text x="873.7280834" y="356.1854475" font-size="62.1327px" fill="#1e1e2e" text-anchor="middle" id="text17" style="stroke-width:2.21902"><tspan sodipodi:role="line" id="tspan17" x="873.7280904" y="356.1854475" style="stroke-width:2.21902">Post-process</tspan></text>
+        </g>
+        <path d="m 206.0778897,545.4823746 h 184.325853" stroke="#a6adc8" stroke-width="7.56129" marker-end="url(#tip)" id="a-post-process" style="stroke-width:8.458436355;stroke-dasharray:none;marker-end:url(#ConcaveTriangle-9)" sodipodi:nodetypes="cc" transform="translate(223.0441879,-200)" inkscape:label="a-post-process"/>
+      </g>
+      <g id="frame" inkscape:label="frame" transform="matrix(1.391766969,0,0,1.391766969,-375.8286242,-1.932695713)">
+        <rect style="fill:none;fill-opacity:1;stroke:#6c7086;stroke-width:10;stroke-dasharray:none" id="rect3" width="1654.369672" height="511.4518652" x="151.5875204" y="141.5153419" ry="117.7000742"/>
+        <rect style="fill:#1e1e2e;fill-opacity:1;stroke:none;stroke-width:10.7054" id="rect5" width="655.1463346" height="72.42609789" x="651.1991891" y="107.082957"/>
+        <text xml:space="preserve" x="683.1331144" y="161.1369848" id="text5" style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';direction:ltr;fill:#cdd6f4;stroke:none;fill-opacity:1"><tspan sodipodi:role="line" id="tspan4" x="683.1331144" y="161.1369848">Custom Pipeline</tspan></text>
+      </g>
+    </g>
+    <g id="g-generate" inkscape:label="g-generate">
+      <path d="m 323.9228045,867.2925538 c 18.7373883,-88.7556481 47.0509154,-133.5200697 73.9057002,-164.5258242" style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1)" inkscape:label="a-generate" id="a-generate" sodipodi:nodetypes="cc"/>
+      <text xml:space="preserve" x="136.3870519" y="942.5149458" id="generate" style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394" inkscape:label="generate"><tspan sodipodi:role="line" id="tspan6" x="136.3870519" y="942.5149458" style="fill:#cdd6f4;stroke-width:0.850394">Generate</tspan></text>
+    </g>
+    <g id="g-select" transform="translate(443.2912378)" inkscape:label="g-select">
+      <path d="M 261.3023228,870.2296169 C 274.7818835,791.2589977 302.392466,748.0587814 325.1081643,710.9177846" style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1)" inkscape:label="a-select" id="a-select" sodipodi:nodetypes="cc"/>
+      <text xml:space="preserve" x="136.3870519" y="943.083331" id="select" style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394" inkscape:label="select"><tspan sodipodi:role="line" id="tspan5" x="136.3870519" y="943.083331" style="fill:#cdd6f4;stroke-width:0.850394">Select</tspan></text>
+    </g>
+    <g id="g-verify" transform="translate(898.5287918,-9.7050458)" inkscape:label="g-verify">
+      <path d="M 261.9417652,876.2779046 C 254.341931,823.1171735 255.8374508,782.7817127 231.7283257,721.1466461" style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1)" inkscape:label="a-verify" id="a-verify" sodipodi:nodetypes="cc"/>
+      <text xml:space="preserve" x="136.3870519" y="946.2677362" id="verify" style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394" inkscape:label="verify"><tspan sodipodi:role="line" id="tspan7" x="136.3870519" y="946.2677362" style="fill:#cdd6f4;stroke-width:0.850394">Verify</tspan></text>
+    </g>
+    <g id="g-fallback" transform="translate(1354.509447,-1.487480414)" inkscape:label="g-fallback">
+      <path d="M 305.4044783,866.9513902 C 299.0917144,776.8945084 285.5428974,764.7006104 256.9439329,712.6504863" style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1)" inkscape:label="a-fallback" id="a-fallback" sodipodi:nodetypes="cc"/>
+      <text xml:space="preserve" x="136.3870519" y="944.5708114" id="fallback" style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394" inkscape:label="fallback"><tspan sodipodi:role="line" id="tspan8" x="136.3870519" y="944.5708114" style="fill:#cdd6f4;stroke-width:0.850394">Fallback</tspan></text>
+    </g>
+  </g>
+</svg>
