@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   inkflow:parent="base"
+   viewBox="0 0 1920 1080"
+   width="1920"
+   height="1080"
+   font-family="DejaVu Sans"
+   version="2.0"
+   id="svg6"
+   inkscape:version="1.4-dev (1:1.4.0-dev+202403210151+2fe0648968)"
+   sodipodi:docname="arbitration-graph.svg"
+   standalone="no"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:inkflow="urn:inkflow">
+  <g
+     inkscape:groupmode="layer"
+     inkscape:label="__inkflow:layout:base__"
+     sodipodi:insensitive="true"
+     inkflow:layout-src="base"
+     inkflow:layout-hash="de607986"
+     id="g1">
+    <sodipodi:namedview
+       id="namedview1"
+       pagecolor="#ffffff"
+       bordercolor="#000000"
+       borderopacity="0.1"
+       inkscape:showpageshadow="2"
+       inkscape:pageopacity="0.0"
+       inkscape:pagecheckerboard="0"
+       inkscape:deskcolor="#d1d1d1"
+       inkscape:zoom="0.6316883752"
+       inkscape:cx="980.7050824"
+       inkscape:cy="790.7379962"
+       inkscape:window-width="1920"
+       inkscape:window-height="1331"
+       inkscape:window-maximized="0"
+       inkscape:current-layer="svg6"
+       inkscape:window-x="3420"
+       inkscape:window-y="52">
+      <inkscape:grid
+         type="xygrid"
+         id="grid1"
+         units="px"
+         originx="0"
+         originy="0"
+         spacingx="1"
+         spacingy="1"
+         empcolor="#0099e5"
+         empopacity="0.3019607843"
+         color="#0099e5"
+         opacity="0.14902"
+         empspacing="5"
+         enabled="true"
+         visible="false" />
+    </sodipodi:namedview>
+    <!-- The ground is a fixed colour rather than the inkflow-fill-bg token: the
+       arbitration graph and the BEV renders are fixed-palette artwork that only
+       reads on a dark ground, so the deck is deliberately mode-invariant. -->
+    <rect
+       width="1920"
+       height="1080"
+       fill="#1e1e2e"
+       id="rect1" />
+    <image
+       href="../assets/logos/kit-logo-white.svg"
+       x="1709.591585"
+       y="985.4718442"
+       width="185.4084154"
+       height="69.52815577"
+       opacity="0.8"
+       preserveAspectRatio="xMaxYMin"
+       id="image1" />
+  </g>
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.1"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.4888016116"
+     inkscape:cx="819.3508173"
+     inkscape:cy="594.3106428"
+     inkscape:window-width="1920"
+     inkscape:window-height="1331"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg6" />
+  <defs
+     id="defs1">
+    <marker
+       id="ConcaveTriangle"
+       style="overflow:visible"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       preserveAspectRatio="xMidYMid">
+      <path
+         d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+         transform="scale(0.7)"
+         id="path1" />
+    </marker>
+    <marker
+       id="ConcaveTriangle-1"
+       style="overflow:visible"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       preserveAspectRatio="xMidYMid">
+      <path
+         d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+         transform="scale(0.7)"
+         id="path1-5" />
+    </marker>
+    <marker
+       id="marker1"
+       style="overflow:visible"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       preserveAspectRatio="xMidYMid">
+      <path
+         d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+         transform="scale(0.7)"
+         id="path1-1" />
+    </marker>
+    <marker
+       id="marker2"
+       style="overflow:visible"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       preserveAspectRatio="xMidYMid">
+      <path
+         d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+         transform="scale(0.7)"
+         id="path2" />
+    </marker>
+    <marker
+       id="ConcaveTriangle-1-7"
+       style="overflow:visible"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       preserveAspectRatio="xMidYMid">
+      <path
+         d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+         transform="scale(0.7)"
+         id="path1-5-1" />
+    </marker>
+    <style
+       id="inkflow-preview">.inkflow-fill-bg { fill: #1e1e2e; }
+.inkflow-stroke-bg { stroke: #1e1e2e; }
+.inkflow-fill-surface { fill: #313244; }
+.inkflow-stroke-surface { stroke: #313244; }
+.inkflow-fill-border { fill: #585b70; }
+.inkflow-stroke-border { stroke: #585b70; }
+.inkflow-fill-text { fill: #cdd6f4; }
+.inkflow-stroke-text { stroke: #cdd6f4; }
+.inkflow-fill-text-muted { fill: #a6adc8; }
+.inkflow-stroke-text-muted { stroke: #a6adc8; }
+.inkflow-fill-accent { fill: #cba6f7; }
+.inkflow-stroke-accent { stroke: #cba6f7; }
+.inkflow-fill-accent-fg { fill: #11111b; }
+.inkflow-stroke-accent-fg { stroke: #11111b; }
+.inkflow-fill-code-bg { fill: #181825; }
+.inkflow-stroke-code-bg { stroke: #181825; }
+.inkflow-fill-code-text { fill: #cdd6f4; }
+.inkflow-stroke-code-text { stroke: #cdd6f4; }
+.inkflow-fill-red { fill: #f38ba8; }
+.inkflow-stroke-red { stroke: #f38ba8; }
+.inkflow-fill-orange { fill: #fab387; }
+.inkflow-stroke-orange { stroke: #fab387; }
+.inkflow-fill-yellow { fill: #f9e2af; }
+.inkflow-stroke-yellow { stroke: #f9e2af; }
+.inkflow-fill-green { fill: #a6e3a1; }
+.inkflow-stroke-green { stroke: #a6e3a1; }
+.inkflow-fill-teal { fill: #94e2d5; }
+.inkflow-stroke-teal { stroke: #94e2d5; }
+.inkflow-fill-blue { fill: #89b4fa; }
+.inkflow-stroke-blue { stroke: #89b4fa; }
+.inkflow-fill-purple { fill: #cba6f7; }
+.inkflow-stroke-purple { stroke: #cba6f7; }
+.inkflow-fill-pink { fill: #f5c2e7; }
+.inkflow-stroke-pink { stroke: #f5c2e7; }
+.inkflow-fill-grey { fill: #6c7086; }
+.inkflow-stroke-grey { stroke: #6c7086; }</style>
+  </defs>
+  <!-- The arbitration graph keeps its native colours: the style is recognisable
+       across the arbitration-graph papers and deliberately does not follow the theme.
+       The shield is inlined rather than linked so it can be filled and animated here;
+       the stock renderer draws no verification marker at all. -->
+  <g
+     inkscape:label="Image"
+     id="Image"
+     transform="matrix(1.768491749,0,0,1.768491749,204.6674473,413.9372142)">
+    <image
+       preserveAspectRatio="none"
+       inkscape:svg-dpi="300"
+       width="853.5470833"
+       height="115.085"
+       xlink:href="../assets/figures/arbitration-graph.svg"
+       id="image2"
+       style="image-rendering:optimizeQuality" />
+  </g>
+  <g
+     id="g-generate"
+     inkscape:label="g-generate"
+     transform="translate(-41.65358728,-807.6747339)">
+    <path
+       d="m 394.2777139,1015.92081 c 39.6380026,44.882231 50.875803,81.814639 69.4919958,137.019788"
+       style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1)"
+       inkscape:label="a-generate"
+       id="a-generate"
+       sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       x="136.3870519"
+       y="996.6593516"
+       id="generate"
+       style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394"
+       inkscape:label="generate"><tspan
+         sodipodi:role="line"
+         id="tspan6"
+         x="136.3870519"
+         y="996.6593516"
+         style="fill:#cdd6f4;stroke-width:0.850394">Generate</tspan></text>
+  </g>
+  <g
+     id="g-select"
+     transform="translate(357.0936887,-84.50093966)"
+     inkscape:label="g-select">
+    <path
+       d="M 247.3438321,916.7258088 C 245.1956824,833.6569537 333.7386295,657.8656989 393.8951023,613.5053872"
+       style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1)"
+       inkscape:label="a-select"
+       id="a-select"
+       sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       x="136.3870519"
+       y="996.6593516"
+       id="select"
+       style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394"
+       inkscape:label="select"><tspan
+         sodipodi:role="line"
+         id="tspan5"
+         x="136.3870519"
+         y="996.6593516"
+         style="fill:#cdd6f4;stroke-width:0.850394">Select</tspan></text>
+  </g>
+  <g
+     id="g-verify"
+     transform="translate(645.3553241,-348.8059401)"
+     inkscape:label="g-verify">
+    <path
+       d="m 364.4932185,608.1757463 c 43.1680053,31.9428259 60.0091338,64.5027252 88.1762581,133.0141919"
+       style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1)"
+       inkscape:label="a-verify"
+       id="a-verify"
+       sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       x="138.5452866"
+       y="595.2459817"
+       id="verify"
+       style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394"
+       inkscape:label="verify"><tspan
+         sodipodi:role="line"
+         id="tspan7"
+         x="138.5452866"
+         y="595.2459817"
+         style="fill:#cdd6f4;stroke-width:0.850394">Verify</tspan></text>
+  </g>
+  <g
+     id="g-fallback"
+     transform="translate(914.0645795,-66.17646555)"
+     inkscape:label="g-fallback">
+    <path
+       d="M 344.8080549,915.6586117 C 338.495291,825.6017299 298.2554735,734.0082666 245.4249172,683.919629"
+       style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1-7)"
+       inkscape:label="a-fallback"
+       id="a-fallback"
+       sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       x="194.8242753"
+       y="996.7282781"
+       id="fallback"
+       style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394"
+       inkscape:label="fallback"><tspan
+         sodipodi:role="line"
+         id="tspan8"
+         x="194.8242753"
+         y="996.7282781"
+         style="fill:#cdd6f4;stroke-width:0.850394">Fallback</tspan></text>
+  </g>
+</svg>
