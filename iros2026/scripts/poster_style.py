@@ -10,7 +10,6 @@ FIGURES_DIR: Final = SCRIPTS_DIR.parent / "assets" / "figures"
 INK: Final = "#1e1e2e"
 PEACH: Final = "#fe640b"
 BLUE: Final = "#1e66f5"
-TEXT: Final = "#4c4f69"
 SURFACE: Final = "#ccd0da"
 TEAL: Final = "#179299"
 
@@ -21,11 +20,11 @@ def matplotlib_rc_params() -> dict[str, object]:
     return {
         "font.family": "sans-serif",
         "font.sans-serif": [FONT_NAME],
-        "text.color": TEXT,
-        "axes.labelcolor": TEXT,
-        "xtick.color": TEXT,
-        "ytick.color": TEXT,
-        "axes.edgecolor": TEXT,
+        "text.color": INK,
+        "axes.labelcolor": INK,
+        "xtick.color": INK,
+        "ytick.color": INK,
+        "axes.edgecolor": INK,
         # Glyphs as paths so the SVG renders without the font installed.
         "svg.fonttype": "path",
     }
