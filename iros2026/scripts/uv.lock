@@ -498,6 +498,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "matplotlib" },
     { name = "numpy" },
+    { name = "pillow" },
     { name = "segno" },
 ]
 
@@ -513,6 +514,7 @@ dev = [
 requires-dist = [
     { name = "matplotlib", specifier = ">=3.9" },
     { name = "numpy", specifier = ">=2.0" },
+    { name = "pillow", specifier = ">=11.0" },
     { name = "segno", specifier = ">=1.6" },
 ]
 
