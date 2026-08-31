@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   inkflow:parent="base"
+   viewBox="0 0 1920 1080"
+   width="1920"
+   height="1080"
+   font-family="DejaVu Sans"
+   version="1.1"
+   id="svg37"
+   sodipodi:docname="results.svg"
+   inkscape:version="1.4-dev (1:1.4.0-dev+202403210151+2fe0648968)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:inkflow="urn:inkflow">
+  <g
+     inkscape:groupmode="layer"
+     inkscape:label="__inkflow:layout:base__"
+     inkflow:layout-src="base"
+     inkflow:layout-hash="de607986"
+     id="g1">
+    <sodipodi:namedview
+       id="namedview1"
+       pagecolor="#ffffff"
+       bordercolor="#000000"
+       borderopacity="0.1"
+       inkscape:showpageshadow="2"
+       inkscape:pageopacity="0.0"
+       inkscape:pagecheckerboard="0"
+       inkscape:deskcolor="#d1d1d1"
+       inkscape:zoom="0.4861461828"
+       inkscape:cx="958.5594138"
+       inkscape:cy="572.8729544"
+       inkscape:window-width="1920"
+       inkscape:window-height="1331"
+       inkscape:window-maximized="0"
+       inkscape:current-layer="svg37"
+       inkscape:window-x="1940"
+       inkscape:window-y="52">
+      <inkscape:grid
+         type="xygrid"
+         id="grid1"
+         units="px"
+         originx="0"
+         originy="0"
+         spacingx="1"
+         spacingy="1"
+         empcolor="#0099e5"
+         empopacity="0.3019607843"
+         color="#0099e5"
+         opacity="0.14902"
+         empspacing="5"
+         enabled="true"
+         visible="false" />
+    </sodipodi:namedview>
+    <!-- The ground is a fixed colour rather than the inkflow-fill-bg token: the
+       arbitration graph and the BEV renders are fixed-palette artwork that only
+       reads on a dark ground, so the deck is deliberately mode-invariant. -->
+    <rect
+       width="1920"
+       height="1080"
+       fill="#1e1e2e"
+       id="rect1"
+       x="0"
+       y="0" />
+    <image
+       href="../assets/logos/kit-logo-white.svg"
+       x="1709.591553"
+       y="985.4718628"
+       width="185.4084167"
+       height="69.52815247"
+       opacity="0.8"
+       preserveAspectRatio="xMaxYMin"
+       id="image1"
+       sodipodi:insensitive="true" />
+  </g>
+  <defs
+     id="defs1">
+    <style
+       id="inkflow-preview">.inkflow-fill-bg { fill: #1e1e2e; }
+.inkflow-stroke-bg { stroke: #1e1e2e; }
+.inkflow-fill-surface { fill: #313244; }
+.inkflow-stroke-surface { stroke: #313244; }
+.inkflow-fill-border { fill: #585b70; }
+.inkflow-stroke-border { stroke: #585b70; }
+.inkflow-fill-text { fill: #cdd6f4; }
+.inkflow-stroke-text { stroke: #cdd6f4; }
+.inkflow-fill-text-muted { fill: #a6adc8; }
+.inkflow-stroke-text-muted { stroke: #a6adc8; }
+.inkflow-fill-accent { fill: #cba6f7; }
+.inkflow-stroke-accent { stroke: #cba6f7; }
+.inkflow-fill-accent-fg { fill: #11111b; }
+.inkflow-stroke-accent-fg { stroke: #11111b; }
+.inkflow-fill-code-bg { fill: #181825; }
+.inkflow-stroke-code-bg { stroke: #181825; }
+.inkflow-fill-code-text { fill: #cdd6f4; }
+.inkflow-stroke-code-text { stroke: #cdd6f4; }
+.inkflow-fill-red { fill: #f38ba8; }
+.inkflow-stroke-red { stroke: #f38ba8; }
+.inkflow-fill-orange { fill: #fab387; }
+.inkflow-stroke-orange { stroke: #fab387; }
+.inkflow-fill-yellow { fill: #f9e2af; }
+.inkflow-stroke-yellow { stroke: #f9e2af; }
+.inkflow-fill-green { fill: #a6e3a1; }
+.inkflow-stroke-green { stroke: #a6e3a1; }
+.inkflow-fill-teal { fill: #94e2d5; }
+.inkflow-stroke-teal { stroke: #94e2d5; }
+.inkflow-fill-blue { fill: #89b4fa; }
+.inkflow-stroke-blue { stroke: #89b4fa; }
+.inkflow-fill-purple { fill: #cba6f7; }
+.inkflow-stroke-purple { stroke: #cba6f7; }
+.inkflow-fill-pink { fill: #f5c2e7; }
+.inkflow-stroke-pink { stroke: #f5c2e7; }
+.inkflow-fill-grey { fill: #6c7086; }
+.inkflow-stroke-grey { stroke: #6c7086; }</style>
+  </defs>
+  <g
+     id="head"
+     transform="matrix(1.11754254,0,0,1.11754254,-115.1916892,-102.7420517)">
+    <text
+       x="1255.821777"
+       y="228"
+       font-size="34px"
+       fill="#a6adc8"
+       text-anchor="middle"
+       id="text1">Val14</text>
+    <line
+       x1="1060"
+       y1="248"
+       x2="1450"
+       y2="248"
+       stroke="#585b70"
+       stroke-width="3"
+       id="line1" />
+    <text
+       x="1210"
+       y="308"
+       font-size="34px"
+       fill="#a6adc8"
+       text-anchor="end"
+       id="text2">CLS-NR ↑</text>
+    <text
+       x="1450"
+       y="308"
+       font-size="34px"
+       fill="#a6adc8"
+       text-anchor="end"
+       id="text3">CLS-R ↑</text>
+    <text
+       x="1710"
+       y="308"
+       font-size="34px"
+       fill="#a6adc8"
+       text-anchor="end"
+       id="text4">interPlan ↑</text>
+    <line
+       x1="210"
+       y1="332"
+       x2="1750"
+       y2="332"
+       stroke="#585b70"
+       stroke-width="3"
+       id="line4" />
+  </g>
+  <g
+     id="row-log-replay"
+     transform="matrix(1.11754254,0,0,1.11754254,-115.1916892,-102.7420517)">
+    <text
+       x="250"
+       y="372"
+       font-size="32px"
+       fill="#a6adc8"
+       font-style="italic"
+       id="text5">Expert</text>
+    <text
+       x="620"
+       y="372"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       id="text6">Log-replay</text>
+    <text
+       x="1210"
+       y="372"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       text-anchor="end"
+       id="text7">93.53</text>
+    <text
+       x="1450"
+       y="372"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       text-anchor="end"
+       id="text8">80.32</text>
+    <text
+       x="1710"
+       y="372"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       text-anchor="end"
+       id="text9">14.76</text>
+  </g>
+  <g
+     id="row-flowdrive"
+     transform="matrix(1.11754254,0,0,1.11754254,-115.1916892,-102.7420517)">
+    <text
+       x="250"
+       y="448"
+       font-size="32px"
+       fill="#a6adc8"
+       font-style="italic"
+       id="text10">Learning-based</text>
+    <text
+       x="620"
+       y="448"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       id="text11">FlowDrive</text>
+    <text
+       x="1210"
+       y="448"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       text-anchor="end"
+       id="text12">91.21</text>
+    <text
+       x="1450"
+       y="448"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       text-anchor="end"
+       id="text13">85.37</text>
+    <text
+       x="1710"
+       y="448"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       text-anchor="end"
+       id="text14">36.96</text>
+  </g>
+  <g
+     id="row-gigaflow†"
+     transform="matrix(1.11754254,0,0,1.11754254,-115.1916892,-102.7420517)">
+    <text
+       x="620"
+       y="524"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       id="text15">GIGAFLOW†</text>
+    <text
+       x="1210"
+       y="524"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       text-anchor="end"
+       id="text16">–</text>
+    <text
+       x="1450"
+       y="524"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       text-anchor="end"
+       id="text17">93.8</text>
+    <text
+       x="1710"
+       y="524"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       text-anchor="end"
+       id="text18">–</text>
+  </g>
+  <g
+     id="row-pdm-closed"
+     transform="matrix(1.11754254,0,0,1.11754254,-115.1916892,-102.7420517)">
+    <text
+       x="250"
+       y="600"
+       font-size="32px"
+       fill="#a6adc8"
+       font-style="italic"
+       id="text19">Rule-based</text>
+    <text
+       x="620"
+       y="600"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       id="text20">PDM-Closed</text>
+    <text
+       x="1210"
+       y="600"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       text-anchor="end"
+       id="text21">92.84</text>
+    <text
+       x="1450"
+       y="600"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       text-anchor="end"
+       id="text22">92.12</text>
+    <text
+       x="1710"
+       y="600"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       text-anchor="end"
+       id="text23">41.23</text>
+  </g>
+  <g
+     id="row-diffusion"
+     transform="matrix(1.11754254,0,0,1.11754254,-115.1916892,-102.7420517)">
+    <text
+       x="250"
+       y="676"
+       font-size="32px"
+       fill="#a6adc8"
+       font-style="italic"
+       id="text24">Hybrid</text>
+    <text
+       x="620"
+       y="676"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       id="text25">Diffusion Planner w/ ref.</text>
+    <text
+       x="1210"
+       y="676"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       text-anchor="end"
+       id="text26">94.26</text>
+    <text
+       x="1450"
+       y="676"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       text-anchor="end"
+       id="text27">92.90</text>
+    <text
+       x="1710"
+       y="676"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       text-anchor="end"
+       id="text28">–</text>
+  </g>
+  <g
+     id="g32"
+     transform="matrix(1.11754254,0,0,1.11754254,-115.1916892,-102.7420517)">
+    <text
+       x="620"
+       y="752"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       id="text29">FlowDrive*</text>
+    <text
+       x="1210"
+       y="752"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       text-anchor="end"
+       id="text30">94.81</text>
+    <text
+       x="1450"
+       y="752"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       text-anchor="end"
+       id="text31">92.96</text>
+    <text
+       x="1710"
+       y="752"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="400"
+       text-anchor="end"
+       id="text32">44.05</text>
+  </g>
+  <g
+     id="row-mosaic"
+     transform="matrix(1.11754254,0,0,1.11754254,-115.1916892,-102.7420517)">
+    <rect
+       x="210"
+       y="778"
+       width="1540"
+       height="68"
+       rx="20"
+       fill="#313244"
+       id="rect32" />
+    <text
+       x="250"
+       y="828"
+       font-size="32px"
+       fill="#a6adc8"
+       font-style="italic"
+       id="text33">Ours</text>
+    <text
+       x="620"
+       y="828"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="700"
+       id="text34">Mosaic</text>
+    <text
+       x="1210"
+       y="828"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="700"
+       text-anchor="end"
+       id="text35">95.56</text>
+    <text
+       x="1450"
+       y="828"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="700"
+       text-anchor="end"
+       id="text36">94.18</text>
+    <text
+       x="1710"
+       y="828"
+       font-size="38px"
+       fill="#cdd6f4"
+       font-weight="700"
+       text-anchor="end"
+       id="text37">54.10</text>
+  </g>
+  <text
+     id="footnote"
+     x="164.7908325"
+     y="1028.512329"
+     font-size="30px"
+     fill="#a6adc8"
+     sodipodi:insensitive="true">† closed-source, trained purely in self-play simulation.</text>
+</svg>
