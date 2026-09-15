@@ -1,0 +1,6 @@
+.kit-logo-mark {
+    fill: #ffffff;
+}
+[data-theme="light"] .kit-logo-mark {
+    fill: #000000;
+}

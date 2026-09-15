@@ -1,12 +1,22 @@
 <svg xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xmlns:inkflow="urn:inkflow" inkflow:parent="base" viewBox="0 0 1920 1080" width="1920" height="1080" font-family="DejaVu Sans" version="2.0" id="svg6" standalone="no">
-  <g inkscape:groupmode="layer" inkscape:label="__inkflow:layout:base__" inkflow:layout-src="base" inkflow:layout-hash="de607986" id="g1" sodipodi:insensitive="true">
-    <!-- The ground is a fixed colour rather than the inkflow-fill-bg token: the
+  <g inkscape:groupmode="layer" inkscape:label="__inkflow:layout:base__" sodipodi:insensitive="true" inkflow:layout-src="base" inkflow:layout-hash="97dbf13f"><!-- The ground is a fixed colour rather than the inkflow-fill-bg token: the
        arbitration graph and the BEV renders are fixed-palette artwork that only
        reads on a dark ground, so the deck is deliberately mode-invariant. -->
-    <rect width="1920" height="1080" id="rect1" x="0" y="0" class="inkflow-fill-bg"/>
-    <image href="../assets/logos/kit-logo-white.svg" x="1709.591585" y="985.4718442" width="185.4084154" height="69.52815577" opacity="0.8" preserveAspectRatio="xMaxYMin" id="image1"/>
+  <rect width="1920" height="1080" id="rect1" class="inkflow-fill-bg"/>
+  <!-- Institutional mark, top-right. The bottom edge carries slide labels
+       (four-jobs / arbitration-graph), so the mark sits in the one corner that
+       is clear on every slide. Inlined from assets/logos/kit-logo-white.svg
+       (not <image href>) so its ink can follow data-theme via the
+       .kit-logo-mark rule in styles.css, the way an <image>-embedded asset
+       cannot. -->
+  <g class="kit-logo-mark" opacity="0.8" transform="translate(1709.591585,985.4718442) scale(0.1854084154)" id="kit-logo">
+    <path d="m984.5105,25.415961-230.51422,0,0,78.511439,67.39781,0,0,270.66615,95.71893,0,0-270.66615,67.39748,0,0-78.511439zm-253.45829,348.81894h-95.71919v-348.81894h95.71919v348.81894zm-111.85159,0-106.47385,0-126.54981-135.87062,0-77.79425,122.60625-135.51274,109.70066,0-141.24836,175.66465,141.96511,173.51296z" fill-rule="evenodd"/>
+    <path d="M90.415838,153.04142c-18.283583,22.22712-34.057265,46.60505-46.246544,72.77533l319.06361,148.41815-272.81706-221.19348z" fill-rule="evenodd"/>
+    <path d="M363.2329,374.2349,214.45625,57.681003c-26.52903,12.188587-50.90675,27.24608-73.13364,45.170947l221.91029,271.38295z" fill-rule="evenodd"/>
+    <path d="m363.2329,374.2349,0.35846-348.81894h-2.86773c-28.32151,0-55.9259,3.585389-82.45464,10.038217l84.96391,338.78072z" fill-rule="evenodd"/>
+    <path d="M21.225547,288.91246c-7.169814,27.24608-10.754847,55.92567-11.113434,85.32244h353.12079l-342.00735-85.32244z" fill-rule="evenodd"/>
   </g>
-  <defs id="defs1">
+</g><defs id="defs1">
     <marker id="ConcaveTriangle" style="overflow:visible" refX="0" refY="0" orient="auto-start-reverse" markerWidth="1" markerHeight="1" viewBox="0 0 1 1" preserveAspectRatio="xMidYMid">
       <path d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z" style="fill:context-stroke;fill-rule:evenodd;stroke:none" transform="scale(0.7)" id="path1"/>
     </marker>
@@ -57,8 +67,7 @@
 .inkflow-fill-pink { fill: #f5c2e7; }
 .inkflow-stroke-pink { stroke: #f5c2e7; }
 .inkflow-fill-grey { fill: #6c7086; }
-.inkflow-stroke-grey { stroke: #6c7086; }</style>
-  </defs>
+.inkflow-stroke-grey { stroke: #6c7086; }</style></defs>
   <!-- The arbitration graph keeps its native colours: the style is recognisable
        across the arbitration-graph papers and deliberately does not follow the theme.
        The shield is inlined rather than linked so it can be filled and animated here;
