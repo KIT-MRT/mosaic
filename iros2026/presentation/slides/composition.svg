@@ -1,11 +1,8 @@
-<svg xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" xmlns:inkflow="urn:inkflow" inkflow:parent="base" viewBox="0 0 1920 1080" width="1920" height="1080" font-family="DejaVu Sans" version="2.0" id="svg7" sodipodi:docname="composition.svg" standalone="no" inkscape:version="1.5-dev (d2b9be1, 2026-08-26)">
-  <g inkscape:groupmode="layer" inkscape:label="__inkflow:layout:base__" sodipodi:insensitive="true" inkflow:layout-src="base" inkflow:layout-hash="de607986"><sodipodi:namedview id="namedview1" pagecolor="#ffffff" bordercolor="#000000" borderopacity="0.1" inkscape:showpageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1" inkscape:zoom="0.3293095251" inkscape:cx="866.9655089" inkscape:cy="945.918585" inkscape:window-width="1920" inkscape:window-height="1331" inkscape:window-maximized="0" inkscape:current-layer="svg1">
-    <inkscape:grid type="xygrid" id="grid1" units="px" originx="0" originy="0" spacingx="1" spacingy="1" empcolor="#0099e5" empopacity="0.3019607843" color="#0099e5" opacity="0.1490196078" empspacing="5" enabled="true" visible="false"/>
-  </sodipodi:namedview>
-  <!-- The ground is a fixed colour rather than the inkflow-fill-bg token: the
+<svg xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xmlns:inkflow="urn:inkflow" inkflow:parent="base" viewBox="0 0 1920 1080" width="1920" height="1080" font-family="DejaVu Sans" version="2.0" id="svg7" standalone="no">
+  <g inkscape:groupmode="layer" inkscape:label="__inkflow:layout:base__" sodipodi:insensitive="true" inkflow:layout-src="base" inkflow:layout-hash="de607986"><!-- The ground is a fixed colour rather than the inkflow-fill-bg token: the
        arbitration graph and the BEV renders are fixed-palette artwork that only
        reads on a dark ground, so the deck is deliberately mode-invariant. -->
-  <rect width="1920" height="1080" fill="#1e1e2e" id="rect1"/>
+  <rect width="1920" height="1080" id="rect1" class="inkflow-fill-bg"/>
   <image href="../assets/logos/kit-logo-white.svg" x="1709.591585" y="985.4718442" width="185.4084154" height="69.52815577" opacity="0.8" preserveAspectRatio="xMaxYMin" id="image1"/>
 </g><defs id="defs1">
     <style id="inkflow-preview">.inkflow-fill-bg { fill: #1e1e2e; }
@@ -48,39 +45,39 @@
        palette and sit on white cards, exactly as they do on the poster.
        One card per timestep so each can be revealed on its own click: t1 shows
        why the lane is blocked, t2 shows what each planner does about it. -->
-  <text id="row-t1" x="265" y="405" font-size="40" fill="#a6adc8" text-anchor="middle">t₁</text>
+  <text id="row-t1" x="265" y="405" font-size="40" text-anchor="middle" class="inkflow-fill-text-muted">t₁</text>
   <g id="col-pdm">
-    <text x="518" y="160" font-size="42" font-weight="700" fill="#cdd6f4" text-anchor="middle" id="text1">PDM-Closed</text>
+    <text x="518" y="160" font-size="42" font-weight="700" text-anchor="middle" id="text1" class="inkflow-fill-text inkflow-fill-code-text">PDM-Closed</text>
     <rect x="327" y="200" width="382" height="382" rx="24" fill="#ffffff" id="rect2"/>
     <image x="343" y="216" width="350" height="350" xlink:href="../assets/bev/bev-composition-pdm-t1.svg" id="image2"/>
   </g>
   <g id="pdm-t2">
-    <text id="row-t2" x="265" y="811" font-size="40" fill="#a6adc8" text-anchor="middle">t₂</text>
+    <text id="row-t2" x="265" y="811" font-size="40" text-anchor="middle" class="inkflow-fill-text-muted">t₂</text>
     <rect x="327" y="606" width="382" height="382" rx="24" fill="#ffffff" id="rect3"/>
     <image x="343" y="622" width="350" height="350" xlink:href="../assets/bev/bev-composition-pdm-t2.svg" id="image3"/>
-    <circle cx="690.9027836" cy="626.1037746" r="30" fill="#f38ba8" id="circle3"/>
-    <path d="m 678.9027836,614.1037746 24,24 m 0,-24 -24,24" stroke="#1e1e2e" stroke-width="7" stroke-linecap="round" id="path3"/>
+    <circle cx="690.9027836" cy="626.1037746" r="30" id="circle3" class="inkflow-fill-red"/>
+    <path d="m 678.9027836,614.1037746 24,24 m 0,-24 -24,24" stroke-width="7" stroke-linecap="round" id="path3" class="inkflow-stroke-bg"/>
   </g>
   <g id="col-fd">
-    <text x="960" y="160" font-size="42" font-weight="700" fill="#cdd6f4" text-anchor="middle" id="text3">FlowDrive*</text>
+    <text x="960" y="160" font-size="42" font-weight="700" text-anchor="middle" id="text3" class="inkflow-fill-text inkflow-fill-code-text">FlowDrive*</text>
     <rect x="769" y="200" width="382" height="382" rx="24" fill="#ffffff" id="rect4"/>
     <image x="785" y="216" width="350" height="350" xlink:href="../assets/bev/bev-composition-fd-t1.svg" id="image4"/>
   </g>
   <g id="fd-t2">
     <rect x="769" y="606" width="382" height="382" rx="24" fill="#ffffff" id="rect5"/>
     <image x="785" y="622" width="350" height="350" xlink:href="../assets/bev/bev-composition-fd-t2.svg" id="image5"/>
-    <circle cx="1132.902784" cy="626.1037746" r="30" fill="#f38ba8" id="circle5"/>
-    <path d="m 1120.902784,614.1037746 24,24 m 0,-24 -24,24" stroke="#1e1e2e" stroke-width="7" stroke-linecap="round" id="path5"/>
+    <circle cx="1132.902784" cy="626.1037746" r="30" id="circle5" class="inkflow-fill-red"/>
+    <path d="m 1120.902784,614.1037746 24,24 m 0,-24 -24,24" stroke-width="7" stroke-linecap="round" id="path5" class="inkflow-stroke-bg"/>
   </g>
   <g id="col-mosaic">
-    <text x="1402" y="160" font-size="42" font-weight="700" fill="#cdd6f4" text-anchor="middle" id="text5">Mosaic</text>
+    <text x="1402" y="160" font-size="42" font-weight="700" text-anchor="middle" id="text5" class="inkflow-fill-text inkflow-fill-code-text">Mosaic</text>
     <rect x="1211" y="200" width="382" height="382" rx="24" fill="#ffffff" id="rect6"/>
     <image x="1227" y="216" width="350" height="350" xlink:href="../assets/bev/bev-composition-mosaic-t1.svg" id="image6"/>
   </g>
   <g id="mosaic-t2">
     <rect x="1211" y="606" width="382" height="382" rx="24" fill="#ffffff" id="rect7"/>
     <image x="1227" y="622" width="350" height="350" xlink:href="../assets/bev/bev-composition-mosaic-t2.svg" id="image7"/>
-    <circle cx="1574.902784" cy="626.1037746" r="30" fill="#a6e3a1" id="circle7"/>
-    <path d="m 1560.902784,626.1037746 10,12 18,-22" stroke="#1e1e2e" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none" id="path7"/>
+    <circle cx="1574.902784" cy="626.1037746" r="30" id="circle7" class="inkflow-fill-green"/>
+    <path d="m 1560.902784,626.1037746 10,12 18,-22" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none" id="path7" class="inkflow-stroke-bg"/>
   </g>
 </svg>
