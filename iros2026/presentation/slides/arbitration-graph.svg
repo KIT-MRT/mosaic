@@ -7,7 +7,7 @@
    font-family="DejaVu Sans"
    version="2.0"
    id="svg6"
-   inkscape:version="1.4-dev (1:1.4.0-dev+202403210151+2fe0648968)"
+   inkscape:version="1.5-dev (1:1.5.0+202609032017+df221170ce)"
    sodipodi:docname="arbitration-graph.svg"
    standalone="no"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -33,9 +33,9 @@
        inkscape:pagecheckerboard="0"
        inkscape:deskcolor="#d1d1d1"
        inkscape:zoom="0.6316883752"
-       inkscape:cx="980.7050824"
-       inkscape:cy="790.7379962"
-       inkscape:window-width="1920"
+       inkscape:cx="1010.783204"
+       inkscape:cy="574.6504356"
+       inkscape:window-width="2520"
        inkscape:window-height="1331"
        inkscape:window-maximized="0"
        inkscape:current-layer="svg6"
@@ -216,108 +216,127 @@
        The shield is inlined rather than linked so it can be filled and animated here;
        the stock renderer draws no verification marker at all. -->
   <g
-     inkscape:label="Image"
-     id="Image"
-     transform="matrix(1.768491749,0,0,1.768491749,204.6674473,413.9372142)">
-    <image
-       preserveAspectRatio="none"
-       inkscape:svg-dpi="300"
-       width="853.5470833"
-       height="115.085"
-       xlink:href="../assets/figures/arbitration-graph.svg"
-       id="image2"
-       style="image-rendering:optimizeQuality" />
-  </g>
-  <g
-     id="g-generate"
-     inkscape:label="g-generate"
-     transform="translate(-41.65358728,-807.6747339)">
-    <path
-       d="m 394.2777139,1015.92081 c 39.6380026,44.882231 50.875803,81.814639 69.4919958,137.019788"
-       style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1)"
-       inkscape:label="a-generate"
-       id="a-generate"
-       sodipodi:nodetypes="cc" />
-    <text
-       xml:space="preserve"
-       x="136.3870519"
-       y="996.6593516"
-       id="generate"
-       style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394"
-       inkscape:label="generate"><tspan
-         sodipodi:role="line"
-         id="tspan6"
+     id="g2"
+     inkscape:label="arbitration-graph"
+     transform="matrix(0.9756405135,0,0,0.9756405135,135.5279429,37.73796206)">
+    <g
+       inkscape:label="Image"
+       id="Image"
+       transform="matrix(1.768491749,0,0,1.768491749,204.6674473,413.9372142)">
+      <image
+         preserveAspectRatio="none"
+         inkscape:svg-dpi="300"
+         width="853.5470833"
+         height="115.085"
+         xlink:href="../assets/figures/arbitration-graph.svg"
+         id="image2"
+         style="image-rendering:optimizeQuality" />
+    </g>
+    <g
+       id="g-generate"
+       inkscape:label="g-generate"
+       transform="translate(-41.65358728,-807.6747339)">
+      <path
+         d="m 348.9857639,1136.327321 c 19.8334083,2.530861 53.6746481,10.327608 68.917157,44.578562"
+         style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1)"
+         inkscape:label="a-generate"
+         id="a-generate"
+         sodipodi:nodetypes="cc" />
+      <text
+         xml:space="preserve"
+         x="-16.04186555"
+         y="1148.049887"
+         id="generate"
+         style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394"
+         inkscape:label="generate"><tspan
+           sodipodi:role="line"
+           id="tspan6"
+           x="-16.04186555"
+           y="1148.049887"
+           style="fill:#cdd6f4;stroke-width:0.850394">Generate</tspan></text>
+    </g>
+    <g
+       id="g-select"
+       transform="translate(357.0936887,-84.50093966)"
+       inkscape:label="g-select">
+      <path
+         d="M 247.3438321,916.7258088 C 245.1956824,833.6569537 333.7386295,657.8656989 393.8951023,613.5053872"
+         style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1)"
+         inkscape:label="a-select"
+         id="a-select"
+         sodipodi:nodetypes="cc" />
+      <text
+         xml:space="preserve"
          x="136.3870519"
          y="996.6593516"
-         style="fill:#cdd6f4;stroke-width:0.850394">Generate</tspan></text>
-  </g>
-  <g
-     id="g-select"
-     transform="translate(357.0936887,-84.50093966)"
-     inkscape:label="g-select">
-    <path
-       d="M 247.3438321,916.7258088 C 245.1956824,833.6569537 333.7386295,657.8656989 393.8951023,613.5053872"
-       style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1)"
-       inkscape:label="a-select"
-       id="a-select"
-       sodipodi:nodetypes="cc" />
-    <text
-       xml:space="preserve"
-       x="136.3870519"
-       y="996.6593516"
-       id="select"
-       style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394"
-       inkscape:label="select"><tspan
-         sodipodi:role="line"
-         id="tspan5"
-         x="136.3870519"
-         y="996.6593516"
-         style="fill:#cdd6f4;stroke-width:0.850394">Select</tspan></text>
-  </g>
-  <g
-     id="g-verify"
-     transform="translate(645.3553241,-348.8059401)"
-     inkscape:label="g-verify">
-    <path
-       d="m 364.4932185,608.1757463 c 43.1680053,31.9428259 60.0091338,64.5027252 88.1762581,133.0141919"
-       style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1)"
-       inkscape:label="a-verify"
-       id="a-verify"
-       sodipodi:nodetypes="cc" />
-    <text
-       xml:space="preserve"
-       x="138.5452866"
-       y="595.2459817"
-       id="verify"
-       style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394"
-       inkscape:label="verify"><tspan
-         sodipodi:role="line"
-         id="tspan7"
-         x="138.5452866"
-         y="595.2459817"
-         style="fill:#cdd6f4;stroke-width:0.850394">Verify</tspan></text>
-  </g>
-  <g
-     id="g-fallback"
-     transform="translate(914.0645795,-66.17646555)"
-     inkscape:label="g-fallback">
-    <path
-       d="M 344.8080549,915.6586117 C 338.495291,825.6017299 298.2554735,734.0082666 245.4249172,683.919629"
-       style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1-7)"
-       inkscape:label="a-fallback"
-       id="a-fallback"
-       sodipodi:nodetypes="cc" />
-    <text
-       xml:space="preserve"
-       x="194.8242753"
-       y="996.7282781"
-       id="fallback"
-       style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394"
-       inkscape:label="fallback"><tspan
-         sodipodi:role="line"
-         id="tspan8"
+         id="select"
+         style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394"
+         inkscape:label="select"><tspan
+           sodipodi:role="line"
+           id="tspan5"
+           x="136.3870519"
+           y="996.6593516"
+           style="fill:#cdd6f4;stroke-width:0.850394">Select</tspan></text>
+    </g>
+    <g
+       id="g-verify"
+       transform="translate(645.3553241,-348.8059401)"
+       inkscape:label="g-verify">
+      <path
+         d="m 413.6686725,679.7080089 c 21.942113,11.3941618 36.5261182,44.8759452 44.38612,64.0135595"
+         style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1)"
+         inkscape:label="a-verify"
+         id="a-verify"
+         sodipodi:nodetypes="cc" />
+      <text
+         xml:space="preserve"
+         x="179.4518121"
+         y="693.8368363"
+         id="verify"
+         style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394"
+         inkscape:label="verify"><tspan
+           sodipodi:role="line"
+           id="tspan7"
+           x="179.4518121"
+           y="693.8368363"
+           style="fill:#cdd6f4;stroke-width:0.850394">Verify</tspan></text>
+    </g>
+    <g
+       id="g-fallback"
+       transform="translate(914.0645795,-66.17646555)"
+       inkscape:label="g-fallback">
+      <path
+         d="M 344.8080549,915.6586117 C 338.495291,825.6017299 298.2554735,734.0082666 245.4249172,683.919629"
+         style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1-7)"
+         inkscape:label="a-fallback"
+         id="a-fallback"
+         sodipodi:nodetypes="cc" />
+      <text
+         xml:space="preserve"
          x="194.8242753"
          y="996.7282781"
-         style="fill:#cdd6f4;stroke-width:0.850394">Fallback</tspan></text>
+         id="fallback"
+         style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394"
+         inkscape:label="fallback"><tspan
+           sodipodi:role="line"
+           id="tspan8"
+           x="194.8242753"
+           y="996.7282781"
+           style="fill:#cdd6f4;stroke-width:0.850394">Fallback</tspan></text>
+    </g>
   </g>
+  <text
+     x="960.2747362"
+     y="108.7908555"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:63.5809px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#ffffff;fill-opacity:1;stroke-width:0.723414;stroke-linecap:butt;stroke-linejoin:round"
+     inkscape:label="paper-title"
+     id="text12"><tspan
+       x="960.2747362"
+       y="108.7908555"
+       id="tspan11"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:63.5809px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;fill-opacity:1;stroke-width:0.723414">Mosaic: An Extensible Framework for Composing</tspan><tspan
+       x="960.2747362"
+       y="180.0015625"
+       id="tspan12"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:63.5809px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;fill-opacity:1;stroke-width:0.723414">Rule-Based and Learned Motion Planners</tspan></text>
 </svg>
