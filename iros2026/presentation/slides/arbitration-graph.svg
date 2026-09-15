@@ -19,10 +19,10 @@
   <g
      inkscape:groupmode="layer"
      inkscape:label="__inkflow:layout:base__"
-     sodipodi:insensitive="true"
      inkflow:layout-src="base"
      inkflow:layout-hash="de607986"
-     id="g1">
+     id="g1"
+     sodipodi:insensitive="true">
     <sodipodi:namedview
        id="namedview1"
        pagecolor="#ffffff"
@@ -33,8 +33,8 @@
        inkscape:pagecheckerboard="0"
        inkscape:deskcolor="#d1d1d1"
        inkscape:zoom="0.6316883752"
-       inkscape:cx="1010.783204"
-       inkscape:cy="574.6504356"
+       inkscape:cx="1070.939448"
+       inkscape:cy="413.1784124"
        inkscape:window-width="2520"
        inkscape:window-height="1331"
        inkscape:window-maximized="0"
@@ -64,7 +64,9 @@
        width="1920"
        height="1080"
        fill="#1e1e2e"
-       id="rect1" />
+       id="rect1"
+       x="0"
+       y="0" />
     <image
        href="../assets/logos/kit-logo-white.svg"
        x="1709.591585"
@@ -339,4 +341,9 @@
        y="180.0015625"
        id="tspan12"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:63.5809px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;fill-opacity:1;stroke-width:0.723414">Rule-Based and Learned Motion Planners</tspan></text>
+  <path
+     style="fill:none;stroke:#89b4fa;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-dasharray:none"
+     d="M 0,223.7210917 H 1920"
+     id="path25"
+     sodipodi:nodetypes="cc" />
 </svg>
