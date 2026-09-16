@@ -29,6 +29,7 @@ CHROMIUM_COMMANDS: Final = (
 
 POSTER_DIR: Final = poster_style.SCRIPTS_DIR.parent / "poster"
 PREVIEW_WIDTH_PX: Final = 1325
+PREVIEW_PALETTE_COLORS: Final = 256
 
 
 class PosterVariant(NamedTuple):
@@ -162,9 +163,16 @@ def export_preview(
         "--default-background-color=FFFFFFFF",
         f"--screenshot={target}",
     )
-    # Guarantee a plain RGB PNG for the invitation slide, whatever Chromium wrote.
+    # These previews are checked into git, and Chromium's screenshot is a full
+    # 24-bit PNG. An indexed palette cuts the checked-in size drastically with
+    # no visible loss; FASTOCTREE beats MEDIANCUT both on size and on how
+    # cleanly it holds up on the author photos.
     with Image.open(target) as raster:
-        raster.convert("RGB").save(target)
+        rgb = raster.convert("RGB")
+        palette = rgb.quantize(
+            colors=PREVIEW_PALETTE_COLORS, method=Image.Quantize.FASTOCTREE
+        )
+        palette.save(target, optimize=True)
 
 
 def main() -> None:
