@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- KIT wordmark, monochrome white. Derived from kit-logo.svg and recoloured to
+     a single white so it reads on the deck's fixed #1e1e2e ground. The
+     "Karlsruher Institut fuer Technologie" sub-lockup is dropped: at footer size
+     it is illegible, and the wordmark alone is the recognisable mark. A viewBox
+     is added so the base layer can scale it. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 375" width="1000" height="375">
+ <path d="m984.5105,25.415961-230.51422,0,0,78.511439,67.39781,0,0,270.66615,95.71893,0,0-270.66615,67.39748,0,0-78.511439zm-253.45829,348.81894h-95.71919v-348.81894h95.71919v348.81894zm-111.85159,0-106.47385,0-126.54981-135.87062,0-77.79425,122.60625-135.51274,109.70066,0-141.24836,175.66465,141.96511,173.51296z" fill-rule="evenodd" fill="#ffffff"/>
+ <path d="M90.415838,153.04142c-18.283583,22.22712-34.057265,46.60505-46.246544,72.77533l319.06361,148.41815-272.81706-221.19348z" fill-rule="evenodd" fill="#ffffff"/>
+ <path d="M363.2329,374.2349,214.45625,57.681003c-26.52903,12.188587-50.90675,27.24608-73.13364,45.170947l221.91029,271.38295z" fill-rule="evenodd" fill="#ffffff"/>
+ <path d="m363.2329,374.2349,0.35846-348.81894h-2.86773c-28.32151,0-55.9259,3.585389-82.45464,10.038217l84.96391,338.78072z" fill-rule="evenodd" fill="#ffffff"/>
+ <path d="M21.225547,288.91246c-7.169814,27.24608-10.754847,55.92567-11.113434,85.32244h353.12079l-342.00735-85.32244z" fill-rule="evenodd" fill="#ffffff"/>
+</svg>

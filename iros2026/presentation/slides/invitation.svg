@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   inkflow:parent="base"
+   viewBox="0 0 1920 1080"
+   width="1920"
+   height="1080"
+   font-family="DejaVu Sans"
+   version="2.0"
+   id="svg4"
+   standalone="no"
+   inkscape:version="1.5-dev (1:1.5.0+202609032017+df221170ce)"
+   sodipodi:docname="invitation.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:inkflow="urn:inkflow">
+  <sodipodi:namedview
+     id="namedview5"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.1"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.7286458333"
+     inkscape:cx="1075.282345"
+     inkscape:cy="731.4939243"
+     inkscape:window-width="2520"
+     inkscape:window-height="1331"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg4"
+     showguides="false" />
+  <g
+     inkscape:groupmode="layer"
+     inkscape:label="__inkflow:layout:base__"
+     sodipodi:insensitive="true"
+     inkflow:layout-src="base"
+     inkflow:layout-hash="97dbf13f"
+     id="g5">
+    <!-- The ground is a fixed colour rather than the inkflow-fill-bg token: the
+       arbitration graph and the BEV renders are fixed-palette artwork that only
+       reads on a dark ground, so the deck is deliberately mode-invariant. -->
+    <rect
+       width="1920"
+       height="1080"
+       id="rect1"
+       class="inkflow-fill-bg" />
+    <!-- Institutional mark, top-right. The bottom edge carries slide labels
+       (four-jobs / arbitration-graph), so the mark sits in the one corner that
+       is clear on every slide. Inlined from assets/logos/kit-logo-white.svg
+       (not <image href>) so its ink can follow data-theme via the
+       .kit-logo-mark rule in styles.css, the way an <image>-embedded asset
+       cannot. -->
+    <g
+       class="kit-logo-mark"
+       opacity="0.8"
+       transform="translate(1709.591585,985.4718442) scale(0.1854084154)"
+       id="kit-logo">
+      <path
+         d="m984.5105,25.415961-230.51422,0,0,78.511439,67.39781,0,0,270.66615,95.71893,0,0-270.66615,67.39748,0,0-78.511439zm-253.45829,348.81894h-95.71919v-348.81894h95.71919v348.81894zm-111.85159,0-106.47385,0-126.54981-135.87062,0-77.79425,122.60625-135.51274,109.70066,0-141.24836,175.66465,141.96511,173.51296z"
+         fill-rule="evenodd"
+         id="path1" />
+      <path
+         d="M90.415838,153.04142c-18.283583,22.22712-34.057265,46.60505-46.246544,72.77533l319.06361,148.41815-272.81706-221.19348z"
+         fill-rule="evenodd"
+         id="path2" />
+      <path
+         d="M363.2329,374.2349,214.45625,57.681003c-26.52903,12.188587-50.90675,27.24608-73.13364,45.170947l221.91029,271.38295z"
+         fill-rule="evenodd"
+         id="path3" />
+      <path
+         d="m363.2329,374.2349,0.35846-348.81894h-2.86773c-28.32151,0-55.9259,3.585389-82.45464,10.038217l84.96391,338.78072z"
+         fill-rule="evenodd"
+         id="path4" />
+      <path
+         d="M21.225547,288.91246c-7.169814,27.24608-10.754847,55.92567-11.113434,85.32244h353.12079l-342.00735-85.32244z"
+         fill-rule="evenodd"
+         id="path5" />
+    </g>
+  </g>
+  <defs
+     id="defs1">
+    <style
+       id="inkflow-preview">.inkflow-fill-bg { fill: #1e1e2e; }
+.inkflow-stroke-bg { stroke: #1e1e2e; }
+.inkflow-fill-surface { fill: #313244; }
+.inkflow-stroke-surface { stroke: #313244; }
+.inkflow-fill-border { fill: #585b70; }
+.inkflow-stroke-border { stroke: #585b70; }
+.inkflow-fill-text { fill: #cdd6f4; }
+.inkflow-stroke-text { stroke: #cdd6f4; }
+.inkflow-fill-text-muted { fill: #a6adc8; }
+.inkflow-stroke-text-muted { stroke: #a6adc8; }
+.inkflow-fill-accent { fill: #cba6f7; }
+.inkflow-stroke-accent { stroke: #cba6f7; }
+.inkflow-fill-accent-fg { fill: #11111b; }
+.inkflow-stroke-accent-fg { stroke: #11111b; }
+.inkflow-fill-code-bg { fill: #181825; }
+.inkflow-stroke-code-bg { stroke: #181825; }
+.inkflow-fill-code-text { fill: #cdd6f4; }
+.inkflow-stroke-code-text { stroke: #cdd6f4; }
+.inkflow-fill-red { fill: #f38ba8; }
+.inkflow-stroke-red { stroke: #f38ba8; }
+.inkflow-fill-orange { fill: #fab387; }
+.inkflow-stroke-orange { stroke: #fab387; }
+.inkflow-fill-yellow { fill: #f9e2af; }
+.inkflow-stroke-yellow { stroke: #f9e2af; }
+.inkflow-fill-green { fill: #a6e3a1; }
+.inkflow-stroke-green { stroke: #a6e3a1; }
+.inkflow-fill-teal { fill: #94e2d5; }
+.inkflow-stroke-teal { stroke: #94e2d5; }
+.inkflow-fill-blue { fill: #89b4fa; }
+.inkflow-stroke-blue { stroke: #89b4fa; }
+.inkflow-fill-purple { fill: #cba6f7; }
+.inkflow-stroke-purple { stroke: #cba6f7; }
+.inkflow-fill-pink { fill: #f5c2e7; }
+.inkflow-stroke-pink { stroke: #f5c2e7; }
+.inkflow-fill-grey { fill: #6c7086; }
+.inkflow-stroke-grey { stroke: #6c7086; }</style>
+  </defs>
+  <g
+     id="poster-thumb"
+     transform="matrix(2.495462356,0,0,2.495462356,-518.0005646,-247.2554446)">
+    <rect
+       x="236"
+       y="166"
+       width="516"
+       height="298.9495655"
+       rx="16"
+       fill="#ffffff"
+       id="rect2"
+       style="stroke-width:0.640816" />
+    <image
+       x="246"
+       y="175.8461035"
+       width="496"
+       height="279.2573585"
+       xlink:href="../assets/figures/poster_landscape_preview.png"
+       id="image2" />
+  </g>
+  <g
+     inkscape:label="github-badge"
+     id="g84"
+     style="display:inline;stroke-linecap:butt;stroke-linejoin:round"
+     transform="matrix(1.614567528,0,0,1.614567528,-3153.555478,-1905.423977)">
+    <rect
+       x="2838.783"
+       y="1340.6"
+       width="268"
+       height="348"
+       rx="28"
+       ry="28"
+       style="fill:#fab387;stroke:#1e1e2e;stroke-width:4.01;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:label="base"
+       id="rect82" />
+    <image
+       id="svg82"
+       inkscape:label="github-mark"
+       x="2944.46"
+       y="1351.62"
+       width="56.7018"
+       height="55.5447"
+       xlink:href="../assets/logos/github-mark.svg"
+       style="stroke-linecap:butt;stroke-linejoin:round" />
+    <path
+       class="qrline"
+       stroke="#1e1e2e"
+       d="m 2885.6807,1436.1208 h 42.0573 m 6.0084,0 h 12.0163 m 6.0081,0 h 6.0082 m 18.0247,0 h 12.0163 m 6.0082,0 h 6.0081 m 6.0082,0 h 6.0081 m 6.0084,0 h 42.0573 m -174.2376,6.0082 h 6.0083 m 30.0409,0 h 6.0081 m 24.0328,0 h 6.0082 m 6.0082,0 h 12.0165 m 6.0081,0 h 6.0082 m 6.0082,0 h 6.0081 m 18.0247,0 h 6.0081 m 30.0409,0 h 6.0083 m -174.2376,6.0081 h 6.0083 m 6.0082,0 h 18.0246 m 6.0081,0 h 6.0081 m 6.0084,0 h 6.0081 m 12.0163,0 h 6.0082 m 12.0163,0 h 24.0329 m 6.0081,0 h 6.0082 m 12.0165,0 h 6.0081 m 6.0081,0 h 18.0246 m 6.0082,0 h 6.0083 m -174.2376,6.0082 h 6.0083 m 6.0082,0 h 18.0246 m 6.0081,0 h 6.0081 m 18.0247,0 h 12.0163 m 12.0163,0 h 6.0084 m 18.0245,0 h 6.0081 m 6.0082,0 h 6.0081 m 6.0084,0 h 6.0081 m 6.0081,0 h 18.0246 m 6.0082,0 h 6.0083 m -174.2376,6.0083 h 6.0083 m 6.0082,0 h 18.0246 m 6.0081,0 h 6.0081 m 12.0165,0 h 12.0163 m 6.0082,0 h 24.0328 m 12.0164,0 h 12.0163 m 12.0165,0 h 6.0081 m 6.0081,0 h 18.0246 m 6.0082,0 h 6.0083 m -174.2376,6.0081 h 6.0083 m 30.0409,0 h 6.0081 m 6.0084,0 h 6.0081 m 6.0082,0 h 18.0245 m 12.0165,0 h 6.0081 m 12.0164,0 h 6.0081 m 6.0082,0 h 6.0081 m 6.0084,0 h 6.0081 m 30.0409,0 h 6.0083 m -174.2376,6.0083 h 42.0573 m 6.0084,0 h 6.0081 m 6.0082,0 h 6.0081 m 6.0082,0 h 6.0082 m 6.0081,0 h 6.0084 m 6.0081,0 h 6.0082 m 6.0082,0 h 6.0081 m 6.0082,0 h 6.0081 m 6.0084,0 h 42.0573 m -120.1638,6.0081 h 6.0082 m 24.0326,0 h 18.0247 m 6.0082,0 h 6.0081 m -114.1556,6.0082 h 6.0083 m 6.0082,0 h 6.0082 m 18.0245,0 h 12.0165 m 12.0163,0 h 30.041 m 6.0081,0 h 12.0164 m 12.0163,0 h 6.0081 m 12.0165,0 h 6.0081 m 12.0164,0 h 6.0082 m 6.0082,0 h 6.0083 m -174.2376,6.0082 h 12.0165 m 6.0082,0 h 6.0081 m 6.0083,0 h 6.0081 m 6.0081,0 h 12.0165 m 24.0327,0 h 12.0165 m 18.0245,0 h 6.0081 m 6.0082,0 h 24.0327 m 18.0246,0 h 12.0165 m -174.2376,6.0081 h 6.0083 m 12.0164,0 h 24.0326 m 18.0247,0 h 6.0081 m 6.0082,0 h 6.0082 m 12.0165,0 h 12.0163 m 6.0082,0 h 12.0163 m 12.0165,0 h 30.0408 m 6.0082,0 h 6.0083 m -174.2376,6.0083 h 24.0328 m 18.0245,0 h 6.0084 m 30.0408,0 h 6.0081 m 30.041,0 h 6.0082 m 6.0081,0 h 6.0084 m 12.0162,0 h 12.0164 m -138.1882,6.0081 h 12.0164 m 6.0081,0 h 6.0081 m 6.0084,0 h 12.0163 m 6.0081,0 h 6.0082 m 6.0082,0 h 6.0081 m 6.0084,0 h 18.0245 m 12.0163,0 h 6.0081 m 6.0084,0 h 12.0162 m 24.0328,0 h 6.0083 m -168.2293,6.0083 h 12.0164 m 6.0081,0 h 12.0164 m 6.0081,0 h 24.0328 m 42.0574,0 h 6.0081 m 6.0082,0 h 6.0081 m 6.0084,0 h 12.0162 m 18.0246,0 h 12.0165 m -138.1884,6.0081 h 6.0081 m 6.0084,0 h 6.0081 m 18.0245,0 h 24.0328 m 6.0082,0 h 6.0082 m 6.0081,0 h 6.0082 m 6.0081,0 h 24.0329 m 18.0245,0 h 6.0083 m -156.2129,6.0081 h 18.0245 m 12.0165,0 h 18.0244 m 18.0245,0 h 12.0165 m 18.0245,0 h 12.0163 m 6.0084,0 h 12.0162 m -132.18,6.0083 h 6.0082 m 6.0081,0 h 6.0083 m 6.0081,0 h 6.0081 m 6.0084,0 h 6.0081 m 24.0327,0 h 24.0328 m 6.0082,0 h 6.0081 m 6.0082,0 h 18.0246 m 30.0409,0 h 6.0083 m -120.1638,6.0081 h 18.0245 m 6.0082,0 h 30.041 m 6.0081,0 h 6.0082 m 12.0165,0 h 12.0162 m 12.0164,0 h 18.0247 m -174.2376,6.0083 h 12.0165 m 18.0246,0 h 12.0162 m 6.0084,0 h 18.0244 m 24.0329,0 h 6.0081 m 18.0245,0 h 6.0082 m 24.0327,0 h 12.0164 m 12.0164,0 h 6.0083 m -162.2211,6.0081 h 6.0082 m 12.0164,0 h 6.0081 m 6.0081,0 h 6.0084 m 12.0163,0 h 6.0081 m 6.0082,0 h 12.0163 m 24.0329,0 h 6.0081 m 6.0082,0 h 6.0081 m 6.0084,0 h 6.0081 m 6.0081,0 h 6.0083 m -150.2048,6.0082 h 18.0247 m 12.0164,0 h 12.0162 m 6.0084,0 h 12.0163 m 6.0081,0 h 6.0082 m 6.0082,0 h 6.0081 m 12.0165,0 h 6.0082 m 18.0245,0 h 36.0491 m 6.0082,0 h 6.0082 m -120.1636,6.0082 h 12.0163 m 30.041,0 h 18.0245 m 12.0163,0 h 6.0081 m 18.0246,0 h 18.0246 m 6.0082,0 h 6.0083 m -174.2376,6.0081 h 42.0573 m 6.0084,0 h 6.0081 m 12.0163,0 h 30.041 m 6.0082,0 h 6.0082 m 12.0163,0 h 6.0081 m 6.0084,0 h 6.0081 m 6.0081,0 h 6.0083 m 18.0245,0 h 6.0083 m -174.2376,6.0083 h 6.0083 m 30.0409,0 h 6.0081 m 12.0165,0 h 24.0327 m 6.0081,0 h 6.0084 m 18.0245,0 h 18.0244 m 18.0246,0 h 6.0083 m 12.0163,0 h 6.0082 m -168.2293,6.0081 h 6.0083 m 6.0082,0 h 18.0246 m 6.0081,0 h 6.0081 m 12.0165,0 h 48.0655 m 12.0163,0 h 42.0573 m 6.0082,0 h 12.0165 m -174.2376,6.0083 h 6.0083 m 6.0082,0 h 18.0246 m 6.0081,0 h 6.0081 m 36.0492,0 h 30.041 m 6.0081,0 h 18.0247 m 12.0162,0 h 18.0246 m 6.0082,0 h 6.0083 m -174.2376,6.0082 h 6.0083 m 6.0082,0 h 18.0246 m 6.0081,0 h 6.0081 m 6.0084,0 h 6.0081 m 6.0082,0 h 24.0326 m 6.0084,0 h 6.0081 m 30.0408,0 h 6.0084 m 12.0162,0 h 6.0083 m 12.0163,0 h 12.0165 m -174.2376,6.0081 h 6.0083 m 30.0409,0 h 6.0081 m 36.0492,0 h 6.0081 m 6.0084,0 h 6.0081 m 12.0164,0 h 6.0081 m 6.0082,0 h 6.0081 m 12.0165,0 h 18.0245 m -156.2129,6.0082 h 42.0573 m 6.0084,0 h 12.0163 m 6.0081,0 h 6.0082 m 6.0082,0 h 6.0081 m 6.0084,0 h 6.0081 m 24.0327,0 h 6.0081 m 18.0246,0 h 12.0164 m 12.0164,0 h 6.0083"
+       id="path83"
+       style="stroke-width:6.00818;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:label="qr" />
+    <text
+       x="2972.783"
+       y="1642.6"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#1e1e2e;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:label="link"
+       id="text84"><tspan
+         sodipodi:role="line"
+         id="tspan8"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
+         x="2972.783"
+         y="1642.6">github.com/</tspan><tspan
+         sodipodi:role="line"
+         id="tspan9"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
+         x="2972.783"
+         y="1674.477739">KIT-MRT/mosaic</tspan></text>
+  </g>
+</svg>
