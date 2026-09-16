@@ -1,38 +1,169 @@
-<svg xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xmlns:inkflow="urn:inkflow" inkflow:parent="base" viewBox="0 0 1920 1080" width="1920" height="1080" font-family="DejaVu Sans" version="2.0" id="svg6" standalone="no">
-  <g inkscape:groupmode="layer" inkscape:label="__inkflow:layout:base__" sodipodi:insensitive="true" inkflow:layout-src="base" inkflow:layout-hash="97dbf13f"><!-- The ground is a fixed colour rather than the inkflow-fill-bg token: the
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   inkflow:parent="base"
+   viewBox="0 0 1920 1080"
+   width="1920"
+   height="1080"
+   font-family="DejaVu Sans"
+   version="2.0"
+   id="svg6"
+   standalone="no"
+   inkscape:version="1.5-dev (1:1.5.0+202609032017+df221170ce)"
+   sodipodi:docname="arbitration-graph.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:inkflow="urn:inkflow">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.1"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.6956899531"
+     inkscape:cx="952.2920333"
+     inkscape:cy="671.2760446"
+     inkscape:window-width="2520"
+     inkscape:window-height="1331"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg6" />
+  <g
+     inkscape:groupmode="layer"
+     inkscape:label="__inkflow:layout:base__"
+     sodipodi:insensitive="true"
+     inkflow:layout-src="base"
+     inkflow:layout-hash="97dbf13f"
+     id="g5">
+    <!-- The ground is a fixed colour rather than the inkflow-fill-bg token: the
        arbitration graph and the BEV renders are fixed-palette artwork that only
        reads on a dark ground, so the deck is deliberately mode-invariant. -->
-  <rect width="1920" height="1080" id="rect1" class="inkflow-fill-bg"/>
-  <!-- Institutional mark, top-right. The bottom edge carries slide labels
+    <rect
+       width="1920"
+       height="1080"
+       id="rect1"
+       class="inkflow-fill-bg" />
+    <!-- Institutional mark, top-right. The bottom edge carries slide labels
        (four-jobs / arbitration-graph), so the mark sits in the one corner that
        is clear on every slide. Inlined from assets/logos/kit-logo-white.svg
        (not <image href>) so its ink can follow data-theme via the
        .kit-logo-mark rule in styles.css, the way an <image>-embedded asset
        cannot. -->
-  <g class="kit-logo-mark" opacity="0.8" transform="translate(1709.591585,985.4718442) scale(0.1854084154)" id="kit-logo">
-    <path d="m984.5105,25.415961-230.51422,0,0,78.511439,67.39781,0,0,270.66615,95.71893,0,0-270.66615,67.39748,0,0-78.511439zm-253.45829,348.81894h-95.71919v-348.81894h95.71919v348.81894zm-111.85159,0-106.47385,0-126.54981-135.87062,0-77.79425,122.60625-135.51274,109.70066,0-141.24836,175.66465,141.96511,173.51296z" fill-rule="evenodd"/>
-    <path d="M90.415838,153.04142c-18.283583,22.22712-34.057265,46.60505-46.246544,72.77533l319.06361,148.41815-272.81706-221.19348z" fill-rule="evenodd"/>
-    <path d="M363.2329,374.2349,214.45625,57.681003c-26.52903,12.188587-50.90675,27.24608-73.13364,45.170947l221.91029,271.38295z" fill-rule="evenodd"/>
-    <path d="m363.2329,374.2349,0.35846-348.81894h-2.86773c-28.32151,0-55.9259,3.585389-82.45464,10.038217l84.96391,338.78072z" fill-rule="evenodd"/>
-    <path d="M21.225547,288.91246c-7.169814,27.24608-10.754847,55.92567-11.113434,85.32244h353.12079l-342.00735-85.32244z" fill-rule="evenodd"/>
+    <g
+       class="kit-logo-mark"
+       opacity="0.8"
+       transform="translate(1709.591585,985.4718442) scale(0.1854084154)"
+       id="kit-logo">
+      <path
+         d="m984.5105,25.415961-230.51422,0,0,78.511439,67.39781,0,0,270.66615,95.71893,0,0-270.66615,67.39748,0,0-78.511439zm-253.45829,348.81894h-95.71919v-348.81894h95.71919v348.81894zm-111.85159,0-106.47385,0-126.54981-135.87062,0-77.79425,122.60625-135.51274,109.70066,0-141.24836,175.66465,141.96511,173.51296z"
+         fill-rule="evenodd"
+         id="path1" />
+      <path
+         d="M90.415838,153.04142c-18.283583,22.22712-34.057265,46.60505-46.246544,72.77533l319.06361,148.41815-272.81706-221.19348z"
+         fill-rule="evenodd"
+         id="path2" />
+      <path
+         d="M363.2329,374.2349,214.45625,57.681003c-26.52903,12.188587-50.90675,27.24608-73.13364,45.170947l221.91029,271.38295z"
+         fill-rule="evenodd"
+         id="path3" />
+      <path
+         d="m363.2329,374.2349,0.35846-348.81894h-2.86773c-28.32151,0-55.9259,3.585389-82.45464,10.038217l84.96391,338.78072z"
+         fill-rule="evenodd"
+         id="path4" />
+      <path
+         d="M21.225547,288.91246c-7.169814,27.24608-10.754847,55.92567-11.113434,85.32244h353.12079l-342.00735-85.32244z"
+         fill-rule="evenodd"
+         id="path5" />
+    </g>
   </g>
-</g><defs id="defs1">
-    <marker id="ConcaveTriangle" style="overflow:visible" refX="0" refY="0" orient="auto-start-reverse" markerWidth="1" markerHeight="1" viewBox="0 0 1 1" preserveAspectRatio="xMidYMid">
-      <path d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z" style="fill:context-stroke;fill-rule:evenodd;stroke:none" transform="scale(0.7)" id="path1"/>
+  <defs
+     id="defs1">
+    <marker
+       id="ConcaveTriangle"
+       style="overflow:visible"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       preserveAspectRatio="xMidYMid">
+      <path
+         d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+         transform="scale(0.7)"
+         id="path6" />
     </marker>
-    <marker id="ConcaveTriangle-1" style="overflow:visible" refX="0" refY="0" orient="auto-start-reverse" markerWidth="1" markerHeight="1" viewBox="0 0 1 1" preserveAspectRatio="xMidYMid">
-      <path d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z" style="fill:context-stroke;fill-rule:evenodd;stroke:none" transform="scale(0.7)" id="path1-5"/>
+    <marker
+       id="ConcaveTriangle-1"
+       style="overflow:visible"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       preserveAspectRatio="xMidYMid">
+      <path
+         d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+         transform="scale(0.7)"
+         id="path1-5" />
     </marker>
-    <marker id="marker1" style="overflow:visible" refX="0" refY="0" orient="auto-start-reverse" markerWidth="1" markerHeight="1" viewBox="0 0 1 1" preserveAspectRatio="xMidYMid">
-      <path d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z" style="fill:context-stroke;fill-rule:evenodd;stroke:none" transform="scale(0.7)" id="path1-1"/>
+    <marker
+       id="marker1"
+       style="overflow:visible"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       preserveAspectRatio="xMidYMid">
+      <path
+         d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+         transform="scale(0.7)"
+         id="path1-1" />
     </marker>
-    <marker id="marker2" style="overflow:visible" refX="0" refY="0" orient="auto-start-reverse" markerWidth="1" markerHeight="1" viewBox="0 0 1 1" preserveAspectRatio="xMidYMid">
-      <path d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z" style="fill:context-stroke;fill-rule:evenodd;stroke:none" transform="scale(0.7)" id="path2"/>
+    <marker
+       id="marker2"
+       style="overflow:visible"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       preserveAspectRatio="xMidYMid">
+      <path
+         d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+         transform="scale(0.7)"
+         id="path7" />
     </marker>
-    <marker id="ConcaveTriangle-1-7" style="overflow:visible" refX="0" refY="0" orient="auto-start-reverse" markerWidth="1" markerHeight="1" viewBox="0 0 1 1" preserveAspectRatio="xMidYMid">
-      <path d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z" style="fill:context-stroke;fill-rule:evenodd;stroke:none" transform="scale(0.7)" id="path1-5-1"/>
+    <marker
+       id="ConcaveTriangle-1-7"
+       style="overflow:visible"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       preserveAspectRatio="xMidYMid">
+      <path
+         d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+         transform="scale(0.7)"
+         id="path1-5-1" />
     </marker>
-    <style id="inkflow-preview">.inkflow-fill-bg { fill: #1e1e2e; }
+    <style
+       id="inkflow-preview">.inkflow-fill-bg { fill: #1e1e2e; }
 .inkflow-stroke-bg { stroke: #1e1e2e; }
 .inkflow-fill-surface { fill: #313244; }
 .inkflow-stroke-surface { stroke: #313244; }
@@ -67,32 +198,146 @@
 .inkflow-fill-pink { fill: #f5c2e7; }
 .inkflow-stroke-pink { stroke: #f5c2e7; }
 .inkflow-fill-grey { fill: #6c7086; }
-.inkflow-stroke-grey { stroke: #6c7086; }</style></defs>
+.inkflow-stroke-grey { stroke: #6c7086; }</style>
+  </defs>
   <!-- The arbitration graph keeps its native colours: the style is recognisable
        across the arbitration-graph papers and deliberately does not follow the theme.
        The shield is inlined rather than linked so it can be filled and animated here;
        the stock renderer draws no verification marker at all. -->
-  <g id="g2" inkscape:label="arbitration-graph" transform="matrix(0.9756405135,0,0,0.9756405135,135.5279429,37.73796206)">
-    <g inkscape:label="Image" id="Image" transform="matrix(1.768491749,0,0,1.768491749,204.6674473,413.9372142)">
-      <image preserveAspectRatio="none" width="853.5470833" height="115.085" xlink:href="../assets/figures/arbitration-graph.svg" id="image2" style="image-rendering:optimizeQuality"/>
+  <g
+     id="g2"
+     inkscape:label="arbitration-graph"
+     transform="matrix(0.9756405135,0,0,0.9756405135,135.5279429,37.73796206)">
+    <g
+       inkscape:label="Image"
+       id="Image"
+       transform="matrix(1.768491749,0,0,1.768491749,204.6674473,413.9372142)">
+      <image
+         preserveAspectRatio="none"
+         width="853.5470833"
+         height="115.085"
+         xlink:href="../assets/figures/arbitration-graph.svg"
+         id="image2"
+         style="image-rendering:optimizeQuality" />
+      <rect
+         style="fill:#006f00;fill-opacity:1;stroke-width:7.07831"
+         id="rect7"
+         width="15.19339969"
+         height="15.55340306"
+         x="497.9998278"
+         y="465.2664519"
+         transform="matrix(0.5795716531,0,0,0.5795716531,-194.2780958,-255.9341349)"
+         inkscape:label="Hide-asterisk" />
     </g>
-    <g id="g-generate" inkscape:label="g-generate" transform="translate(-41.65358728,-807.6747339)">
-      <path d="m 348.9857639,1136.327321 c 19.8334083,2.530861 53.6746481,10.327608 68.917157,44.578562" style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1)" inkscape:label="a-generate" id="a-generate"/>
-      <text xml:space="preserve" x="-16.04186555" y="1148.049887" id="generate" style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394" inkscape:label="generate"><tspan id="tspan6" x="-16.04186555" y="1148.049887" style="stroke-width: 0.850394" class="inkflow-fill-text inkflow-fill-code-text">Generate</tspan></text>
+    <g
+       id="g-generate"
+       inkscape:label="g-generate"
+       transform="translate(-41.65358728,-807.6747339)">
+      <path
+         d="m 348.9857639,1136.327321 c 19.8334083,2.530861 53.6746481,10.327608 68.917157,44.578562"
+         style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1)"
+         inkscape:label="a-generate"
+         id="a-generate" />
+      <text
+         xml:space="preserve"
+         x="-16.04186555"
+         y="1148.049887"
+         id="generate"
+         style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394"
+         inkscape:label="generate"><tspan
+           id="tspan6"
+           x="-16.04186555"
+           y="1148.049887"
+           style="stroke-width: 0.850394"
+           class="inkflow-fill-text inkflow-fill-code-text">Generate</tspan></text>
     </g>
-    <g id="g-select" transform="translate(357.0936887,-84.50093966)" inkscape:label="g-select">
-      <path d="M 247.3438321,916.7258088 C 245.1956824,833.6569537 333.7386295,657.8656989 393.8951023,613.5053872" style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1)" inkscape:label="a-select" id="a-select"/>
-      <text xml:space="preserve" x="136.3870519" y="996.6593516" id="select" style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394" inkscape:label="select"><tspan id="tspan5" x="136.3870519" y="996.6593516" style="stroke-width: 0.850394" class="inkflow-fill-text inkflow-fill-code-text">Select</tspan></text>
+    <g
+       id="g-select"
+       transform="translate(357.0936887,-84.50093966)"
+       inkscape:label="g-select">
+      <path
+         d="M 247.3438321,916.7258088 C 245.1956824,833.6569537 333.7386295,657.8656989 393.8951023,613.5053872"
+         style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1)"
+         inkscape:label="a-select"
+         id="a-select" />
+      <text
+         xml:space="preserve"
+         x="136.3870519"
+         y="996.6593516"
+         id="select"
+         style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394"
+         inkscape:label="select"><tspan
+           id="tspan5"
+           x="136.3870519"
+           y="996.6593516"
+           style="stroke-width: 0.850394"
+           class="inkflow-fill-text inkflow-fill-code-text">Select</tspan></text>
     </g>
-    <g id="g-verify" transform="translate(645.3553241,-348.8059401)" inkscape:label="g-verify">
-      <path d="m 413.6686725,679.7080089 c 21.942113,11.3941618 36.5261182,44.8759452 44.38612,64.0135595" style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1)" inkscape:label="a-verify" id="a-verify"/>
-      <text xml:space="preserve" x="179.4518121" y="693.8368363" id="verify" style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394" inkscape:label="verify"><tspan id="tspan7" x="179.4518121" y="693.8368363" style="stroke-width: 0.850394" class="inkflow-fill-text inkflow-fill-code-text">Verify</tspan></text>
+    <g
+       id="g-verify"
+       transform="translate(645.3553241,-348.8059401)"
+       inkscape:label="g-verify">
+      <path
+         d="m 413.6686725,679.7080089 c 21.942113,11.3941618 36.5261182,44.8759452 44.38612,64.0135595"
+         style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1)"
+         inkscape:label="a-verify"
+         id="a-verify" />
+      <text
+         xml:space="preserve"
+         x="179.4518121"
+         y="693.8368363"
+         id="verify"
+         style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394"
+         inkscape:label="verify"><tspan
+           id="tspan7"
+           x="179.4518121"
+           y="693.8368363"
+           style="stroke-width: 0.850394"
+           class="inkflow-fill-text inkflow-fill-code-text">Verify</tspan></text>
     </g>
-    <g id="g-fallback" transform="translate(914.0645795,-66.17646555)" inkscape:label="g-fallback">
-      <path d="M 344.8080549,915.6586117 C 338.495291,825.6017299 298.2554735,734.0082666 245.4249172,683.919629" style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1-7)" inkscape:label="a-fallback" id="a-fallback"/>
-      <text xml:space="preserve" x="194.8242753" y="996.7282781" id="fallback" style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394" inkscape:label="fallback"><tspan id="tspan8" x="194.8242753" y="996.7282781" style="stroke-width: 0.850394" class="inkflow-fill-text inkflow-fill-code-text">Fallback</tspan></text>
+    <g
+       id="g-fallback"
+       transform="translate(914.0645795,-66.17646555)"
+       inkscape:label="g-fallback">
+      <path
+         d="M 344.8080549,915.6586117 C 338.495291,825.6017299 298.2554735,734.0082666 245.4249172,683.919629"
+         style="fill:none;stroke:#b4befe;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24, 12;marker-end:url(#ConcaveTriangle-1-7)"
+         inkscape:label="a-fallback"
+         id="a-fallback" />
+      <text
+         xml:space="preserve"
+         x="194.8242753"
+         y="996.7282781"
+         id="fallback"
+         style="font-weight:bold;font-size:64.6696px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:none;direction:ltr;stroke-width:0.850394"
+         inkscape:label="fallback"><tspan
+           id="tspan8"
+           x="194.8242753"
+           y="996.7282781"
+           style="stroke-width: 0.850394"
+           class="inkflow-fill-text inkflow-fill-code-text">Fallback</tspan></text>
     </g>
   </g>
-  <text x="960.2747362" y="108.7908555" style="font-style: normal; font-variant: normal; font-weight: bold; font-stretch: normal; font-size: 63.5809px; font-family: 'DejaVu Sans'; -inkscape-font-specification: 'DejaVu Sans, Bold'; font-variant-ligatures: normal; font-variant-caps: normal; font-variant-numeric: normal; font-variant-east-asian: normal; text-align: center; text-anchor: middle; white-space: pre; fill-opacity: 1; stroke-width: 0.723414; stroke-linecap: butt; stroke-linejoin: round" inkscape:label="paper-title" id="text12" class="inkflow-fill-text inkflow-fill-code-text"><tspan x="960.2747362" y="108.7908555" id="tspan11" style="font-style: normal; font-variant: normal; font-weight: bold; font-stretch: normal; font-size: 63.5809px; font-family: 'DejaVu Sans'; -inkscape-font-specification: 'DejaVu Sans, Bold'; font-variant-ligatures: normal; font-variant-caps: normal; font-variant-numeric: normal; font-variant-east-asian: normal; fill-opacity: 1; stroke-width: 0.723414" class="inkflow-fill-text inkflow-fill-code-text">Mosaic: An Extensible Framework for Composing</tspan><tspan x="960.2747362" y="180.0015625" id="tspan12" style="font-style: normal; font-variant: normal; font-weight: bold; font-stretch: normal; font-size: 63.5809px; font-family: 'DejaVu Sans'; -inkscape-font-specification: 'DejaVu Sans, Bold'; font-variant-ligatures: normal; font-variant-caps: normal; font-variant-numeric: normal; font-variant-east-asian: normal; fill-opacity: 1; stroke-width: 0.723414" class="inkflow-fill-text inkflow-fill-code-text">Rule-Based and Learned Motion Planners</tspan></text>
-  <path style="fill: none; stroke-width: 2; stroke-linecap: butt; stroke-linejoin: miter; stroke-opacity: 1; stroke-dasharray: none" d="M 0,223.7210917 H 1920" id="path25" class="inkflow-stroke-blue"/>
+  <text
+     x="960.2747362"
+     y="108.7908555"
+     style="font-style: normal; font-variant: normal; font-weight: bold; font-stretch: normal; font-size: 63.5809px; font-family: 'DejaVu Sans'; -inkscape-font-specification: 'DejaVu Sans, Bold'; font-variant-ligatures: normal; font-variant-caps: normal; font-variant-numeric: normal; font-variant-east-asian: normal; text-align: center; text-anchor: middle; white-space: pre; fill-opacity: 1; stroke-width: 0.723414; stroke-linecap: butt; stroke-linejoin: round"
+     inkscape:label="paper-title"
+     id="text12"
+     class="inkflow-fill-text inkflow-fill-code-text"><tspan
+       x="960.2747362"
+       y="108.7908555"
+       id="tspan11"
+       style="font-style: normal; font-variant: normal; font-weight: bold; font-stretch: normal; font-size: 63.5809px; font-family: 'DejaVu Sans'; -inkscape-font-specification: 'DejaVu Sans, Bold'; font-variant-ligatures: normal; font-variant-caps: normal; font-variant-numeric: normal; font-variant-east-asian: normal; fill-opacity: 1; stroke-width: 0.723414"
+       class="inkflow-fill-text inkflow-fill-code-text">Mosaic: An Extensible Framework for Composing</tspan><tspan
+       x="960.2747362"
+       y="180.0015625"
+       id="tspan12"
+       style="font-style: normal; font-variant: normal; font-weight: bold; font-stretch: normal; font-size: 63.5809px; font-family: 'DejaVu Sans'; -inkscape-font-specification: 'DejaVu Sans, Bold'; font-variant-ligatures: normal; font-variant-caps: normal; font-variant-numeric: normal; font-variant-east-asian: normal; fill-opacity: 1; stroke-width: 0.723414"
+       class="inkflow-fill-text inkflow-fill-code-text">Rule-Based and Learned Motion Planners</tspan></text>
+  <path
+     style="fill: none; stroke-width: 2; stroke-linecap: butt; stroke-linejoin: miter; stroke-opacity: 1; stroke-dasharray: none"
+     d="M 0,223.7210917 H 1920"
+     id="path25"
+     class="inkflow-stroke-blue" />
 </svg>
