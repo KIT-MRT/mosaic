@@ -1,4 +1,4 @@
-"""Export the poster PDF and its preview thumbnail from poster.svg.
+"""Export each poster variant's print PDF and preview thumbnail from its SVG.
 
 Requires a Chromium build (`chromium`, `chromium-browser` or `google-chrome`).
 
@@ -14,7 +14,7 @@ import shutil
 import subprocess
 import tempfile
 from pathlib import Path
-from typing import Final
+from typing import Final, NamedTuple
 
 from PIL import Image
 
@@ -28,11 +28,29 @@ CHROMIUM_COMMANDS: Final = (
 )
 
 POSTER_DIR: Final = poster_style.SCRIPTS_DIR.parent / "poster"
-POSTER_SVG: Final = POSTER_DIR / "poster.svg"
-POSTER_PDF: Final = POSTER_DIR / "poster.pdf"
-# Rasterised for the invitation slide, which links it by this path.
-PREVIEW_PNG: Final = poster_style.FIGURES_DIR / "poster_preview.png"
 PREVIEW_WIDTH_PX: Final = 1325
+
+
+class PosterVariant(NamedTuple):
+    svg: Path
+    pdf: Path
+    preview: Path
+
+
+# Rasterised previews are checked in; the portrait one is also used by the
+# invitation slide, which links it by this path.
+VARIANTS: Final = (
+    PosterVariant(
+        svg=POSTER_DIR / "poster.svg",
+        pdf=POSTER_DIR / "poster.pdf",
+        preview=poster_style.FIGURES_DIR / "poster_preview.png",
+    ),
+    PosterVariant(
+        svg=POSTER_DIR / "poster_landscape.svg",
+        pdf=POSTER_DIR / "poster_landscape.pdf",
+        preview=poster_style.FIGURES_DIR / "poster_landscape_preview.png",
+    ),
+)
 
 _XML_DECLARATION: Final = re.compile(r"^\s*<\?xml[^>]*\?>")
 _RELATIVE_HREF: Final = re.compile(
@@ -103,7 +121,14 @@ def _run_chromium(chromium: str, page_html: str, *arguments: str) -> None:
         )
 
 
-def build_pdf(chromium: str, source_svg: Path, target: Path) -> None:
+def export_variant(chromium: str, variant: PosterVariant, preview_width: int) -> None:
+    export_pdf(chromium, variant.svg, variant.pdf)
+    print(f"wrote {variant.pdf}")
+    export_preview(chromium, variant.svg, variant.preview, preview_width)
+    print(f"wrote {variant.preview}")
+
+
+def export_pdf(chromium: str, source_svg: Path, target: Path) -> None:
     target.parent.mkdir(parents=True, exist_ok=True)
     width_mm, height_mm = _read_page_size_mm(source_svg)
     page_style = (
@@ -119,7 +144,9 @@ def build_pdf(chromium: str, source_svg: Path, target: Path) -> None:
     )
 
 
-def build_preview(chromium: str, source_svg: Path, target: Path, width_px: int) -> None:
+def export_preview(
+    chromium: str, source_svg: Path, target: Path, width_px: int
+) -> None:
     target.parent.mkdir(parents=True, exist_ok=True)
     width_mm, height_mm = _read_page_size_mm(source_svg)
     height_px = round(width_px * height_mm / width_mm)
@@ -145,20 +172,17 @@ def main() -> None:
     parser.add_argument(
         "--svg",
         type=Path,
-        default=POSTER_SVG,
-        help="source poster SVG (default: %(default)s)",
+        help="export only this SVG, not every variant (needs --pdf/--preview)",
     )
     parser.add_argument(
         "--pdf",
         type=Path,
-        default=POSTER_PDF,
-        help="where to write the PDF (default: %(default)s)",
+        help="where to write the PDF (with --svg)",
     )
     parser.add_argument(
         "--preview",
         type=Path,
-        default=PREVIEW_PNG,
-        help="where to write the preview PNG (default: %(default)s)",
+        help="where to write the preview PNG (with --svg)",
     )
     parser.add_argument(
         "--preview-width",
@@ -168,12 +192,18 @@ def main() -> None:
     )
     arguments = parser.parse_args()
 
-    chromium = _find_chromium()
+    if arguments.svg is not None:
+        if arguments.pdf is None or arguments.preview is None:
+            parser.error("--svg requires --pdf and --preview")
+        variants = (PosterVariant(arguments.svg, arguments.pdf, arguments.preview),)
+    elif arguments.pdf is not None or arguments.preview is not None:
+        parser.error("--pdf/--preview require --svg")
+    else:
+        variants = VARIANTS
 
-    build_pdf(chromium, arguments.svg, arguments.pdf)
-    print(f"wrote {arguments.pdf}")
-    build_preview(chromium, arguments.svg, arguments.preview, arguments.preview_width)
-    print(f"wrote {arguments.preview}")
+    chromium = _find_chromium()
+    for variant in variants:
+        export_variant(chromium, variant, arguments.preview_width)
 
 
 if __name__ == "__main__":
