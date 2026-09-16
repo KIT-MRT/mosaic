@@ -37,13 +37,13 @@ class PosterVariant(NamedTuple):
     preview: Path
 
 
-# Rasterised previews are checked in; the portrait one is also used by the
+# Rasterised previews are checked in; the landscape one is also used by the
 # invitation slide, which links it by this path.
 VARIANTS: Final = (
     PosterVariant(
-        svg=POSTER_DIR / "poster.svg",
-        pdf=POSTER_DIR / "poster.pdf",
-        preview=poster_style.FIGURES_DIR / "poster_preview.png",
+        svg=POSTER_DIR / "poster_portrait.svg",
+        pdf=POSTER_DIR / "poster_portrait.pdf",
+        preview=poster_style.FIGURES_DIR / "poster_portrait_preview.png",
     ),
     PosterVariant(
         svg=POSTER_DIR / "poster_landscape.svg",
