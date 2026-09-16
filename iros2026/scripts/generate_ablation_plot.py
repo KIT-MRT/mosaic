@@ -39,8 +39,8 @@ FIGURE_WIDTH_INCHES: Final = 7.6
 
 BAR_WIDTH: Final = 0.34
 Y_AXIS_HEADROOM: Final = 8
-LABEL_FONT_SIZE: Final = 13
-TICK_FONT_SIZE: Final = 12.5
+LABEL_FONT_SIZE: Final = 18
+TICK_FONT_SIZE: Final = 16
 
 
 def render(output_path: Path) -> None:
@@ -81,7 +81,7 @@ def render(output_path: Path) -> None:
     axes.set_ylim(0, tallest + Y_AXIS_HEADROOM)
     axes.set_xticks(list(positions))
     axes.set_xticklabels(CONFIGURATIONS, fontsize=TICK_FONT_SIZE)
-    axes.set_ylabel(f"Scenarios (of {TOTAL_SCENARIOS})", fontsize=TICK_FONT_SIZE)
+    axes.set_ylabel(f"Scenarios (of {TOTAL_SCENARIOS})", fontsize=LABEL_FONT_SIZE)
     axes.tick_params(axis="y", labelsize=TICK_FONT_SIZE - 1)
     axes.grid(axis="y", color=poster_style.SURFACE, linewidth=0.9, zorder=0)
     axes.set_axisbelow(True)
