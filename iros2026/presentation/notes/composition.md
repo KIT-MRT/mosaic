@@ -1,4 +1,4 @@
-Here we see the ego vehicle approaching an accident.
+Here we see the ego controlled by PDM-Open approaching an accident.
 PDM is a lange-following planner
 so it handles the situation as expected and gets stuck behind the accident.
 
