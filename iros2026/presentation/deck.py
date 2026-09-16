@@ -1,6 +1,6 @@
 """IROS 2026 lightning talk for Mosaic."""
 
-from inkflow import Deck, Slide, animations, transitions
+from inkflow import Deck, Slide, Trigger, animations, transitions
 
 
 def main() -> Deck:
@@ -17,8 +17,10 @@ def main() -> Deck:
                 notes="notes/four-jobs.md",
                 transition=morph,
                 animations=[
-                    animations.FadeIn(el)
-                    for el in ["g-generate", "g-select", "g-verify", "g-fallback"]
+                    animations.FadeIn("g-generate"),
+                    animations.FadeIn("g-select", trigger=Trigger.AFTER_PREVIOUS),
+                    animations.FadeIn("g-verify", trigger=Trigger.AFTER_PREVIOUS),
+                    animations.FadeIn("g-fallback", trigger=Trigger.AFTER_PREVIOUS),
                 ],
             ),
             Slide(
