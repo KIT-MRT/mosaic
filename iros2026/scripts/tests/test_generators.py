@@ -59,16 +59,16 @@ def test_qr_code_is_written_with_a_quiet_zone(tmp_path: Path) -> None:
     qr.render(output)
     _ = _parse_svg(output)
 
-    code = segno.make(qr.REPOSITORY_URL, error=qr.ERROR_CORRECTION)
+    code = segno.make(qr.SITE_URL, error=qr.ERROR_CORRECTION)
     plain = code.symbol_size(scale=1, border=0)[0]
     bordered = code.symbol_size(scale=1, border=qr.QUIET_ZONE_MODULES)[0]
     assert bordered == plain + 2 * qr.QUIET_ZONE_MODULES
 
 
-def test_qr_code_decodes_back_to_the_repository() -> None:
+def test_qr_code_decodes_back_to_the_site_url() -> None:
     cv2 = pytest.importorskip("cv2", reason="OpenCV not installed")
 
-    code = segno.make(qr.REPOSITORY_URL, error=qr.ERROR_CORRECTION)
+    code = segno.make(qr.SITE_URL, error=qr.ERROR_CORRECTION)
     modules = np.array(
         [[0 if module else 255 for module in row] for row in code.matrix],
         dtype=np.uint8,
@@ -77,7 +77,7 @@ def test_qr_code_decodes_back_to_the_repository() -> None:
     padded = np.pad(scaled, 8 * qr.QUIET_ZONE_MODULES, constant_values=255)
 
     decoded, _, _ = cv2.QRCodeDetector().detectAndDecode(padded)
-    assert decoded == qr.REPOSITORY_URL
+    assert decoded == qr.SITE_URL
 
 
 def test_equation_document_uses_the_shared_palette() -> None:
