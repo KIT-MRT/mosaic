@@ -34,14 +34,27 @@ POSTER_PDF: Final = POSTER_DIR / "poster.pdf"
 PREVIEW_PNG: Final = poster_style.FIGURES_DIR / "poster_preview.png"
 PREVIEW_WIDTH_PX: Final = 1325
 
-# ISO A0, matching poster.svg's own page dimensions.
-PAGE_WIDTH_MM: Final = 841
-PAGE_HEIGHT_MM: Final = 1189
-
 _XML_DECLARATION: Final = re.compile(r"^\s*<\?xml[^>]*\?>")
 _RELATIVE_HREF: Final = re.compile(
     r'((?:xlink:)?href=")(?!#|/|data:|https?:|file:)([^"]+)(")'
 )
+_SVG_WIDTH_MM: Final = re.compile(r'<svg\b[^>]*\swidth="([\d.]+)mm"')
+_SVG_HEIGHT_MM: Final = re.compile(r'<svg\b[^>]*\sheight="([\d.]+)mm"')
+
+
+def _read_page_size_mm(source_svg: Path) -> tuple[float, float]:
+    """Read the page's physical size from its own width/height attributes.
+
+    Every poster variant (portrait, landscape, ...) declares its own page size
+    on the root element, so the page size is read from there instead of being
+    duplicated as a constant per variant.
+    """
+    markup = source_svg.read_text(encoding="utf-8")
+    width_match = _SVG_WIDTH_MM.search(markup)
+    height_match = _SVG_HEIGHT_MM.search(markup)
+    if width_match is None or height_match is None:
+        raise ValueError(f"{source_svg}: root <svg> has no width/height in mm")
+    return float(width_match.group(1)), float(height_match.group(1))
 
 
 def _find_chromium() -> str:
@@ -92,10 +105,11 @@ def _run_chromium(chromium: str, page_html: str, *arguments: str) -> None:
 
 def build_pdf(chromium: str, source_svg: Path, target: Path) -> None:
     target.parent.mkdir(parents=True, exist_ok=True)
+    width_mm, height_mm = _read_page_size_mm(source_svg)
     page_style = (
-        f"@page{{size:{PAGE_WIDTH_MM}mm {PAGE_HEIGHT_MM}mm;margin:0}}"
+        f"@page{{size:{width_mm}mm {height_mm}mm;margin:0}}"
         "html,body{margin:0;padding:0}"
-        f"svg{{display:block;width:{PAGE_WIDTH_MM}mm;height:{PAGE_HEIGHT_MM}mm}}"
+        f"svg{{display:block;width:{width_mm}mm;height:{height_mm}mm}}"
     )
     _run_chromium(
         chromium,
@@ -107,7 +121,8 @@ def build_pdf(chromium: str, source_svg: Path, target: Path) -> None:
 
 def build_preview(chromium: str, source_svg: Path, target: Path, width_px: int) -> None:
     target.parent.mkdir(parents=True, exist_ok=True)
-    height_px = round(width_px * PAGE_HEIGHT_MM / PAGE_WIDTH_MM)
+    width_mm, height_mm = _read_page_size_mm(source_svg)
+    height_px = round(width_px * height_mm / width_mm)
     page_style = (
         "html,body{margin:0;padding:0;background:#fff}"
         f"svg{{display:block;width:{width_px}px;height:{height_px}px}}"
