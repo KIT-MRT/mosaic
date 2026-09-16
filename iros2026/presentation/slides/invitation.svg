@@ -26,12 +26,13 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="0.7286458333"
-     inkscape:cx="960"
-     inkscape:cy="539.3566833"
+     inkscape:cx="1075.282345"
+     inkscape:cy="731.4939243"
      inkscape:window-width="2520"
      inkscape:window-height="1331"
      inkscape:window-maximized="0"
-     inkscape:current-layer="svg4" />
+     inkscape:current-layer="svg4"
+     showguides="false" />
   <g
      inkscape:groupmode="layer"
      inkscape:label="__inkflow:layout:base__"
@@ -122,63 +123,70 @@
   </defs>
   <g
      id="poster-thumb"
-     transform="matrix(1.312660102,0,0,1.312660102,-238.8592327,-165.7098539)">
+     transform="matrix(2.495462356,0,0,2.495462356,-518.0005646,-247.2554446)">
     <rect
        x="236"
        y="166"
        width="516"
-       height="728"
+       height="298.9495655"
        rx="16"
        fill="#ffffff"
-       id="rect2" />
+       id="rect2"
+       style="stroke-width:0.640816" />
     <image
        x="246"
-       y="176"
+       y="175.8461035"
        width="496"
-       height="708"
-       xlink:href="../assets/figures/poster_preview.png"
+       height="279.2573585"
+       xlink:href="../assets/figures/poster_landscape_preview.png"
        id="image2" />
   </g>
   <g
-     id="call"
-     transform="translate(0,-104.272916)">
+     inkscape:label="github-badge"
+     id="g84"
+     style="display:inline;stroke-linecap:butt;stroke-linejoin:round"
+     transform="matrix(1.614567528,0,0,1.614567528,-3153.555478,-1905.423977)">
+    <rect
+       x="2838.783"
+       y="1340.6"
+       width="268"
+       height="348"
+       rx="28"
+       ry="28"
+       style="fill:#fab387;stroke:#1e1e2e;stroke-width:4.01;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:label="base"
+       id="rect82" />
+    <image
+       id="svg82"
+       inkscape:label="github-mark"
+       x="2944.46"
+       y="1351.62"
+       width="56.7018"
+       height="55.5447"
+       xlink:href="../assets/logos/github-mark.svg"
+       style="stroke-linecap:butt;stroke-linejoin:round" />
+    <path
+       class="qrline"
+       stroke="#1e1e2e"
+       d="m 2885.6807,1436.1208 h 42.0573 m 6.0084,0 h 12.0163 m 6.0081,0 h 6.0082 m 18.0247,0 h 12.0163 m 6.0082,0 h 6.0081 m 6.0082,0 h 6.0081 m 6.0084,0 h 42.0573 m -174.2376,6.0082 h 6.0083 m 30.0409,0 h 6.0081 m 24.0328,0 h 6.0082 m 6.0082,0 h 12.0165 m 6.0081,0 h 6.0082 m 6.0082,0 h 6.0081 m 18.0247,0 h 6.0081 m 30.0409,0 h 6.0083 m -174.2376,6.0081 h 6.0083 m 6.0082,0 h 18.0246 m 6.0081,0 h 6.0081 m 6.0084,0 h 6.0081 m 12.0163,0 h 6.0082 m 12.0163,0 h 24.0329 m 6.0081,0 h 6.0082 m 12.0165,0 h 6.0081 m 6.0081,0 h 18.0246 m 6.0082,0 h 6.0083 m -174.2376,6.0082 h 6.0083 m 6.0082,0 h 18.0246 m 6.0081,0 h 6.0081 m 18.0247,0 h 12.0163 m 12.0163,0 h 6.0084 m 18.0245,0 h 6.0081 m 6.0082,0 h 6.0081 m 6.0084,0 h 6.0081 m 6.0081,0 h 18.0246 m 6.0082,0 h 6.0083 m -174.2376,6.0083 h 6.0083 m 6.0082,0 h 18.0246 m 6.0081,0 h 6.0081 m 12.0165,0 h 12.0163 m 6.0082,0 h 24.0328 m 12.0164,0 h 12.0163 m 12.0165,0 h 6.0081 m 6.0081,0 h 18.0246 m 6.0082,0 h 6.0083 m -174.2376,6.0081 h 6.0083 m 30.0409,0 h 6.0081 m 6.0084,0 h 6.0081 m 6.0082,0 h 18.0245 m 12.0165,0 h 6.0081 m 12.0164,0 h 6.0081 m 6.0082,0 h 6.0081 m 6.0084,0 h 6.0081 m 30.0409,0 h 6.0083 m -174.2376,6.0083 h 42.0573 m 6.0084,0 h 6.0081 m 6.0082,0 h 6.0081 m 6.0082,0 h 6.0082 m 6.0081,0 h 6.0084 m 6.0081,0 h 6.0082 m 6.0082,0 h 6.0081 m 6.0082,0 h 6.0081 m 6.0084,0 h 42.0573 m -120.1638,6.0081 h 6.0082 m 24.0326,0 h 18.0247 m 6.0082,0 h 6.0081 m -114.1556,6.0082 h 6.0083 m 6.0082,0 h 6.0082 m 18.0245,0 h 12.0165 m 12.0163,0 h 30.041 m 6.0081,0 h 12.0164 m 12.0163,0 h 6.0081 m 12.0165,0 h 6.0081 m 12.0164,0 h 6.0082 m 6.0082,0 h 6.0083 m -174.2376,6.0082 h 12.0165 m 6.0082,0 h 6.0081 m 6.0083,0 h 6.0081 m 6.0081,0 h 12.0165 m 24.0327,0 h 12.0165 m 18.0245,0 h 6.0081 m 6.0082,0 h 24.0327 m 18.0246,0 h 12.0165 m -174.2376,6.0081 h 6.0083 m 12.0164,0 h 24.0326 m 18.0247,0 h 6.0081 m 6.0082,0 h 6.0082 m 12.0165,0 h 12.0163 m 6.0082,0 h 12.0163 m 12.0165,0 h 30.0408 m 6.0082,0 h 6.0083 m -174.2376,6.0083 h 24.0328 m 18.0245,0 h 6.0084 m 30.0408,0 h 6.0081 m 30.041,0 h 6.0082 m 6.0081,0 h 6.0084 m 12.0162,0 h 12.0164 m -138.1882,6.0081 h 12.0164 m 6.0081,0 h 6.0081 m 6.0084,0 h 12.0163 m 6.0081,0 h 6.0082 m 6.0082,0 h 6.0081 m 6.0084,0 h 18.0245 m 12.0163,0 h 6.0081 m 6.0084,0 h 12.0162 m 24.0328,0 h 6.0083 m -168.2293,6.0083 h 12.0164 m 6.0081,0 h 12.0164 m 6.0081,0 h 24.0328 m 42.0574,0 h 6.0081 m 6.0082,0 h 6.0081 m 6.0084,0 h 12.0162 m 18.0246,0 h 12.0165 m -138.1884,6.0081 h 6.0081 m 6.0084,0 h 6.0081 m 18.0245,0 h 24.0328 m 6.0082,0 h 6.0082 m 6.0081,0 h 6.0082 m 6.0081,0 h 24.0329 m 18.0245,0 h 6.0083 m -156.2129,6.0081 h 18.0245 m 12.0165,0 h 18.0244 m 18.0245,0 h 12.0165 m 18.0245,0 h 12.0163 m 6.0084,0 h 12.0162 m -132.18,6.0083 h 6.0082 m 6.0081,0 h 6.0083 m 6.0081,0 h 6.0081 m 6.0084,0 h 6.0081 m 24.0327,0 h 24.0328 m 6.0082,0 h 6.0081 m 6.0082,0 h 18.0246 m 30.0409,0 h 6.0083 m -120.1638,6.0081 h 18.0245 m 6.0082,0 h 30.041 m 6.0081,0 h 6.0082 m 12.0165,0 h 12.0162 m 12.0164,0 h 18.0247 m -174.2376,6.0083 h 12.0165 m 18.0246,0 h 12.0162 m 6.0084,0 h 18.0244 m 24.0329,0 h 6.0081 m 18.0245,0 h 6.0082 m 24.0327,0 h 12.0164 m 12.0164,0 h 6.0083 m -162.2211,6.0081 h 6.0082 m 12.0164,0 h 6.0081 m 6.0081,0 h 6.0084 m 12.0163,0 h 6.0081 m 6.0082,0 h 12.0163 m 24.0329,0 h 6.0081 m 6.0082,0 h 6.0081 m 6.0084,0 h 6.0081 m 6.0081,0 h 6.0083 m -150.2048,6.0082 h 18.0247 m 12.0164,0 h 12.0162 m 6.0084,0 h 12.0163 m 6.0081,0 h 6.0082 m 6.0082,0 h 6.0081 m 12.0165,0 h 6.0082 m 18.0245,0 h 36.0491 m 6.0082,0 h 6.0082 m -120.1636,6.0082 h 12.0163 m 30.041,0 h 18.0245 m 12.0163,0 h 6.0081 m 18.0246,0 h 18.0246 m 6.0082,0 h 6.0083 m -174.2376,6.0081 h 42.0573 m 6.0084,0 h 6.0081 m 12.0163,0 h 30.041 m 6.0082,0 h 6.0082 m 12.0163,0 h 6.0081 m 6.0084,0 h 6.0081 m 6.0081,0 h 6.0083 m 18.0245,0 h 6.0083 m -174.2376,6.0083 h 6.0083 m 30.0409,0 h 6.0081 m 12.0165,0 h 24.0327 m 6.0081,0 h 6.0084 m 18.0245,0 h 18.0244 m 18.0246,0 h 6.0083 m 12.0163,0 h 6.0082 m -168.2293,6.0081 h 6.0083 m 6.0082,0 h 18.0246 m 6.0081,0 h 6.0081 m 12.0165,0 h 48.0655 m 12.0163,0 h 42.0573 m 6.0082,0 h 12.0165 m -174.2376,6.0083 h 6.0083 m 6.0082,0 h 18.0246 m 6.0081,0 h 6.0081 m 36.0492,0 h 30.041 m 6.0081,0 h 18.0247 m 12.0162,0 h 18.0246 m 6.0082,0 h 6.0083 m -174.2376,6.0082 h 6.0083 m 6.0082,0 h 18.0246 m 6.0081,0 h 6.0081 m 6.0084,0 h 6.0081 m 6.0082,0 h 24.0326 m 6.0084,0 h 6.0081 m 30.0408,0 h 6.0084 m 12.0162,0 h 6.0083 m 12.0163,0 h 12.0165 m -174.2376,6.0081 h 6.0083 m 30.0409,0 h 6.0081 m 36.0492,0 h 6.0081 m 6.0084,0 h 6.0081 m 12.0164,0 h 6.0081 m 6.0082,0 h 6.0081 m 12.0165,0 h 18.0245 m -156.2129,6.0082 h 42.0573 m 6.0084,0 h 12.0163 m 6.0081,0 h 6.0082 m 6.0082,0 h 6.0081 m 6.0084,0 h 6.0081 m 24.0327,0 h 6.0081 m 18.0246,0 h 12.0164 m 12.0164,0 h 6.0083"
+       id="path83"
+       style="stroke-width:6.00818;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:label="qr" />
     <text
-       x="900"
-       y="420"
-       font-size="120px"
-       font-weight="700"
-       id="text2"
-       class="inkflow-fill-text inkflow-fill-code-text">Paper 467</text>
-    <g
-       id="g4"
-       transform="matrix(1.550624128,0,0,1.550624128,-495.5617151,-286.3245465)">
-      <rect
-         x="900"
-         y="520"
-         width="260"
-         height="260"
-         rx="16"
-         fill="#ffffff"
-         id="rect3" />
-      <image
-         x="920"
-         y="540"
-         width="220"
-         height="220"
-         xlink:href="../assets/figures/qr-mosaic.svg"
-         id="image3" />
-      <text
-         x="1210"
-         y="640"
-         font-size="40px"
-         id="text3"
-         class="inkflow-fill-text-muted">github.com/</text>
-      <text
-         x="1210"
-         y="700"
-         font-size="40px"
-         id="text4"
-         class="inkflow-fill-text-muted">KIT-MRT/mosaic</text>
-    </g>
+       x="2972.783"
+       y="1642.6"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#1e1e2e;stroke-linecap:butt;stroke-linejoin:round"
+       inkscape:label="link"
+       id="text84"><tspan
+         sodipodi:role="line"
+         id="tspan8"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
+         x="2972.783"
+         y="1642.6">github.com/</tspan><tspan
+         sodipodi:role="line"
+         id="tspan9"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
+         x="2972.783"
+         y="1674.477739">KIT-MRT/mosaic</tspan></text>
   </g>
 </svg>
