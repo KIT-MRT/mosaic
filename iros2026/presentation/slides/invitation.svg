@@ -28,7 +28,7 @@
      inkscape:zoom="0.7286458333"
      inkscape:cx="1075.282345"
      inkscape:cy="731.4939243"
-     inkscape:window-width="2520"
+     inkscape:window-width="3400"
      inkscape:window-height="1331"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg4"
@@ -124,20 +124,11 @@
   <g
      id="poster-thumb"
      transform="matrix(2.495462356,0,0,2.495462356,-518.0005646,-247.2554446)">
-    <rect
-       x="236"
-       y="166"
-       width="516"
-       height="298.9495655"
-       rx="16"
-       fill="#ffffff"
-       id="rect2"
-       style="stroke-width:0.640816" />
     <image
-       x="246"
-       y="175.8461035"
-       width="496"
-       height="279.2573585"
+       x="233.7555633"
+       y="168.9522546"
+       width="520.4888733"
+       height="293.0450562"
        xlink:href="../assets/figures/poster_landscape_preview.png"
        id="image2" />
   </g>

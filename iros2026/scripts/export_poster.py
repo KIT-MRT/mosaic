@@ -16,7 +16,7 @@ import tempfile
 from pathlib import Path
 from typing import Final, NamedTuple
 
-from PIL import Image
+from PIL import Image, ImageDraw
 
 import poster_style
 
@@ -30,6 +30,7 @@ CHROMIUM_COMMANDS: Final = (
 POSTER_DIR: Final = poster_style.SCRIPTS_DIR.parent / "poster"
 PREVIEW_WIDTH_PX: Final = 1325
 PREVIEW_PALETTE_COLORS: Final = 256
+PREVIEW_CORNER_RADIUS_PX: Final = 20
 
 
 class PosterVariant(NamedTuple):
@@ -145,6 +146,22 @@ def export_pdf(chromium: str, source_svg: Path, target: Path) -> None:
     )
 
 
+def _round_corners(image: Image.Image, radius: int) -> Image.Image:
+    """Punch the four corners out to transparency so it looks framed on any background.
+
+    This bakes the rounding into the raster itself, since the README and the
+    presentation slide embed this PNG directly with no CSS or clip-path of
+    their own to round it for them.
+    """
+    mask = Image.new("L", image.size, 0)
+    ImageDraw.Draw(mask).rounded_rectangle(
+        (0, 0, image.width - 1, image.height - 1), radius=radius, fill=255
+    )
+    rgba = image.convert("RGBA")
+    rgba.putalpha(mask)
+    return rgba
+
+
 def export_preview(
     chromium: str, source_svg: Path, target: Path, width_px: int
 ) -> None:
@@ -168,8 +185,8 @@ def export_preview(
     # no visible loss; FASTOCTREE beats MEDIANCUT both on size and on how
     # cleanly it holds up on the author photos.
     with Image.open(target) as raster:
-        rgb = raster.convert("RGB")
-        palette = rgb.quantize(
+        rounded = _round_corners(raster, PREVIEW_CORNER_RADIUS_PX)
+        palette = rounded.quantize(
             colors=PREVIEW_PALETTE_COLORS, method=Image.Quantize.FASTOCTREE
         )
         palette.save(target, optimize=True)
