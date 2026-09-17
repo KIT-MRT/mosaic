@@ -6,6 +6,7 @@ set -euo pipefail
 
 SCRIPTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 IROS_DIR="$(dirname "$SCRIPTS_DIR")"
+REPO_ROOT="$(dirname "$IROS_DIR")"
 SITE_DIR="$IROS_DIR/site"
 OUT_DIR="${1:-$SITE_DIR/build}"
 
@@ -26,7 +27,6 @@ SITE_ASSETS=(
     logos/iros-2026-logo.png
     logos/kit-logo.svg
     logos/linkedin.svg
-    logos/mosaic-logo.png
     photos/marlon.jpg
     photos/nick.jpg
 )
@@ -34,6 +34,9 @@ for asset in "${SITE_ASSETS[@]}"; do
     mkdir -p "$OUT_DIR/assets/$(dirname "$asset")"
     cp "$IROS_DIR/assets/$asset" "$OUT_DIR/assets/$asset"
 done
+
+mkdir -p "$OUT_DIR/assets/logos"
+cp "$REPO_ROOT/assets/mosaic.png" "$OUT_DIR/assets/logos/mosaic-logo.png"
 
 cp -r "$IROS_DIR/presentation/build" "$OUT_DIR/slides"
 
