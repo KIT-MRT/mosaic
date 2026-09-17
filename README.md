@@ -95,40 +95,12 @@ uv run mosaic plot              # Generate behavior selection pie chart
 uv run mosaic cite              # Print BibTeX citation
 ```
 
+Use `--help` to see all available options per command.
+
 ### Quick test
 
 ```bash
 uv run mosaic simulate -n 1     # Run a single scenario
-```
-
-### CLI reference
-
-```
-uv run mosaic simulate [OPTIONS]
-  -c, --challenge          closed_loop_reactive_agents (default) | closed_loop_nonreactive_agents | interplan
-  --scenario-filter        Scenario filter preset (default: val14_split, or interplan10 for interplan)
-  --ablation               none (default) | no_verifier | pdm_closed_only | flow_drive_only
-  -n, --limit-scenarios    Limit total scenarios
-  --experiment-name        Experiment name (default: mosaic)
-  --threads                Worker threads per node (default: 160)
-  --gpus-per-sim           GPUs per simulation (default: 0.05)
-  -o, --override           Simulation framework overrides (repeatable, e.g. -o worker.threads_per_node=80)
-  -p, --planner-override   Planner parameter overrides (repeatable, e.g. -p cost_estimator.parameters.ttc.weight=10)
-
-uv run mosaic analyze [OPTIONS]
-  -p, --path               Path to experiment output dir (auto-detects latest)
-  -b, --baseline           Path to baseline experiment dir for comparison
-  --per-type / --no-per-type  Per-scenario-type breakdown (default: on)
-
-uv run mosaic results [OPTIONS]
-  -p, --path               Path to output dir or .nuboard file (auto-detects latest)
-  --port                   Port number (default: 5006)
-
-uv run mosaic plot [OPTIONS]
-  -p, --path               Path to experiment output dir (auto-detects latest)
-  -o, --output             Output SVG path (default: behavior_selection.svg)
-
-uv run mosaic cite
 ```
 
 ## Reproducing paper experiments
