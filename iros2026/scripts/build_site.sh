@@ -26,6 +26,7 @@ SITE_ASSETS=(
     logos/iros-2026-logo.png
     logos/kit-logo.svg
     logos/linkedin.svg
+    logos/mosaic-logo.png
     photos/marlon.jpg
     photos/nick.jpg
 )
