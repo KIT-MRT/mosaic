@@ -23,9 +23,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: astral-sh/setup-uv@v3
+      - uses: astral-sh/setup-uv@v10.1.0
 
       - name: Install Google Chrome
         run: |
@@ -40,7 +40,7 @@ jobs:
       - name: Build site
         run: iros2026/scripts/build_site.sh
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: iros2026/site/build
 
@@ -51,5 +51,5 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/deploy-pages@v4
+      - uses: actions/deploy-pages@v5
         id: deployment
