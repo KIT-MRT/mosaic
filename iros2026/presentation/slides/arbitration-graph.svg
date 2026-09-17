@@ -25,10 +25,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.6956899531"
-     inkscape:cx="952.2920333"
-     inkscape:cy="671.2760446"
-     inkscape:window-width="2520"
+     inkscape:zoom="0.5850031878"
+     inkscape:cx="730.7652487"
+     inkscape:cy="747.0044765"
+     inkscape:window-width="3400"
      inkscape:window-height="1331"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg6" />
@@ -319,25 +319,32 @@
     </g>
   </g>
   <text
-     x="960.2747362"
+     x="959.2083455"
      y="108.7908555"
-     style="font-style: normal; font-variant: normal; font-weight: bold; font-stretch: normal; font-size: 63.5809px; font-family: 'DejaVu Sans'; -inkscape-font-specification: 'DejaVu Sans, Bold'; font-variant-ligatures: normal; font-variant-caps: normal; font-variant-numeric: normal; font-variant-east-asian: normal; text-align: center; text-anchor: middle; white-space: pre; fill-opacity: 1; stroke-width: 0.723414; stroke-linecap: butt; stroke-linejoin: round"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:63.5809px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill-opacity:1;stroke-width:0.723414;stroke-linecap:butt;stroke-linejoin:round"
      inkscape:label="paper-title"
      id="text12"
      class="inkflow-fill-text inkflow-fill-code-text"><tspan
-       x="960.2747362"
+       x="959.2083455"
        y="108.7908555"
        id="tspan11"
-       style="font-style: normal; font-variant: normal; font-weight: bold; font-stretch: normal; font-size: 63.5809px; font-family: 'DejaVu Sans'; -inkscape-font-specification: 'DejaVu Sans, Bold'; font-variant-ligatures: normal; font-variant-caps: normal; font-variant-numeric: normal; font-variant-east-asian: normal; fill-opacity: 1; stroke-width: 0.723414"
-       class="inkflow-fill-text inkflow-fill-code-text">Mosaic: An Extensible Framework for Composing</tspan><tspan
-       x="960.2747362"
-       y="180.0015625"
-       id="tspan12"
-       style="font-style: normal; font-variant: normal; font-weight: bold; font-stretch: normal; font-size: 63.5809px; font-family: 'DejaVu Sans'; -inkscape-font-specification: 'DejaVu Sans, Bold'; font-variant-ligatures: normal; font-variant-caps: normal; font-variant-numeric: normal; font-variant-east-asian: normal; fill-opacity: 1; stroke-width: 0.723414"
-       class="inkflow-fill-text inkflow-fill-code-text">Rule-Based and Learned Motion Planners</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:63.5809px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill-opacity:1;stroke-width:0.723414"
+       class="inkflow-fill-text inkflow-fill-code-text">Mosaic</tspan></text>
   <path
      style="fill: none; stroke-width: 2; stroke-linecap: butt; stroke-linejoin: miter; stroke-opacity: 1; stroke-dasharray: none"
      d="M 0,223.7210917 H 1920"
      id="path25"
      class="inkflow-stroke-blue" />
+  <text
+     x="961.0781996"
+     y="177.9216899"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:47.9208px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#cdd6f4;fill-opacity:1;stroke-width:0.717406;stroke-linecap:butt;stroke-linejoin:round"
+     inkscape:label="paper-title"
+     id="text2"
+     class="inkflow-fill-text inkflow-fill-code-text"><tspan
+       sodipodi:role="line"
+       id="tspan2"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:47.9208px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans';stroke-width:0.717406"
+       x="961.078187"
+       y="177.9216899">An Extensible Framework for Composing Rule-Based and Learned Motion Planners</tspan></text>
 </svg>

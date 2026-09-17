@@ -1,4 +1,4 @@
-"""QR code linking to the repository."""
+"""QR code linking to the IROS 2026 materials site."""
 
 import argparse
 from pathlib import Path
@@ -8,7 +8,7 @@ import segno
 
 import poster_style
 
-REPOSITORY_URL: Final = "https://github.com/KIT-MRT/mosaic"
+SITE_URL: Final = "https://kit-mrt.github.io/mosaic/"
 
 ERROR_CORRECTION: Final = "m"
 MODULE_SCALE: Final = 8
@@ -16,7 +16,7 @@ MODULE_SCALE: Final = 8
 QUIET_ZONE_MODULES: Final = 3
 
 
-def render(output_path: Path, url: str = REPOSITORY_URL) -> None:
+def render(output_path: Path, url: str = SITE_URL) -> None:
     code = segno.make(url, error=ERROR_CORRECTION)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     code.save(
@@ -33,7 +33,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--url",
-        default=REPOSITORY_URL,
+        default=SITE_URL,
         help="URL to encode (default: %(default)s)",
     )
     parser.add_argument(

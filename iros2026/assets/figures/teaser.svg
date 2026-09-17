@@ -11473,7 +11473,6 @@
          y="240.3363"
          inkscape:export-xdpi="300"
          inkscape:export-ydpi="300"
-         inkscape:export-filename="/home/lelarge/accidentScene.png"
          inkscape:label="ashphalt" /><path
          style="fill:none;stroke:#ffffff;stroke-width:3.47993;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:41.7591, 41.7591;stroke-dashoffset:0;stroke-opacity:1"
          d="M 28.495734,579.12935 V 240.3363"
@@ -11481,7 +11480,6 @@
          inkscape:connector-curvature="0"
          inkscape:export-xdpi="300"
          inkscape:export-ydpi="300"
-         inkscape:export-filename="/home/lelarge/accidentScene.png"
          inkscape:label="center" /><path
          inkscape:connector-curvature="0"
          id="path970"
@@ -11489,7 +11487,6 @@
          style="fill:none;stroke:#ffffff;stroke-width:3.47993;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          inkscape:export-xdpi="300"
          inkscape:export-ydpi="300"
-         inkscape:export-filename="/home/lelarge/accidentScene.png"
          inkscape:label="left-bound" /><path
          inkscape:connector-curvature="0"
          id="path968"
@@ -11498,14 +11495,12 @@
          sodipodi:nodetypes="cc"
          inkscape:export-xdpi="300"
          inkscape:export-ydpi="300"
-         inkscape:export-filename="/home/lelarge/accidentScene.png"
          inkscape:label="right-bound" /></g><path
        style="opacity:0.632;vector-effect:none;fill:none;fill-opacity:1;stroke:#04a5e5;stroke-width:26.118;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        d="M 57.310894,495.16932 V 276.08776"
        id="path1085-5"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="/home/lelarge/trajectoryStraight.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
        inkscape:label="follow-trajectory" /><path
@@ -11514,7 +11509,6 @@
        id="path1087"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="csssccc"
-       inkscape:export-filename="/home/lelarge/trajectoryLeft.png"
        inkscape:export-xdpi="299.99207"
        inkscape:export-ydpi="299.99207"
        inkscape:label="overtake-trajectory" /><g
@@ -11522,7 +11516,6 @@
        transform="matrix(0,-0.06756283,0.07017797,0,6.4313148,566.08326)"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
-       inkscape:export-filename="/home/lelarge/egoVehicle.png"
        style="stroke-width:1.00206;stroke-dasharray:none"
        inkscape:label="ego"><path
          id="path840"
@@ -12941,7 +12934,6 @@
          y="240.3363"
          inkscape:export-xdpi="300"
          inkscape:export-ydpi="300"
-         inkscape:export-filename="/home/lelarge/accidentScene.png"
          inkscape:label="ashphalt" /><path
          style="fill:none;stroke:#ffffff;stroke-width:3.47993;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:41.7591, 41.7591;stroke-dashoffset:0;stroke-opacity:1"
          d="M 28.495734,579.12935 V 240.3363"
@@ -12949,7 +12941,6 @@
          inkscape:connector-curvature="0"
          inkscape:export-xdpi="300"
          inkscape:export-ydpi="300"
-         inkscape:export-filename="/home/lelarge/accidentScene.png"
          inkscape:label="center" /><path
          inkscape:connector-curvature="0"
          id="path50"
@@ -12957,7 +12948,6 @@
          style="fill:none;stroke:#ffffff;stroke-width:3.47993;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          inkscape:export-xdpi="300"
          inkscape:export-ydpi="300"
-         inkscape:export-filename="/home/lelarge/accidentScene.png"
          inkscape:label="left-bound" /><path
          inkscape:connector-curvature="0"
          id="path51"
@@ -12966,14 +12956,12 @@
          sodipodi:nodetypes="cc"
          inkscape:export-xdpi="300"
          inkscape:export-ydpi="300"
-         inkscape:export-filename="/home/lelarge/accidentScene.png"
          inkscape:label="right-bound" /></g><path
        style="opacity:0.632;vector-effect:none;fill:none;fill-opacity:1;stroke:#40a02b;stroke-width:26.118;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        d="M 57.310894,495.16932 V 276.08776"
        id="path52-9"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="/home/lelarge/trajectoryStraight.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
        inkscape:label="follow-trajectory" /><path
@@ -12982,7 +12970,6 @@
        id="path1087-2"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="csssccc"
-       inkscape:export-filename="/home/lelarge/trajectoryLeft.png"
        inkscape:export-xdpi="299.99207"
        inkscape:export-ydpi="299.99207"
        inkscape:label="overtake-trajectory" /><g
@@ -12990,7 +12977,6 @@
        transform="matrix(0,-0.06756283,0.07017797,0,6.431314,566.08326)"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
-       inkscape:export-filename="/home/lelarge/egoVehicle.png"
        style="stroke-width:1.00206;stroke-dasharray:none"
        inkscape:label="ego"><path
          id="path54"
@@ -13125,7 +13111,6 @@
        transform="matrix(0,0.06756283,-0.07017797,0,52.312064,212.9934)"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
-       inkscape:export-filename="/home/lelarge/egoVehicle.png"
        style="stroke-width:1.00206;stroke-dasharray:none"
        inkscape:label="oncoming"><path
          id="path54-1"

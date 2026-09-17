@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mosaic | IROS 2026</title>
+<link rel="icon" type="image/png" href="assets/logos/mosaic-logo.png">
+<style>
+  :root {
+    --bg: #b4befe;
+    --card: #ffffff;
+    --ink: #1e1e2e;
+    --muted: #6c6f85;
+    --peach: #fe640b;
+    --blue: #1e66f5;
+    --teal: #179299;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Helvetica, Arial, sans-serif;
+  }
+  .page {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 24px 16px 48px;
+  }
+  .hero {
+    background: var(--ink);
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    text-align: center;
+  }
+  .hero h1 {
+    margin: 0 0 6px;
+    font-size: 1.9rem;
+  }
+  .hero .tagline {
+    margin: 0 0 14px;
+    font-size: 1.05rem;
+    color: #dcdcf5;
+  }
+  .hero .authors {
+    margin: 0 0 6px;
+    font-size: 0.95rem;
+  }
+  .hero .affiliations {
+    margin: 0;
+    font-size: 0.72rem;
+    color: #b4befe;
+  }
+  .hero .affiliations .footnote {
+    display: inline-block;
+  }
+
+  nav.links {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 20px 0 38px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--peach);
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.95rem;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn svg { width: 17px; height: 17px; flex-shrink: 0; }
+
+  .center-row {
+    display: flex;
+    justify-content: center;
+  }
+
+  section.card {
+    background: var(--card);
+    border: 2px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
+    border-radius: 12px;
+    padding: 0 24px 24px;
+    margin: 0 0 44px;
+  }
+  h2.pill {
+    display: block;
+    width: fit-content;
+    background: var(--ink);
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: bold;
+    padding: 8px 22px;
+    border-radius: 10px;
+    transform: translateY(-18px);
+    margin: 0 auto -8px;
+  }
+  section.card p { line-height: 1.55; }
+
+  .bibtex-frame {
+    position: relative;
+  }
+  pre.bibtex {
+    background: #f4f4fb;
+    border-radius: 10px;
+    padding: 16px;
+    overflow-x: auto;
+    font-size: 0.82rem;
+  }
+  .copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border-radius: 7px;
+    border: 2px solid var(--ink);
+    background: #fff;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .copy-btn svg { width: 16px; height: 16px; }
+  .copy-btn.copied {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .toggle {
+    display: inline-flex;
+    background: #eef0fb;
+    border: 2px solid var(--ink);
+    border-radius: 10px;
+    padding: 3px;
+    gap: 3px;
+    margin-bottom: 16px;
+  }
+  .toggle button {
+    font-family: inherit;
+    font-size: 0.9rem;
+    padding: 7px 20px;
+    border-radius: 7px;
+    border: none;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .toggle button.active {
+    background: var(--ink);
+    color: #fff;
+  }
+  .poster-frame {
+    display: block;
+  }
+  .poster-frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .poster-download {
+    margin-top: 12px;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  .contact-grid {
+    display: flex;
+    justify-content: center;
+    gap: 56px;
+    flex-wrap: wrap;
+  }
+  .contact-person {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .contact-person img {
+    width: 64px;
+    height: 64px;
+    border-radius: 999px;
+    object-fit: cover;
+    border: 2px solid var(--ink);
+    flex-shrink: 0;
+  }
+  .contact-person .name {
+    font-weight: bold;
+    margin: 0 0 4px;
+  }
+  .contact-person .contact-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .contact-person .contact-line img {
+    width: 18px;
+    height: 18px;
+    border-radius: 0;
+    border: none;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+  .contact-person .contact-line a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .contact-person .contact-line a:hover {
+    text-decoration: underline;
+  }
+
+  footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 96px;
+    flex-wrap: wrap;
+    padding: 24px 0 8px;
+  }
+  footer img { height: 72px; width: auto; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="hero">
+    <h1>Mosaic</h1>
+    <p class="tagline">An Extensible Framework for Composing Rule-Based and Learned Motion Planners</p>
+    <p class="authors">Nick&nbsp;Le&nbsp;Large*<sup>1</sup>, Marlon&nbsp;Steiner*<sup>1</sup>, Lingguang&nbsp;Wang<sup>1</sup>, Willi&nbsp;Poh<sup>1</sup>, Jan-Hendrik&nbsp;Pauls<sup>1</sup>, Ömer&nbsp;Şahin&nbsp;Taş<sup>2</sup>, Christoph&nbsp;Stiller<sup>1</sup></p>
+    <p class="affiliations">
+      <span class="footnote"><sup>1</sup>Karlsruhe Institute of Technology (KIT), Karlsruhe, Germany ·</span>
+      <span class="footnote"><sup>2</sup>FZI Research Center for Information Technology, Karlsruhe, Germany ·</span>
+      <span class="footnote">*Authors have equal contribution</span>
+    </p>
+  </header>
+
+  <nav class="links">
+    <a class="btn" href="https://arxiv.org/abs/2604.13853v2">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+      Paper
+    </a>
+    <a class="btn" href="https://github.com/KIT-MRT/mosaic">
+      <svg viewBox="0 0 98 96" fill="currentColor"><path d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z"/></svg>
+      Code
+    </a>
+    <a class="btn" href="slides/index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg>
+      Slides
+    </a>
+  </nav>
+
+  <section class="card">
+    <h2 class="pill">Abstract</h2>
+    <p>
+      Safe and explainable motion planning remains a central challenge in autonomous driving.
+      While rule-based planners offer predictable and explainable behavior, they often fail to
+      grasp the complexity and uncertainty of real-world traffic. Conversely, learned planners
+      exhibit strong adaptability but suffer from reduced transparency and occasional safety
+      violations. We introduce Mosaic, a framework for structured decision-making that integrates
+      both paradigms through arbitration graphs. By decoupling trajectory verification and
+      selection from the generation of trajectories by individual planners, every decision becomes
+      transparent and traceable. This separation lets verification and trajectory selection
+      contribute independently: centralized verification acts as a safety floor, reducing at-fault
+      collisions from 25 for each standalone planner to 16. In contrast, per-step trajectory
+      selection acts as a performance ceiling, combining the complementary strengths of a
+      rule-based and a learned planner. In experimental evaluation on nuPlan, Mosaic achieves
+      95.56 CLS-NR and 94.18 CLS-R on the Val14 closed-loop benchmark, setting a new state of the
+      art. On the interPlan benchmark, focused on highly interactive and out-of-distribution
+      scenarios, Mosaic scores 54.10 CLS-R, outperforming its best constituent planner by 22.8%
+      — all without retraining or requiring additional data.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2 class="pill">Poster</h2>
+    <div class="center-row">
+      <div class="toggle" role="group" aria-label="Poster orientation">
+        <button type="button" data-variant="landscape" class="active">Landscape</button>
+        <button type="button" data-variant="portrait">Portrait</button>
+      </div>
+    </div>
+    <a class="poster-frame" id="poster-link" href="poster_landscape.pdf">
+      <img id="poster-preview" src="poster_landscape_preview.png" alt="Mosaic IROS 2026 poster preview">
+    </a>
+    <p class="poster-download">Click the poster to download the PDF.</p>
+  </section>
+
+  <section class="card">
+    <h2 class="pill">Cite</h2>
+    <div class="bibtex-frame">
+      <pre class="bibtex" id="bibtex-text">@misc{lelarge2026mosaic,
+  title={Mosaic: An Extensible Framework for Composing Rule-Based and Learned Motion Planners},
+  author={Le Large, Nick and Steiner, Marlon and Wang, Lingguang and Poh, Willi and Pauls, Jan-Hendrik and Ta\c{s}, {\"{O}}mer {\c{S}}ahin and Stiller, Christoph},
+  year={2026},
+  eprint={2604.13853},
+  archivePrefix={arXiv},
+  primaryClass={cs.RO},
+  url={https://arxiv.org/abs/2604.13853},
+}</pre>
+      <button class="copy-btn" id="bibtex-copy" type="button" aria-label="Copy BibTeX">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="pill">Contact</h2>
+    <div class="contact-grid">
+      <div class="contact-person">
+        <img src="assets/photos/nick.jpg" alt="Nick Le Large">
+        <div>
+          <p class="name">Nick Le Large</p>
+          <p class="contact-line"><img src="assets/logos/email.svg" alt=""> <a href="mailto:nick.lelarge@kit.edu">nick.lelarge@kit.edu</a></p>
+          <p class="contact-line"><img src="assets/logos/linkedin.svg" alt=""> <a href="https://linkedin.com/in/nick-le-large">linkedin.com/in/nick-le-large</a></p>
+        </div>
+      </div>
+      <div class="contact-person">
+        <img src="assets/photos/marlon.jpg" alt="Marlon Steiner">
+        <div>
+          <p class="name">Marlon Steiner</p>
+          <p class="contact-line"><img src="assets/logos/email.svg" alt=""> <a href="mailto:marlon.steiner@kit.edu">marlon.steiner@kit.edu</a></p>
+          <p class="contact-line"><img src="assets/logos/linkedin.svg" alt=""> <a href="https://linkedin.com/in/steiner-marlon">linkedin.com/in/steiner-marlon</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <img src="assets/logos/kit-logo.svg" alt="KIT">
+    <img src="assets/logos/iros-2026-logo.png" alt="IROS 2026">
+  </footer>
+
+</div>
+<script>
+  const variants = {
+    landscape: { pdf: "poster_landscape.pdf", preview: "poster_landscape_preview.png" },
+    portrait: { pdf: "poster_portrait.pdf", preview: "poster_portrait_preview.png" },
+  };
+  const buttons = document.querySelectorAll(".toggle button");
+  const link = document.getElementById("poster-link");
+  const preview = document.getElementById("poster-preview");
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const variant = variants[button.dataset.variant];
+      link.href = variant.pdf;
+      preview.src = variant.preview;
+      buttons.forEach((b) => b.classList.toggle("active", b === button));
+    });
+  });
+
+  const copyBtn = document.getElementById("bibtex-copy");
+  const copyIcon = copyBtn.innerHTML;
+  const checkIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+  copyBtn.addEventListener("click", async () => {
+    await navigator.clipboard.writeText(document.getElementById("bibtex-text").textContent);
+    copyBtn.innerHTML = checkIcon;
+    copyBtn.classList.add("copied");
+    setTimeout(() => {
+      copyBtn.innerHTML = copyIcon;
+      copyBtn.classList.remove("copied");
+    }, 1500);
+  });
+</script>
+</body>
+</html>
