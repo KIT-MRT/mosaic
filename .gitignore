@@ -4,6 +4,9 @@
 ### PDF export ###
 
 *.pdf
+*.png
+
+!iros2026/assets/figures/poster_landscape_preview.png
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
