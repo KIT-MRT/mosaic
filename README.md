@@ -23,8 +23,16 @@ Evaluated on [nuPlan](https://github.com/motional/nuplan-devkit), Mosaic achieve
 ---
 
 <p align="center">
-  <a href="iros2026/poster/poster.pdf">
-    <img src="iros2026/assets/figures/poster_preview.png" alt="Mosaic IROS 2026 poster" width="800">
+  <a href="https://arxiv.org/abs/2604.13853v2"><img src="assets/paper-button.svg" alt="Read the paper"></a>
+  &nbsp;&nbsp;
+  <a href="https://kit-mrt.github.io/mosaic/"><img src="assets/website-button.svg" alt="Visit the project website"></a>
+  &nbsp;&nbsp;
+  <a href="https://kit-mrt.github.io/mosaic/slides/index.html"><img src="assets/slides-button.svg" alt="Watch the lightning talk"></a>
+</p>
+
+<p align="center">
+  <a href="https://kit-mrt.github.io/mosaic/poster_landscape.pdf">
+    <img src="iros2026/assets/figures/poster_landscape_preview.png" alt="Mosaic IROS 2026 poster" width="800">
   </a>
 </p>
 
