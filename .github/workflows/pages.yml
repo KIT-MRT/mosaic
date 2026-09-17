@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - add-pages
     paths:
       - iros2026/**
       - .github/workflows/pages.yml
