@@ -179,7 +179,7 @@
   .contact-grid {
     display: flex;
     justify-content: center;
-    gap: 40px;
+    gap: 56px;
     flex-wrap: wrap;
   }
   .contact-person {
@@ -215,12 +215,19 @@
     object-fit: contain;
     flex-shrink: 0;
   }
+  .contact-person .contact-line a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .contact-person .contact-line a:hover {
+    text-decoration: underline;
+  }
 
   footer {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 64px;
+    gap: 96px;
     flex-wrap: wrap;
     padding: 24px 0 8px;
   }
@@ -317,16 +324,16 @@
         <img src="assets/photos/nick.jpg" alt="Nick Le Large">
         <div>
           <p class="name">Nick Le Large</p>
-          <p class="contact-line"><img src="assets/logos/email.svg" alt=""> nick.lelarge@kit.edu</p>
-          <p class="contact-line"><img src="assets/logos/linkedin.svg" alt=""> linkedin.com/in/nick-le-large</p>
+          <p class="contact-line"><img src="assets/logos/email.svg" alt=""> <a href="mailto:nick.lelarge@kit.edu">nick.lelarge@kit.edu</a></p>
+          <p class="contact-line"><img src="assets/logos/linkedin.svg" alt=""> <a href="https://linkedin.com/in/nick-le-large">linkedin.com/in/nick-le-large</a></p>
         </div>
       </div>
       <div class="contact-person">
         <img src="assets/photos/marlon.jpg" alt="Marlon Steiner">
         <div>
           <p class="name">Marlon Steiner</p>
-          <p class="contact-line"><img src="assets/logos/email.svg" alt=""> marlon.steiner@kit.edu</p>
-          <p class="contact-line"><img src="assets/logos/linkedin.svg" alt=""> linkedin.com/in/steiner-marlon</p>
+          <p class="contact-line"><img src="assets/logos/email.svg" alt=""> <a href="mailto:marlon.steiner@kit.edu">marlon.steiner@kit.edu</a></p>
+          <p class="contact-line"><img src="assets/logos/linkedin.svg" alt=""> <a href="https://linkedin.com/in/steiner-marlon">linkedin.com/in/steiner-marlon</a></p>
         </div>
       </div>
     </div>
