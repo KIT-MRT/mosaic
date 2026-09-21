@@ -25,9 +25,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.5850031878"
-     inkscape:cx="730.7652487"
-     inkscape:cy="747.0044765"
+     inkscape:zoom="0.6109034916"
+     inkscape:cx="793.0876262"
+     inkscape:cy="723.5185362"
      inkscape:window-width="3400"
      inkscape:window-height="1331"
      inkscape:window-maximized="0"
@@ -336,15 +336,15 @@
      id="path25"
      class="inkflow-stroke-blue" />
   <text
-     x="961.0781996"
-     y="177.9216899"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:47.9208px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#cdd6f4;fill-opacity:1;stroke-width:0.717406;stroke-linecap:butt;stroke-linejoin:round"
+     x="960.9837462"
+     y="176.651091"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:43.3151px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#cdd6f4;fill-opacity:1;stroke-width:0.648456;stroke-linecap:butt;stroke-linejoin:round"
      inkscape:label="paper-title"
      id="text2"
      class="inkflow-fill-text inkflow-fill-code-text"><tspan
        sodipodi:role="line"
        id="tspan2"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:47.9208px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans';stroke-width:0.717406"
-       x="961.078187"
-       y="177.9216899">An Extensible Framework for Composing Rule-Based and Learned Motion Planners</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:43.3151px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans';stroke-width:0.648456"
+       x="960.9837269"
+       y="176.651091">An Extensible Framework for Composing Rule-Based and Learned Motion Planners</tspan></text>
 </svg>
