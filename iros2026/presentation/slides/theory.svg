@@ -24,10 +24,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.5850031878"
-     inkscape:cx="717.0901095"
-     inkscape:cy="765.8077927"
-     inkscape:window-width="3400"
+     inkscape:zoom="0.4710709892"
+     inkscape:cx="1143.139808"
+     inkscape:cy="951.0243897"
+     inkscape:window-width="1920"
      inkscape:window-height="1331"
      inkscape:window-maximized="0"
      inkscape:current-layer="main" />
@@ -188,7 +188,7 @@
     <g
        id="g8"
        inkscape:label="g-input"
-       transform="translate(412.3866859)">
+       transform="translate(396.8748127,45.654832)">
       <path
          d="M 257.5384764,389.3846515 H 389.9786457"
          stroke-width="7.56129"
@@ -208,7 +208,7 @@
     </g>
     <g
        id="pipeline"
-       transform="matrix(0.7185110888,0,0,0.7185110888,556.2276425,1.388663301)">
+       transform="matrix(0.7185110888,0,0,0.7185110888,556.2276425,47.0434953)">
       <g
          id="learned"
          transform="translate(-579.7630834,200)"
@@ -242,7 +242,7 @@
     </g>
     <g
        id="g-trajectory"
-       transform="matrix(0.7185110888,0,0,0.7185110888,169.1788099,1.388663301)">
+       transform="matrix(0.7185110888,0,0,0.7185110888,182.4706223,47.0434953)">
       <text
          x="1662.413534"
          y="555.5168918"
@@ -260,5 +260,17 @@
          inkscape:label="a-trajectory"
          class="inkflow-stroke-text-muted" />
     </g>
+    <text
+       x="879.8609465"
+       y="135.6155189"
+       font-size="64.2799px"
+       font-weight="700"
+       id="text1"
+       style="fill:#cdd6f4;stroke-width:1.46091"
+       class="inkflow-fill-text inkflow-fill-code-text"><tspan
+         id="tspan15"
+         x="879.8609465"
+         y="135.6155189"
+         style="stroke-width:1.46091">Theory</tspan></text>
   </g>
 </svg>
