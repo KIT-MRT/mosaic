@@ -24,10 +24,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.4919270836"
-     inkscape:cx="1190.217045"
-     inkscape:cy="772.4722071"
-     inkscape:window-width="2520"
+     inkscape:zoom="0.4710709892"
+     inkscape:cx="1143.139808"
+     inkscape:cy="951.0243897"
+     inkscape:window-width="1920"
      inkscape:window-height="1331"
      inkscape:window-maximized="0"
      inkscape:current-layer="main" />
@@ -96,7 +96,7 @@
     </marker>
     <marker
        style="overflow:visible"
-       id="ConcaveTriangle"
+       id="ConcaveTriangle-9"
        refX="0"
        refY="0"
        orient="auto-start-reverse"
@@ -108,7 +108,23 @@
          transform="scale(0.7)"
          d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z"
          style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round"
-         id="path7" />
+         id="path7-0" />
+    </marker>
+    <marker
+       id="ConcaveTriangle-1"
+       style="overflow:visible"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       preserveAspectRatio="xMidYMid">
+      <path
+         d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+         transform="scale(0.7)"
+         id="path1-5" />
     </marker>
     <style
        id="inkflow-preview">.inkflow-fill-bg { fill: #1e1e2e; }
@@ -147,73 +163,114 @@
 .inkflow-stroke-pink { stroke: #f5c2e7; }
 .inkflow-fill-grey { fill: #6c7086; }
 .inkflow-stroke-grey { stroke: #6c7086; }</style>
+    <marker
+       style="overflow:visible"
+       id="ConcaveTriangle"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.7)"
+         d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round"
+         id="path7" />
+    </marker>
   </defs>
   <g
      inkscape:groupmode="layer"
      id="main"
-     inkscape:label="main">
-    <text
-       x="812.0470314"
-       y="180.9780605"
-       font-size="76.0466px"
-       font-weight="700"
-       id="text1"
-       style="stroke-width: 1.72833"
-       class="inkflow-fill-text inkflow-fill-code-text">Theory</text>
-    <path
-       style="fill:#b4befe;fill-opacity:1;stroke-width:7.97341;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#ConcaveTriangle)"
-       d="M 483.1500294,541.3634368 H 679.2484916"
-       id="a-input"
-       inkscape:label="a-input"
-       class="inkflow-stroke-text-muted" />
+     inkscape:label="main"
+     transform="matrix(1.183053731,0,0,1.183053731,-228.8756932,20.67133886)">
     <g
-       id="learned"
-       transform="translate(90.26896782,200)"
-       inkscape:label="learned">
-      <rect
-         x="663.0251935"
-         y="114.8636775"
-         width="421.8608567"
-         height="450.272645"
-         rx="28.12405711"
-         id="rect2"
-         style="stroke-width:2.56818"
-         class="inkflow-fill-teal" />
+       id="g8"
+       inkscape:label="g-input"
+       transform="translate(396.8748127,45.654832)">
+      <path
+         d="M 257.5384764,389.3846515 H 389.9786457"
+         stroke-width="7.56129"
+         marker-end="url(#tip)"
+         id="a-input"
+         style="stroke-width:6.07748;stroke-dasharray:none;marker-end:url(#ConcaveTriangle-9)"
+         inkscape:label="a-input"
+         class="inkflow-stroke-text-muted" />
       <text
-         x="873.7280834"
-         y="324.3303037"
-         font-size="62.1327px"
-         text-anchor="middle"
-         id="text2"
-         style="stroke-width:2.21902"
-         class="inkflow-fill-bg"><tspan
-           id="tspan12"
-           x="873.7280897"
+         x="126.2038047"
+         y="400.5337175"
+         font-size="40.4129px"
+         id="input"
+         style="stroke-width:1.26291"
+         inkscape:label="input"
+         class="inkflow-fill-text-muted inkflow-fill-text inkflow-fill-code-text">input</text>
+    </g>
+    <g
+       id="pipeline"
+       transform="matrix(0.7185110888,0,0,0.7185110888,556.2276425,47.0434953)">
+      <g
+         id="learned"
+         transform="translate(-579.7630834,200)"
+         inkscape:label="learned">
+        <rect
+           x="993.3094312"
+           y="114.8636775"
+           width="421.8608567"
+           height="450.272645"
+           rx="28.12405711"
+           id="rect2"
+           style="stroke-width:2.56818"
+           class="inkflow-fill-teal" />
+        <text
+           x="1204.012321"
            y="324.3303037"
-           style="stroke-width:2.21902">Learned</tspan><tspan
-           id="tspan13"
-           x="873.7280886"
-           y="401.9961787"
-           style="stroke-width:2.21902">Planner</tspan></text>
+           font-size="62.1327px"
+           text-anchor="middle"
+           id="text2"
+           style="stroke-width:2.21902"
+           class="inkflow-fill-bg"><tspan
+             id="tspan12"
+             x="1204.012327"
+             y="324.3303037"
+             style="stroke-width:2.21902">Learned</tspan><tspan
+             id="tspan13"
+             x="1204.012326"
+             y="401.9961787"
+             style="stroke-width:2.21902">Planner</tspan></text>
+      </g>
     </g>
     <g
        id="g-trajectory"
-       inkscape:label="g-trajectory"
-       transform="translate(215.155018)">
+       transform="matrix(0.7185110888,0,0,0.7185110888,182.4706223,47.0434953)">
       <text
-         x="1249.344517"
-         y="556.8803284"
+         x="1662.413534"
+         y="555.5168918"
          font-size="56.2453px"
          id="trajectory"
          style="stroke-width:1.75767"
          inkscape:label="trajectory"
          class="inkflow-fill-text-muted inkflow-fill-text inkflow-fill-code-text">trajectory</text>
       <path
-         style="fill:#b4befe;fill-opacity:1;stroke-width:7.97341;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#ConcaveTriangle)"
-         d="M 982.9000848,541.3634368 H 1178.998547"
+         d="m 1392.027189,540.0000004 h 184.325853"
+         stroke-width="7.56129"
+         marker-end="url(#tip)"
          id="a-trajectory"
+         style="stroke-width:8.45844;stroke-dasharray:none;marker-end:url(#ConcaveTriangle-9)"
          inkscape:label="a-trajectory"
          class="inkflow-stroke-text-muted" />
     </g>
+    <text
+       x="879.8609465"
+       y="135.6155189"
+       font-size="64.2799px"
+       font-weight="700"
+       id="text1"
+       style="fill:#cdd6f4;stroke-width:1.46091"
+       class="inkflow-fill-text inkflow-fill-code-text"><tspan
+         id="tspan15"
+         x="879.8609465"
+         y="135.6155189"
+         style="stroke-width:1.46091">Theory</tspan></text>
   </g>
 </svg>

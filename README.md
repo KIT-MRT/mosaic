@@ -23,6 +23,10 @@ Evaluated on [nuPlan](https://github.com/motional/nuplan-devkit), Mosaic achieve
 ---
 
 <p align="center">
+  <a href="https://2026.ieee-iros.org/program/contributed-talks/#b1db4d:467"><img src="assets/venue-badge.svg" alt="IROS 2026 · Contributed Talk"></a>
+</p>
+
+<p align="center">
   <a href="https://arxiv.org/abs/2604.13853v2"><img src="assets/paper-button.svg" alt="Read the paper"></a>
   &nbsp;&nbsp;
   <a href="https://kit-mrt.github.io/mosaic/"><img src="assets/website-button.svg" alt="Visit the project website"></a>

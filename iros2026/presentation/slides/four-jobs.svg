@@ -24,10 +24,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.6956899531"
-     inkscape:cx="1229.714467"
-     inkscape:cy="583.5933064"
-     inkscape:window-width="2520"
+     inkscape:zoom="0.6661949815"
+     inkscape:cx="574.1562315"
+     inkscape:cy="535.8791494"
+     inkscape:window-width="3400"
      inkscape:window-height="1331"
      inkscape:window-maximized="0"
      inkscape:current-layer="main" />
@@ -184,12 +184,26 @@
      inkscape:groupmode="layer"
      id="main"
      inkscape:label="main">
-    <path
-       style="fill:#b4befe;fill-opacity:1;stroke:#a6adc8;stroke-width:5.3553;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#ConcaveTriangle)"
-       d="M 254.9442172,389.3846515 H 392.5089463"
-       id="a-input"
-       inkscape:label="a-input"
-       class="inkflow-stroke-text-muted" />
+    <g
+       id="g8"
+       inkscape:label="g-input">
+      <path
+         d="M 257.5384764,389.3846515 H 389.9786457"
+         stroke-width="7.56129"
+         marker-end="url(#tip)"
+         id="a-input"
+         style="stroke-width:6.07748;stroke-dasharray:none;marker-end:url(#ConcaveTriangle-9)"
+         inkscape:label="a-input"
+         class="inkflow-stroke-text-muted" />
+      <text
+         x="126.2038047"
+         y="400.5337175"
+         font-size="40.4129px"
+         id="input"
+         style="stroke-width:1.26291"
+         inkscape:label="input"
+         class="inkflow-fill-text-muted inkflow-fill-text inkflow-fill-code-text">input</text>
+    </g>
     <g
        id="pipeline"
        transform="matrix(0.7185110888,0,0,0.7185110888,236.5121924,1.388663301)">
@@ -211,14 +225,14 @@
            y="324.3303037"
            font-size="62.1327px"
            text-anchor="middle"
-           id="text2"
+           id="text10"
            style="stroke-width:2.21902"
            class="inkflow-fill-bg"><tspan
-             id="tspan12"
+             id="tspan9"
              x="1204.012327"
              y="324.3303037"
              style="stroke-width:2.21902">Learned</tspan><tspan
-             id="tspan13"
+             id="tspan10"
              x="1204.012326"
              y="401.9961787"
              style="stroke-width:2.21902">Planner</tspan></text>
@@ -297,22 +311,22 @@
     <g
        id="g-trajectory"
        transform="matrix(0.7185110888,0,0,0.7185110888,495.6697469,1.388663301)">
-      <path
-         d="m 1391.172703,539.7787418 h 184.325853"
-         stroke-width="7.56129"
-         marker-end="url(#tip)"
-         id="a-trajectory"
-         style="stroke-width:8.458436355;stroke-dasharray:none;marker-end:url(#ConcaveTriangle-1)"
-         inkscape:label="a-trajectory"
-         class="inkflow-stroke-text-muted" />
       <text
-         x="1655.608723"
-         y="555.5168919"
+         x="1662.413534"
+         y="555.5168918"
          font-size="56.2453px"
          id="trajectory"
          style="stroke-width:1.75767"
          inkscape:label="trajectory"
          class="inkflow-fill-text-muted inkflow-fill-text inkflow-fill-code-text">trajectory</text>
+      <path
+         d="m 1392.027189,540.0000004 h 184.325853"
+         stroke-width="7.56129"
+         marker-end="url(#tip)"
+         id="a-trajectory"
+         style="stroke-width:8.45844;stroke-dasharray:none;marker-end:url(#ConcaveTriangle-9)"
+         inkscape:label="a-trajectory"
+         class="inkflow-stroke-text-muted" />
     </g>
     <g
        id="g-generate"

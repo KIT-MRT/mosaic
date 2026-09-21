@@ -47,6 +47,31 @@
     margin: 0 0 6px;
     font-size: 0.95rem;
   }
+  .venue-row {
+    display: flex;
+    justify-content: center;
+    margin: 18px 0 0;
+  }
+  .venue-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--ink);
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: bold;
+    padding: 8px 18px;
+    border-radius: 999px;
+  }
+  .venue-badge:hover {
+    opacity: 0.85;
+  }
+  .venue-badge svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+  }
   .hero .affiliations {
     margin: 0;
     font-size: 0.72rem;
@@ -248,6 +273,13 @@
     </p>
   </header>
 
+  <div class="venue-row">
+    <a class="venue-badge" href="https://2026.ieee-iros.org/program/contributed-talks/#b1db4d:467">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      IROS 2026 &middot; Contributed Talk
+    </a>
+  </div>
+
   <nav class="links">
     <a class="btn" href="https://arxiv.org/abs/2604.13853v2">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
@@ -341,7 +373,9 @@
 
   <footer>
     <img src="assets/logos/kit-logo.svg" alt="KIT">
-    <img src="assets/logos/iros-2026-logo.png" alt="IROS 2026">
+    <a href="https://2026.ieee-iros.org/program/contributed-talks/#b1db4d:467">
+      <img src="assets/logos/iros-2026-logo.png" alt="IROS 2026">
+    </a>
   </footer>
 
 </div>
