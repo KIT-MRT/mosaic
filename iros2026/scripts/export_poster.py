@@ -56,7 +56,7 @@ VARIANTS: Final = (
 
 _XML_DECLARATION: Final = re.compile(r"^\s*<\?xml[^>]*\?>")
 _RELATIVE_HREF: Final = re.compile(
-    r'((?:xlink:)?href=")(?!#|/|data:|https?:|file:)([^"]+)(")'
+    r'((?:xlink:)?href=")(?!#|/|[a-zA-Z][a-zA-Z0-9+.-]*:)([^"]+)(")'
 )
 _SVG_WIDTH_MM: Final = re.compile(r'<svg\b[^>]*\swidth="([\d.]+)mm"')
 _SVG_HEIGHT_MM: Final = re.compile(r'<svg\b[^>]*\sheight="([\d.]+)mm"')
