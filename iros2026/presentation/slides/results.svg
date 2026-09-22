@@ -24,10 +24,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.5775117676"
-     inkscape:cx="485.7043886"
-     inkscape:cy="881.367322"
-     inkscape:window-width="3400"
+     inkscape:zoom="0.816724974"
+     inkscape:cx="693.0117458"
+     inkscape:cy="662.4016863"
+     inkscape:window-width="2520"
      inkscape:window-height="1331"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg37" />
@@ -128,18 +128,18 @@
        id="head"
        transform="matrix(1.11754254,0,0,1.11754254,-115.1916892,-102.7420517)">
       <text
-         x="1255.821777"
+         x="1247.406624"
          y="228"
          font-size="34px"
          text-anchor="middle"
          id="text1"
-         class="inkflow-fill-text-muted">Val14</text>
+         class="inkflow-fill-text-muted">nuPlan Val14</text>
       <line
-         x1="1060"
+         x1="1045.991959"
          y1="248"
          x2="1450"
          y2="248"
-         stroke-width="3"
+         stroke-width="3.0534"
          id="line1"
          class="inkflow-stroke-border" />
       <text
