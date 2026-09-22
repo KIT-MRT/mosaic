@@ -24,9 +24,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.816724974"
-     inkscape:cx="693.0117458"
-     inkscape:cy="662.4016863"
+     inkscape:zoom="0.5775117676"
+     inkscape:cx="447.6099268"
+     inkscape:cy="460.5966751"
      inkscape:window-width="2520"
      inkscape:window-height="1331"
      inkscape:window-maximized="0"
@@ -123,7 +123,7 @@
   <g
      id="g1"
      inkscape:label="Group Table"
-     transform="matrix(1.038947215,0,0,1.038947215,-58.16827036,5.327420695)">
+     transform="matrix(0.9411533699,0,0,0.9411533699,37.66969783,34.17934776)">
     <g
        id="head"
        transform="matrix(1.11754254,0,0,1.11754254,-115.1916892,-102.7420517)">
@@ -463,12 +463,49 @@
          class="inkflow-fill-text inkflow-fill-code-text">54.10</text>
     </g>
   </g>
+  <g
+     id="g37"
+     transform="matrix(0.7187636462,-0.0528139871,0.0528139871,0.7187636462,-848.3266533,-1431.434578)"
+     inkscape:label="nuplan-highscore"
+     style="stroke-linecap:butt;stroke-linejoin:round">
+    <rect
+       style="fill:#fab387;stroke:#585b70;stroke-width:5.89424;stroke-linecap:butt;stroke-linejoin:round"
+       id="rect23"
+       width="845.5205438"
+       height="132.9462197"
+       x="2715.663168"
+       y="3378.758856"
+       rx="40.85407194"
+       ry="37.79527689" />
+    <g
+       id="g36"
+       transform="translate(-99.38783061,224.6129599)"
+       style="stroke-linecap:butt;stroke-linejoin:round">
+      <path
+         d="m -611.8414683,20 h -3.1172 c 0.14063,-2.0977 0.25,-4.25 0.28125,-6.5117 0.019532,-1.2539 -0.45703,-2.4414 -1.3398,-3.3398 -0.89062,-0.90234 -2.0781,-1.4023 -3.3477,-1.4023 l -41.203,0.003906 c -1.2695,0 -2.457,0.49609 -3.3477,1.4023 -0.88281,0.89844 -1.3594,2.082 -1.3398,3.3359 0.035156,2.2617 0.14062,4.4141 0.28125,6.5117 h -3.1172 c -4.1367,0 -7.5,3.3633 -7.5,7.5 v 3.75 c 0,9.3047 7.5703,16.875 16.875,16.875 h 1.5859 c 2.8359,4.1367 6.3867,6.9297 10.602,8.3203 v 1.0547 c 0,2.9805 -1.4141,5.7383 -3.7891,7.5 h -4.6484 c -3.1016,0 -5.625,2.5234 -5.625,5.625 v 9.375 h -1.875 c -2.0664,0 -3.75,1.6836 -3.75,3.75 v 3.75 c 0,2.0664 1.6836,3.75 3.75,3.75 h 45 c 2.0664,0 3.75,-1.6836 3.75,-3.75 v -3.75 c 0,-2.0664 -1.6836,-3.75 -3.75,-3.75 h -1.875 v -9.375 c 0,-3.1016 -2.5234,-5.625 -5.625,-5.625 h -4.6484 c -2.375,-1.7617 -3.7891,-4.5195 -3.7891,-7.5 v -1.0547 c 4.2148,-1.3906 7.7656,-4.1836 10.602,-8.3203 h 1.5859 c 9.3047,0 16.875,-7.5703 16.875,-16.875 v -3.75 c 0,-4.1367 -3.3633,-7.5 -7.5,-7.5 z m -60,11.25 V 27.5 c 0,-2.0664 1.6836,-3.75 3.75,-3.75 h 3.418 c 0.86328,8.375 2.6797,15.254 5.3438,20.594 -6.9492,-0.32422 -12.512,-6.0625 -12.512,-13.094 z m 54.375,56.25 h -45 v -3.75 h 45 z m -5.625,-16.875 V 80 h -33.75 v -9.375 c 0,-1.0352 0.83984,-1.875 1.875,-1.875 h 30 c 1.0352,0 1.875,0.83984 1.875,1.875 z m -11.703,-5.625 h -10.34 c 1.5117,-2.1641 2.3594,-4.7695 2.3594,-7.5 v -0.17578 c 0.91406,0.11328 1.8477,0.17578 2.8125,0.17578 0.9648,0 1.8984,-0.0625 2.8125,-0.17578 V 57.5 c 0,2.7305 0.84375,5.3359 2.3594,7.5 z m -5.1719,-11.25 c -18.223,0 -21.316,-25.258 -21.539,-40.316 -0.00391,-0.32812 0.16406,-0.54688 0.26172,-0.64844 0.10547,-0.10547 0.33203,-0.28125 0.67578,-0.28125 h 41.207 c 0.34375,0 0.57031,0.17969 0.67578,0.28125 0.10156,0.10156 0.26953,0.32031 0.26172,0.65234 -0.22266,15.059 -3.3203,40.316 -21.539,40.316 z m 31.875,-22.5 c 0,7.0312 -5.5586,12.77 -12.512,13.094 2.6641,-5.3398 4.4805,-12.219 5.3438,-20.594 h 3.418 c 2.0664,0 3.75,1.6836 3.75,3.75 z"
+         id="path1-4"
+         transform="translate(3525.869259,3170.620903)"
+         style="stroke-linecap:butt;stroke-linejoin:round" />
+      <text
+         xml:space="preserve"
+         x="2946.901236"
+         y="3236.001087"
+         id="text9-6"
+         style="font-weight:bold;font-size:47.9065px;line-height:1.25;font-family:'Arbeit Regular', Helvetica, Arial-Unicode, Arial, Sans-serif;-inkscape-font-specification:'Arbeit Regular, Helvetica, Arial-Unicode, Arial, Sans-serif, Bold';direction:ltr;fill:#313244;stroke-width:9.58132;stroke-linecap:butt;stroke-linejoin:round"><tspan
+           sodipodi:role="line"
+           id="tspan9"
+           x="2946.901236"
+           y="3236.001087"
+           style="fill:#313244;stroke-width:9.58132">nuPlan Benchmark Highscore</tspan></text>
+    </g>
+  </g>
   <text
      id="footnote"
-     x="113.3654657"
-     y="1016.333253"
-     font-size="30px"
-     class="inkflow-fill-text-muted"><tspan
-   style="font-size:65%;baseline-shift:super"
+     x="193.0573358"
+     y="950.0213967"
+     font-size="27.1762px"
+     class="inkflow-fill-text-muted"
+     style="stroke-width:0.905872"><tspan
+   style="font-size:17.6645px;baseline-shift:super;stroke-width:0.905872"
    id="tspan5">†</tspan> closed-source</text>
 </svg>
