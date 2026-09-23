@@ -29,6 +29,8 @@ SITE_ASSETS=(
     logos/linkedin.svg
     photos/marlon.jpg
     photos/nick.jpg
+    videos/bev-composition-comparison.mp4
+    videos/bev-verification-comparison.mp4
 )
 for asset in "${SITE_ASSETS[@]}"; do
     mkdir -p "$OUT_DIR/assets/$(dirname "$asset")"

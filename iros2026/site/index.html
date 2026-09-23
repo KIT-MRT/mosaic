@@ -200,6 +200,23 @@
     font-size: 0.9rem;
     text-align: center;
   }
+  .video-frame {
+    display: block;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #000;
+  }
+  .video-frame video {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .scenario-caption {
+    margin-top: 12px;
+    font-size: 0.9rem;
+    text-align: center;
+    color: var(--muted);
+  }
 
   .contact-grid {
     display: flex;
@@ -332,6 +349,25 @@
   </section>
 
   <section class="card">
+    <h2 class="pill">Scenarios</h2>
+    <div class="center-row">
+      <div class="toggle" role="group" aria-label="Scenario video">
+        <button type="button" data-variant="composition" class="active">Composition</button>
+        <button type="button" data-variant="verification">Verification</button>
+      </div>
+    </div>
+    <div class="video-frame">
+      <video id="scenario-video" src="assets/videos/bev-composition-comparison.mp4" controls muted loop playsinline preload="metadata"></video>
+    </div>
+    <p class="scenario-caption" id="scenario-caption">
+      PDM-Closed alone stops behind a blocked lane.
+      For FlowDrive*, this is an out-of-distribution scenario.
+      It destabilizes and stalls too.
+      Composing both lets Mosaic stabilize the approach using PDM-Closed giving FlowDrive* time to propose the lane change around it.
+    </p>
+  </section>
+
+  <section class="card">
     <h2 class="pill">Cite</h2>
     <div class="bibtex-frame">
       <pre class="bibtex" id="bibtex-text">@misc{lelarge2026mosaic,
@@ -393,6 +429,36 @@
       link.href = variant.pdf;
       preview.src = variant.preview;
       buttons.forEach((b) => b.classList.toggle("active", b === button));
+    });
+  });
+
+  const scenarioVariants = {
+    composition: {
+      src: "assets/videos/bev-composition-comparison.mp4",
+      caption: "PDM-Closed alone stops behind a blocked lane. " +
+        "For FlowDrive*, this is an out-of-distribution scenario. " +
+        "It destabilizes and stalls too. " +
+        "Composing both lets Mosaic stabilize the approach using PDM-Closed giving FlowDrive* time " +
+        "to propose the lane change around it.",
+    },
+    verification: {
+      src: "assets/videos/bev-verification-comparison.mp4",
+      caption: "Mosaic's shared verifier rejects unsafe proposals before they reach the vehicle, " +
+        "acting as a safety floor beneath the learned and rule-based planners it composes. " +
+        "Without the verifier, the ego vehicle in the left frame collides with the oncoming vehicle.",
+    },
+  };
+  const scenarioButtons = document.querySelectorAll('.toggle[aria-label="Scenario video"] button');
+  const scenarioVideo = document.getElementById("scenario-video");
+  const scenarioCaption = document.getElementById("scenario-caption");
+  scenarioButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const variant = scenarioVariants[button.dataset.variant];
+      scenarioVideo.pause();
+      scenarioVideo.src = variant.src;
+      scenarioVideo.load();
+      scenarioCaption.textContent = variant.caption;
+      scenarioButtons.forEach((b) => b.classList.toggle("active", b === button));
     });
   });
 
