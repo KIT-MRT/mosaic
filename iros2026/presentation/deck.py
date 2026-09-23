@@ -43,6 +43,10 @@ def main() -> Deck:
                     ]
                 ],
             ),
-            Slide("invitation", notes="notes/invitation.md"),
+            Slide(
+                "invitation",
+                notes="notes/invitation.md",
+                animations=[animations.FadeIn("inkflow-badge")],
+            ),
         ],
     )
