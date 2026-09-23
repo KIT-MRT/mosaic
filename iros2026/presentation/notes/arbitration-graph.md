@@ -1,6 +1,7 @@
 We use arbitration graphs to separate responsibilities and increase transparency.
-So-called behavior components propose actions,
-a shared verifier rejects unsafe proposals,
+So-called behavior components propose trajectories.
+These are basically your planners, anything that generates a trajectory, rule-based, learned, even end-to-end.
+A shared verifier rejects unsafe proposals,
 a cost arbitrator picks the best proposal at runtime,
 and a fallback component is executed if no proposal is safe.
 

@@ -1,1 +1,1 @@
-There's a lot more to talk about so come see me at my poster!
+I'll be happy to talk about all the details!
