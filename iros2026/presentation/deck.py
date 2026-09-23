@@ -34,7 +34,13 @@ def main() -> Deck:
                 notes="notes/composition.md",
                 animations=[
                     animations.FadeIn(el)
-                    for el in ["pdm-t2", "col-fd", "fd-t2", "col-mosaic", "mosaic-t2"]
+                    for el in [
+                        "pdm-t2",
+                        "fd-header",
+                        "fd-t2",
+                        "mosaic-header",
+                        "mosaic-t2",
+                    ]
                 ],
             ),
             Slide("invitation", notes="notes/invitation.md"),
