@@ -1,4 +1,5 @@
-So without requiring any additional data or retraining,
+Here's where this takes us.
+Without requiring any additional data or retraining,
 we can combine the strengths of both planners
 and achieve a new state of the art score on the nuPlan benchmark.
 

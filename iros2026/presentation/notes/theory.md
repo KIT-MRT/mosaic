@@ -1,2 +1,2 @@
-This is a slightly simplified version of what most current motion planning architectures aim for.
-A monolithic, learning-based architecture that emits a trajectory.
+This is a slightly simplified version of what many state of the art motion planners aim for.
+A monolithic, learning-based architecture that takes some kind of input and somehow emits a trajectory.
