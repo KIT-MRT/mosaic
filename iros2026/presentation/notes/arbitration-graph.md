@@ -1,10 +1,11 @@
-We use arbitration graphs to separate responsibilities and increase transparency.
+In Mosaic, we use arbitration graphs to separate responsibilities and increase transparency.
 So-called behavior components propose trajectories.
-These are basically your planners, anything that generates a trajectory, rule-based, learned, even end-to-end.
+These are your planners, anything that generates a trajectory;
+rule-based, learned, hybrid or even end-to-end.
 A shared verifier rejects unsafe proposals,
-a cost arbitrator picks the best proposal at runtime,
-and a fallback component is executed if no proposal is safe.
+while a cost arbitrator picks the best option at runtime.
+A fallback component is executed if no safe proposal is left.
 
-Here, we combine the learning-based `FlowDrive` with the rule-based `PDM-Closed` planner.
-We then evaluate this architecture using nuPlan and interplan,
+Here, we combine the learning-based `FlowDrive` with the rule-based `PDM-Closed` planner
+and evaluate this architecture using the nuPlan and interPlan benchmarks,
 commonly used benchmarks for closed-loop planning in autonomous driving.
