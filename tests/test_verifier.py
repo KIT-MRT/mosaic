@@ -16,12 +16,13 @@ def verifier():
     )
     v = TrajectoryVerifier(params)
     # Mock the expensive internals so we don't need real simulation data
-    v._simulator = MagicMock()
-    v._simulator.simulate_proposals.return_value = np.zeros((1, 40, 10))
     v._collision_metric = MagicMock()
     v._collision_metric.compute.return_value = MetricResult(
         scores=np.array([1.0]),
-        metadata={"collision_time_idcs": np.array([np.inf])},
+        metadata={
+            "collision_time_idcs": np.array([np.inf]),
+            "collision_tokens": [None],
+        },
     )
     return v
 
@@ -29,20 +30,16 @@ def verifier():
 def _make_command(name: str) -> MagicMock:
     cmd = MagicMock()
     cmd.name = name
-    cmd.trajectory = MagicMock()
+    cmd.simulated_states = np.zeros((41, 11))
     return cmd
 
 
-@patch(
-    "mosaic.core.verifier.trajectory_utils.trajectory_to_state_array",
-    return_value=np.zeros((40, 10)),
-)
 @patch("mosaic.core.verifier.ScoringInput.create")
 class TestVerifierCaching:
     def test_same_command_same_time_returns_cached_result(
-        self, mock_si_create, mock_traj, verifier
+        self, mock_si_create, verifier
     ):
-        """Calling analyze twice with the same time and command should only run simulation once."""
+        """Calling analyze twice with the same time and command should only check collisions once."""
         time = timedelta(seconds=1.0)
         env = MagicMock()
         cmd = _make_command("pdm_closed")
@@ -51,10 +48,10 @@ class TestVerifierCaching:
         result2 = verifier.analyze(time, env, cmd)
 
         assert result1 is result2
-        verifier._simulator.simulate_proposals.assert_called_once()
+        verifier._collision_metric.compute.assert_called_once()
 
     def test_different_commands_same_time_both_computed(
-        self, mock_si_create, mock_traj, verifier
+        self, mock_si_create, verifier
     ):
         """Different commands at the same time should each be computed."""
         time = timedelta(seconds=1.0)
@@ -63,10 +60,10 @@ class TestVerifierCaching:
         verifier.analyze(time, env, _make_command("flow_drive"))
         verifier.analyze(time, env, _make_command("pdm_closed"))
 
-        assert verifier._simulator.simulate_proposals.call_count == 2
+        assert verifier._collision_metric.compute.call_count == 2
 
     def test_same_command_different_time_recomputed(
-        self, mock_si_create, mock_traj, verifier
+        self, mock_si_create, verifier
     ):
         """Same command at a new timestep should be recomputed, not cached."""
         env = MagicMock()
@@ -75,9 +72,9 @@ class TestVerifierCaching:
         verifier.analyze(timedelta(seconds=1.0), env, cmd)
         verifier.analyze(timedelta(seconds=2.0), env, cmd)
 
-        assert verifier._simulator.simulate_proposals.call_count == 2
+        assert verifier._collision_metric.compute.call_count == 2
 
-    def test_new_timestep_clears_old_cache(self, mock_si_create, mock_traj, verifier):
+    def test_new_timestep_clears_old_cache(self, mock_si_create, verifier):
         """Advancing to a new timestep should clear all cached entries from the previous one."""
         env = MagicMock()
 
@@ -90,7 +87,7 @@ class TestVerifierCaching:
         assert len(verifier._cache) == 1
 
     def test_cached_result_is_logged_only_once(
-        self, mock_si_create, mock_traj, verifier
+        self, mock_si_create, verifier
     ):
         """A cached hit should not produce a duplicate log entry."""
         time = timedelta(seconds=1.0)

@@ -197,7 +197,9 @@ class TestDrivingDirectionComplianceMetric:
         )
 
         metric = DrivingDirectionComplianceMetric(
-            compliance_threshold=2.0, violation_threshold=6.0
+            DrivingDirectionComplianceMetric.Parameters(
+                compliance_threshold=2.0, violation_threshold=6.0
+            )
         )
         result = metric.compute(si, env_model)
 
