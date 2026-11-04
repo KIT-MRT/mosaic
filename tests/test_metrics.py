@@ -229,7 +229,6 @@ class TestProgressMetric:
         """Movement matching expected -> score 1.0."""
         si = _make_scoring_input(proposal_sampling)
         # ego_speed=10, horizon_time=1.0s -> expected=10m
-        # but fallback_max_meters=10 and min_expected=0.1
         # project returns [0, 10] -> progress=10m, expected=10m -> score=1.0
         centerline = MagicMock()
         centerline.project.return_value = [0.0, 10.0]
@@ -243,6 +242,24 @@ class TestProgressMetric:
         result = metric.compute(si, env_model)
 
         np.testing.assert_array_almost_equal(result.scores, [1.0, 1.0])
+
+    def test_expected_progress_scales_with_speed(self, proposal_sampling, env_model):
+        """At high speed, the same distance is a smaller share of the expected progress."""
+        si = _make_scoring_input(proposal_sampling)
+        # ego_speed=20, horizon_time=1.0s -> expected=20m
+        # project returns [0, 10] -> progress=10m -> score=0.5
+        centerline = MagicMock()
+        centerline.project.return_value = [0.0, 10.0]
+        centerline.length = 100.0
+        env_model.route_center_line = centerline
+        ego_state = MagicMock()
+        ego_state.dynamic_car_state.speed = 20.0
+        env_model.ego_state = ego_state
+
+        metric = ProgressMetric()
+        result = metric.compute(si, env_model)
+
+        np.testing.assert_array_almost_equal(result.scores, [0.5, 0.5])
 
 
 # === TTCMetric ===

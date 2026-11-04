@@ -22,14 +22,12 @@ class ProgressMetric(WeightedMetric):
     class Parameters:
         weight: float = 5.0
         ref_speed_factor: float = 1.0
-        fallback_max_meters: float = 10.0
         min_expected_meters: float = 0.1
         cap_to_centerline: bool = True
 
     def __init__(self, parameters: Parameters = Parameters()) -> None:
         super().__init__(parameters.weight)
         self._ref_speed_factor = parameters.ref_speed_factor
-        self._fallback_max_meters = parameters.fallback_max_meters
         self._min_expected_meters = parameters.min_expected_meters
         self._cap_to_centerline = parameters.cap_to_centerline
 
@@ -83,7 +81,6 @@ class ProgressMetric(WeightedMetric):
                 except Exception:
                     pass
 
-            expected = min(expected, self._fallback_max_meters)
             expected = max(expected, self._min_expected_meters)
 
             progress_scores[proposal_idx] = float(
