@@ -25,6 +25,7 @@ from mosaic.core.command import Command
 from mosaic.core.cost_estimator import TrajectoryCostEstimator
 from mosaic.core.environment_model import EnvironmentModel
 from mosaic.core.scene_recorder import SceneRecorder
+from mosaic.core.velocity_estimation import VelocityEstimationParameters
 from mosaic.core.verifier import TrajectoryVerifier
 
 
@@ -40,6 +41,7 @@ class Mosaic(AbstractPlanner):
         ablation: Ablation = Ablation.NONE
         map_radius: float = 50.0
         record_scenes: bool = False
+        estimate_missing_velocities: bool = True
 
     def __init__(
         self,
@@ -59,6 +61,11 @@ class Mosaic(AbstractPlanner):
                 self.parameters.trajectory_sampling,
                 self.parameters.scoring_sampling,
                 self.parameters.map_radius,
+                velocity_estimation=(
+                    VelocityEstimationParameters()
+                    if self.parameters.estimate_missing_velocities
+                    else None
+                ),
             )
         )
         self._build_arbitration_graph()
