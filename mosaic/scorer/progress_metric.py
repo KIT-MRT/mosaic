@@ -20,7 +20,7 @@ from mosaic.scorer.scoring_input import ScoringInput
 class ProgressMetric(WeightedMetric):
     @dataclass
     class Parameters:
-        weight: float = 5.0
+        weight: float = 3.0
         ref_speed_factor: float = 1.0
         min_expected_meters: float = 0.1
         cap_to_centerline: bool = True
