@@ -1,12 +1,11 @@
-Using latest experiment: /home/lelarge/nuplan/experiments/exp/baseline-pdm-closed/closed_loop_reactive_agents/2026.07.08.14.47.56
 
 ╭──────────────────────────────────────────────────────────╮
-│  2026.07.08.14.47.56                                     │
+│  2026.11.05.20.37.21                                     │
 ╰──────────────────────────────────────────────────────────╯
 
   Scenarios             1118
-  Overall score         0.9218
-  Duration              00:25:24 (1.4s/ea)
+  Overall score         0.9216
+  Duration              01:12:38 (3.9s/ea)
 
 
 ── Failures ────────────────────────────────────────────────
@@ -26,7 +25,7 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/baseline-pdm-close
   │ Metric                                 │  Fail │    Rate │
   ├────────────────────────────────────────┼───────┼─────────┤
   │ ego_progress_along_expert_route (w=5)  │     0 │    0.0% │
-  │ time_to_collision_within_bound (w=5)   │    68 │    6.1% │ ◆
+  │ time_to_collision_within_bound (w=5)   │    69 │    6.2% │ ◆
   │ speed_limit_compliance (w=4)           │     0 │    0.0% │
   │ ego_is_comfortable (w=2)               │    59 │    5.3% │ ◆
   ╰────────────────────────────────────────┴───────┴─────────╯
@@ -75,7 +74,7 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/baseline-pdm-close
   │ starting_right_turn                  │   98 │ 0.8922 │    5 │   10 │    0 │
   │ starting_left_turn                   │  100 │ 0.8922 │    4 │    9 │    3 │
   │ low_magnitude_speed                  │  100 │ 0.9052 │    5 │    5 │    3 │
-  │ traversing_pickup_dropoff            │   99 │ 0.9124 │    1 │    5 │    2 │
+  │ traversing_pickup_dropoff            │   99 │ 0.9092 │    1 │    6 │    2 │
   │ starting_straight_traffic_light_int… │   98 │ 0.9203 │    1 │    7 │    3 │
   │ changing_lane                        │   70 │ 0.9353 │    3 │    4 │    2 │
   │ high_magnitude_speed                 │   99 │ 0.9394 │    2 │    6 │    3 │

@@ -1,12 +1,11 @@
-Using latest experiment: /home/lelarge/nuplan/experiments/exp/ablation-flowdrive-only/closed_loop_reactive_agents/2026.07.08.14.15.21
 
 ╭──────────────────────────────────────────────────────────╮
-│  2026.07.08.14.15.21                                     │
+│  2026.11.05.12.05.40                                     │
 ╰──────────────────────────────────────────────────────────╯
 
   Scenarios             1118
   Overall score         0.9337
-  Duration              00:31:24 (1.7s/ea)
+  Duration              02:07:03 (6.8s/ea)
 
 
 ── Failures ────────────────────────────────────────────────
@@ -86,8 +85,8 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/ablation-flowdrive
   ╭────────────────────┬────────┬──────────┬────────────╮
   │ Command            │  Fails │   Checks │  Fail Rate │
   ├────────────────────┼────────┼──────────┼────────────┤
-  │ EmergencyStop      │     82 │      511 │      16.0% │
-  │ flow_drive         │    511 │   166806 │       0.3% │
+  │ EmergencyStop      │     82 │      512 │      16.0% │
+  │ flow_drive         │    512 │   166806 │       0.3% │
   ╰────────────────────┴────────┴──────────┴────────────╯
 
   Both failed           82 / 166806 (0.0%)

@@ -1,12 +1,11 @@
-Using latest experiment: /home/lelarge/nuplan/experiments/exp/interplan/default_interplan_benchmark/2026.07.08.13.02.07
 
 ╭──────────────────────────────────────────────────────────╮
-│  2026.07.08.13.02.07                                     │
+│  2026.11.08.02.00.36                                     │
 ╰──────────────────────────────────────────────────────────╯
 
   Scenarios             80
-  Overall score         0.5410
-  Duration              00:07:04 (5.3s/ea)
+  Overall score         0.5550
+  Duration              00:20:06 (15.1s/ea)
 
 
 ── Failures ────────────────────────────────────────────────
@@ -15,7 +14,7 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/interplan/default_
   ╭────────────────────────────────────────┬───────┬─────────╮
   │ Metric                                 │  Fail │    Rate │
   ├────────────────────────────────────────┼───────┼─────────┤
-  │ no_ego_at_fault_collisions             │     2 │    2.5% │ ◆
+  │ no_ego_at_fault_collisions             │     1 │    1.2% │ ◆
   │ drivable_area_compliance               │     0 │    0.0% │
   │ driving_direction_compliance           │     0 │    0.0% │
   │ ego_is_making_progress                 │    14 │   17.5% │ ◆
@@ -29,21 +28,20 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/interplan/default_
   │ Metric                                 │  Fail │    Rate │
   ├────────────────────────────────────────┼───────┼─────────┤
   │ ego_progress_along_expert_route (w=5)  │     0 │    0.0% │
-  │ time_to_collision_within_bound (w=5)   │     3 │    3.8% │ ◆
+  │ time_to_collision_within_bound (w=5)   │     2 │    2.5% │ ◆
   │ speed_limit_compliance (w=4)           │     0 │    0.0% │
-  │ ego_is_comfortable (w=2)               │    10 │   12.5% │ ◆
-  │ lane_changes_to_goal (w=4)             │    16 │   20.0% │ ◆
+  │ ego_is_comfortable (w=2)               │     9 │   11.2% │ ◆
+  │ lane_changes_to_goal (w=4)             │    14 │   17.5% │ ◆
   ╰────────────────────────────────────────┴───────┴─────────╯
 
-  27 scenarios scored zero
+  26 scenarios scored zero
 
 
-── Collisions (2) ──────────────────────────────────────────
+── Collisions (1) ──────────────────────────────────────────
   ╭────────────────────┬──────────────────────────┬─────────┬────────╮
   │ Scenario           │ Type                     │ Kind    │  Score │
   ├────────────────────┼──────────────────────────┼─────────┼────────┤
   │ 71f182558ee95100-s1 │ nudge_around_parked_veh… │ dynamic │ 0.0000 │
-  │ 71f182558ee95100-s8 │ jaywalking_pedestrian    │ dynamic │ 0.0000 │
   ╰────────────────────┴──────────────────────────┴─────────┴────────╯
 
 
@@ -51,14 +49,14 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/interplan/default_
   ╭──────────────────────────────────────┬──────┬────────┬──────┬──────┬──────╮
   │ Type                                 │    n │  Score │ Zero │  TTC │ Coll │
   ├──────────────────────────────────────┼──────┼────────┼──────┼──────┼──────┤
-  │ approaching_construction_zone        │   10 │ 0.1785 │    8 │    0 │    0 │
-  │ overtake_parked_vehicle              │   10 │ 0.2685 │    7 │    0 │    0 │
-  │ avoid_crashed_cars                   │   10 │ 0.2980 │    7 │    0 │    0 │
-  │ high_traffic_density                 │   10 │ 0.6250 │    1 │    0 │    0 │
-  │ medium_traffic_density               │   10 │ 0.6253 │    1 │    0 │    0 │
-  │ low_traffic_density                  │   10 │ 0.6560 │    1 │    0 │    0 │
-  │ nudge_around_parked_vehicle          │   10 │ 0.8151 │    1 │    2 │    1 │
-  │ jaywalking_pedestrian                │   10 │ 0.8616 │    1 │    1 │    1 │
+  │ approaching_construction_zone        │   10 │ 0.1812 │    8 │    0 │    0 │
+  │ overtake_parked_vehicle              │   10 │ 0.2808 │    7 │    0 │    0 │
+  │ avoid_crashed_cars                   │   10 │ 0.2996 │    7 │    0 │    0 │
+  │ medium_traffic_density               │   10 │ 0.6252 │    1 │    0 │    0 │
+  │ high_traffic_density                 │   10 │ 0.6302 │    1 │    0 │    0 │
+  │ low_traffic_density                  │   10 │ 0.6518 │    1 │    0 │    0 │
+  │ nudge_around_parked_vehicle          │   10 │ 0.8371 │    1 │    2 │    1 │
+  │ jaywalking_pedestrian                │   10 │ 0.9343 │    0 │    0 │    0 │
   ╰──────────────────────────────────────┴──────┴────────┴──────┴──────┴──────╯
 
 
@@ -66,20 +64,20 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/interplan/default_
   ╭────────────────────┬────────┬───────────────┬─────────────────╮
   │ Command            │   Wins │  Of Decisions │  Of Appearances │
   ├────────────────────┼────────┼───────────────┼─────────────────┤
-  │ flow_drive         │   7189 │         33.7% │           33.7% │
-  │ pdm_closed         │   5143 │         24.1% │           24.1% │
+  │ flow_drive         │   7912 │         40.2% │           40.2% │
+  │ pdm_closed         │   8421 │         42.8% │           42.8% │
   ╰────────────────────┴────────┴───────────────┴─────────────────╯
 
-  Tied scores           8987 / 21319 (42.2%)
+  Tied scores           3343 / 19676 (17.0%)
 
 
 ── Verifier ────────────────────────────────────────────────
   ╭────────────────────┬────────┬──────────┬────────────╮
   │ Command            │  Fails │   Checks │  Fail Rate │
   ├────────────────────┼────────┼──────────┼────────────┤
-  │ EmergencyStop      │      8 │       26 │      30.8% │
-  │ flow_drive         │    957 │    22326 │       4.3% │
-  │ pdm_closed         │     76 │    22326 │       0.3% │
+  │ EmergencyStop      │      4 │       24 │      16.7% │
+  │ flow_drive         │    932 │    20673 │       4.5% │
+  │ pdm_closed         │     89 │    20673 │       0.4% │
   ╰────────────────────┴────────┴──────────┴────────────╯
 
-  Both failed           26 / 22326 (0.1%)
+  Both failed           24 / 20673 (0.1%)

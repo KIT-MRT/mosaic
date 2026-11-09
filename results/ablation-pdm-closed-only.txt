@@ -1,12 +1,11 @@
-Using latest experiment: /home/lelarge/nuplan/experiments/exp/ablation-pdm-closed-only/closed_loop_reactive_agents/2026.07.08.13.48.47
 
 ╭──────────────────────────────────────────────────────────╮
-│  2026.07.08.13.48.47                                     │
+│  2026.11.05.14.14.24                                     │
 ╰──────────────────────────────────────────────────────────╯
 
   Scenarios             1118
-  Overall score         0.9237
-  Duration              00:25:27 (1.4s/ea)
+  Overall score         0.9234
+  Duration              01:15:13 (4.0s/ea)
 
 
 ── Failures ────────────────────────────────────────────────
@@ -26,7 +25,7 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/ablation-pdm-close
   │ Metric                                 │  Fail │    Rate │
   ├────────────────────────────────────────┼───────┼─────────┤
   │ ego_progress_along_expert_route (w=5)  │     0 │    0.0% │
-  │ time_to_collision_within_bound (w=5)   │    67 │    6.0% │ ◆
+  │ time_to_collision_within_bound (w=5)   │    68 │    6.1% │ ◆
   │ speed_limit_compliance (w=4)           │     0 │    0.0% │
   │ ego_is_comfortable (w=2)               │    78 │    7.0% │ ◆
   ╰────────────────────────────────────────┴───────┴─────────╯
@@ -67,7 +66,7 @@ Using latest experiment: /home/lelarge/nuplan/experiments/exp/ablation-pdm-close
   │ starting_left_turn                   │  100 │ 0.8942 │    3 │    9 │    2 │
   │ near_multiple_vehicles               │   85 │ 0.8978 │    4 │    7 │    3 │
   │ low_magnitude_speed                  │  100 │ 0.9075 │    5 │    4 │    3 │
-  │ traversing_pickup_dropoff            │   99 │ 0.9159 │    0 │    5 │    1 │
+  │ traversing_pickup_dropoff            │   99 │ 0.9128 │    0 │    6 │    1 │
   │ starting_straight_traffic_light_int… │   98 │ 0.9228 │    0 │    7 │    2 │
   │ waiting_for_pedestrian_to_cross      │   53 │ 0.9271 │    2 │    3 │    1 │
   │ changing_lane                        │   70 │ 0.9433 │    2 │    4 │    1 │
