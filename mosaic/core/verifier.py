@@ -1,18 +1,48 @@
 import json
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import timedelta
 from typing import Optional
 
 import numpy as np
 from arbitration_graphs.typing import Time
 from arbitration_graphs.verification import Result, Verifier
+from nuplan.common.actor_state.vehicle_parameters import VehicleParameters
 from nuplan.planning.simulation.trajectory.trajectory_sampling import TrajectorySampling
+from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_array_representation import (
+    coords_array_to_polygon_array,
+    state_array_to_coords_array,
+)
 from typing_extensions import override
 
 from mosaic.core.command import Command
 from mosaic.core.environment_model import EnvironmentModel
 from mosaic.scorer import NoAtFaultCollisionMetric, ScoringInput
+
+
+def _with_inflated_ego_polygons(
+    scoring_input: ScoringInput,
+    vehicle_parameters: VehicleParameters,
+    buffer_m: float,
+) -> ScoringInput:
+    # Inflating via the vehicle dimensions instead of shapely's buffer keeps the
+    # rectangle's vertex order, which get_collision_type relies on to find the front edge.
+    inflated_vehicle_parameters = VehicleParameters(
+        width=vehicle_parameters.width + 2.0 * buffer_m,
+        front_length=vehicle_parameters.front_length + buffer_m,
+        rear_length=vehicle_parameters.rear_length + buffer_m,
+        cog_position_from_rear_axle=vehicle_parameters.cog_position_from_rear_axle,
+        wheel_base=vehicle_parameters.wheel_base,
+        vehicle_name=vehicle_parameters.vehicle_name,
+        vehicle_type=vehicle_parameters.vehicle_type,
+        height=vehicle_parameters.height,
+    )
+    inflated_coords = state_array_to_coords_array(
+        scoring_input.states, inflated_vehicle_parameters
+    )
+    return replace(
+        scoring_input, ego_polygons=coords_array_to_polygon_array(inflated_coords)
+    )
 
 
 class VerificationResult(Result):
@@ -40,6 +70,8 @@ class TrajectoryVerifier(Verifier):
         proposal_sampling: TrajectorySampling
         time_to_infraction_threshold: float = 2.0
         max_ego_speed: Optional[float] = None  # None = disable speed check
+        # Inflates the ego footprint on every side for the collision check only
+        ego_buffer_m: float = 0.0
         logging_enabled: bool = True
 
     def __init__(self, parameters: Parameters):
@@ -71,6 +103,12 @@ class TrajectoryVerifier(Verifier):
 
         # Create scoring input and run only collision metric
         scoring_input = ScoringInput.create(states, environment_model)
+        if self.parameters.ego_buffer_m > 0.0:
+            scoring_input = _with_inflated_ego_polygons(
+                scoring_input,
+                environment_model.ego_state.car_footprint.vehicle_parameters,
+                self.parameters.ego_buffer_m,
+            )
 
         result = self._collision_metric.compute(scoring_input, environment_model)
         collision_time_idcs = result.metadata["collision_time_idcs"]
