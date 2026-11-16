@@ -98,3 +98,49 @@ class TestVerifierCaching:
         verifier.analyze(time, env, cmd)
 
         assert len(verifier._log_buffer) == 1
+
+
+class TestEgoBuffer:
+    def test_inflated_polygon_grows_each_side_and_keeps_front_edge(self):
+        from nuplan.common.actor_state.vehicle_parameters import (
+            get_pacifica_parameters,
+        )
+        from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_array_representation import (
+            coords_array_to_polygon_array,
+            state_array_to_coords_array,
+        )
+
+        from mosaic.core.verifier import _with_inflated_ego_polygons
+        from mosaic.scorer import ScoringInput
+
+        vehicle_parameters = get_pacifica_parameters()
+        states = np.zeros((1, 1, 11))
+        states[0, 0, 2] = 0.7  # heading
+        original_polygons = coords_array_to_polygon_array(
+            state_array_to_coords_array(states, vehicle_parameters)
+        )
+        scoring_input = ScoringInput(
+            states=states,
+            ego_coords=np.zeros((1, 1, 5, 2)),
+            ego_polygons=original_polygons,
+            ego_areas=np.zeros((1, 1, 3), dtype=np.bool_),
+            proposal_sampling=TrajectorySampling(time_horizon=4.0, interval_length=0.1),
+        )
+
+        inflated = _with_inflated_ego_polygons(scoring_input, vehicle_parameters, 0.3)
+        original_polygon = original_polygons[0, 0]
+        inflated_polygon = inflated.ego_polygons[0, 0]
+
+        assert inflated_polygon.area == pytest.approx(
+            (vehicle_parameters.length + 0.6) * (vehicle_parameters.width + 0.6)
+        )
+        assert inflated_polygon.centroid.distance(original_polygon.centroid) < 1e-9
+        assert original_polygon.buffer(0.3 - 1e-9).within(inflated_polygon)
+        # The front edge (vertices 0 and 3) moves forward by exactly the buffer
+        heading_vector = np.array([np.cos(0.7), np.sin(0.7)])
+        for vertex_idx in (0, 3):
+            shift = np.subtract(
+                inflated_polygon.exterior.coords[vertex_idx],
+                original_polygon.exterior.coords[vertex_idx],
+            )
+            assert float(shift @ heading_vector) == pytest.approx(0.3)
