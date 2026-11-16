@@ -51,24 +51,24 @@ Evaluated on [nuPlan](https://github.com/motional/nuplan-devkit), Mosaic achieve
 |                     | GIGAFLOW          |      -       |    93.80    |        -        |
 | Rule-based & Hybrid | PDM-Closed        |    92.84     |    92.12    |      41.23      |
 |                     | FlowDrive*        |    94.81     |    92.96    |      44.05      |
-|                     | **Mosaic (ours)** |  **95.56**   |  **94.18**  |    **54.10**    |
+|                     | **Mosaic (ours)** |  **95.35**   |  **94.36**  |    **55.50**    |
 
-Mosaic achieves state-of-the-art closed-loop performance on nuPlan Val14 and improves substantially over both constituent planners on interPlan (+23% CLS-R over FlowDrive\*).
+Mosaic achieves state-of-the-art closed-loop performance on nuPlan Val14 and improves substantially over both constituent planners on interPlan (+26% CLS-R over FlowDrive\*).
 
 ### Ablation study (Val14 CLS-R)
 
 | Configuration          |   CLS-R   | Collisions | Zero-score |
 | ---------------------- | :-------: | :--------: | :--------: |
-| PDM-Closed (baseline)  |   92.18   |     25     |     35     |
+| PDM-Closed (baseline)  |   92.16   |     25     |     35     |
 | FlowDrive\* (baseline) |   92.96   |     25     |     32     |
-| PDM-Closed only        |   92.37   |     17     |     28     |
+| PDM-Closed only        |   92.34   |     17     |     28     |
 | FlowDrive\* only       |   93.37   |   **15**   |     23     |
-| w/o verifier           |   92.82   |     40     |     38     |
-| **Mosaic (full)**      | **94.18** |     16     |   **17**   |
+| w/o verifier           |   93.26   |     36     |     33     |
+| **Mosaic (full)**      | **94.36** |     16     |   **16**   |
 
 Baselines run each planner stand-alone with their respective native verifier.
 The remaining rows run within Mosaic's arbitration layer (stricter centralized verifier, harder emergency brake).
-Verification reduces collisions ~36% over the baselines while composition adds an additional +0.81 CLS-R at the same collision floor.
+Verification reduces collisions ~36% over the baselines while composition adds an additional +0.99 CLS-R at the same collision floor.
 
 ## Architecture
 

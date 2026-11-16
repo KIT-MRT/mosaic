@@ -33,6 +33,10 @@ from tuplan_garage.planning.simulation.planner.pdm_planner.observation.pdm_occup
 )
 from tuplan_garage.planning.simulation.planner.pdm_planner.utils.pdm_path import PDMPath
 
+from mosaic.core.velocity_estimation import (
+    VelocityEstimationParameters,
+    estimate_missing_velocities,
+)
 from mosaic.utils import map as map_utils
 from mosaic.utils.time_conversion import to_timedelta
 
@@ -44,6 +48,7 @@ class EnvironmentModel:
         proposal_sampling: TrajectorySampling
         map_radius: float
         ttc_horizon: float = 3.0
+        velocity_estimation: Optional[VelocityEstimationParameters] = None
 
     def __init__(self, parameters: Parameters) -> None:
         self.parameters: EnvironmentModel.Parameters = parameters
@@ -86,6 +91,10 @@ class EnvironmentModel:
         self._traffic_light_data = planner_input.traffic_light_data
 
         ego_state, observation = self._history.current_state
+        if self.parameters.velocity_estimation is not None:
+            observation = estimate_missing_velocities(
+                self._history, self.parameters.velocity_estimation
+            )
         assert self._traffic_light_data is not None, (
             "Traffic light data is not available."
         )

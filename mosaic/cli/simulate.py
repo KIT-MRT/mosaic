@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Union
 
 import click
@@ -6,6 +7,11 @@ from hydra.utils import instantiate
 from omegaconf import DictConfig, OmegaConf
 
 from mosaic.ablation import Ablation
+from mosaic.cli.run_metadata import (
+    collect_run_metadata,
+    mark_finished,
+    write_run_metadata,
+)
 
 
 def _configure_hydra(overrides: list[str]) -> DictConfig:
@@ -185,6 +191,17 @@ def simulate(
 
     planner = instantiate(planner_cfg.mosaic)
 
+    output_dir = Path(cfg.output_dir)
+    run_metadata = collect_run_metadata(
+        threads=threads,
+        gpus_per_sim=gpus_per_sim,
+        simulation_overrides=overrides,
+        planner_config=OmegaConf.to_container(planner_cfg.mosaic),
+    )
+    write_run_metadata(run_metadata, output_dir)
+
     run_simulation(cfg, planners=planner)
+
+    mark_finished(run_metadata, output_dir)
 
     click.echo(f"Simulation results are saved in: {cfg.output_dir}")

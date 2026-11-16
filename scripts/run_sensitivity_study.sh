@@ -3,9 +3,9 @@
 #
 # With three weights (TTC, progress, comfort) there are only two independent
 # degrees of freedom — the ratios between them. We fix comfort=2 and sweep
-# TTC in {3.5, 7, 14} × progress in {2.5, 5, 10}, covering ±1 octave around
-# the defaults (TTC=7, progress=5) in both directions. The center cell
-# (TTC=7, progress=5) is already captured by the main val14-reactive result
+# TTC in {3.5, 7, 14} × progress in {1.5, 3, 6}, covering ±1 octave around
+# the defaults (TTC=7, progress=3) in both directions. The center cell
+# (TTC=7, progress=3) is already captured by the main val14-reactive result
 # and is skipped here.
 set -euo pipefail
 
@@ -61,13 +61,13 @@ run_cell() {
     mosaic analyze | tee "$RESULTS_DIR/$name.txt"
 }
 
-# 3x3 grid: TTC in {3.5, 7, 14} x progress in {2.5, 5, 10}
-# Skip center cell (7, 5) — already in results/val14-reactive.txt
+# 3x3 grid: TTC in {3.5, 7, 14} x progress in {1.5, 3, 6}
+# Skip center cell (7, 3) — already in results/val14-reactive.txt
 for ttc in 3.5 7 14; do
-    for prog in 2.5 5 10; do
-        if [[ "$ttc" == "7" && "$prog" == "5" ]]; then
+    for prog in 1.5 3 6; do
+        if [[ "$ttc" == "7" && "$prog" == "3" ]]; then
             echo ""
-            echo "=== Skipping center cell (TTC=7, progress=5): use results/val14-reactive.txt ==="
+            echo "=== Skipping center cell (TTC=7, progress=3): use results/val14-reactive.txt ==="
             continue
         fi
         run_cell "$ttc" "$prog"

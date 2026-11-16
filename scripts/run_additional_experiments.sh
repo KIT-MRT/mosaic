@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Additional experiments for the dissertation (not part of the Mosaic paper).
 # Runs single-planner ablations on the interPlan benchmark to isolate the
-# composition gain from the verification gain on out-of-distribution scenarios.
+# composition gain from the verification gain on out-of-distribution scenarios,
+# and swaps the composer's option order, which decides exact cost ties.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -56,6 +57,8 @@ run_experiment() {
 
 run_experiment interplan-pdm-closed-only interplan pdm_closed_only
 run_experiment interplan-flowdrive-only interplan flow_drive_only
+run_experiment ablation-pdm-first closed_loop_reactive_agents none \
+    -p parameters.pdm_closed_first=true
 
 echo ""
 echo "=== Additional experiments complete. Results saved in $RESULTS_DIR ==="

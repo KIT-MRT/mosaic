@@ -25,6 +25,7 @@ from mosaic.core.command import Command
 from mosaic.core.cost_estimator import TrajectoryCostEstimator
 from mosaic.core.environment_model import EnvironmentModel
 from mosaic.core.scene_recorder import SceneRecorder
+from mosaic.core.velocity_estimation import VelocityEstimationParameters
 from mosaic.core.verifier import TrajectoryVerifier
 
 
@@ -40,6 +41,9 @@ class Mosaic(AbstractPlanner):
         ablation: Ablation = Ablation.NONE
         map_radius: float = 50.0
         record_scenes: bool = False
+        estimate_missing_velocities: bool = True
+        # The composer breaks exact cost ties in favour of the option added first.
+        pdm_closed_first: bool = False
 
     def __init__(
         self,
@@ -59,6 +63,11 @@ class Mosaic(AbstractPlanner):
                 self.parameters.trajectory_sampling,
                 self.parameters.scoring_sampling,
                 self.parameters.map_radius,
+                velocity_estimation=(
+                    VelocityEstimationParameters()
+                    if self.parameters.estimate_missing_velocities
+                    else None
+                ),
             )
         )
         self._build_arbitration_graph()
@@ -80,15 +89,16 @@ class Mosaic(AbstractPlanner):
                 "Composer", self._cost_estimator, self._verifier
             )
 
+        composer_behaviors = []
         if self.parameters.ablation != Ablation.PDM_CLOSED_ONLY:
-            self.cost_arbitrator.add_option(
-                self.flow_drive_behavior,
-                CostArbitrator.Option.Flags.INTERRUPTABLE,
-            )
+            composer_behaviors.append(self.flow_drive_behavior)
         if self.parameters.ablation != Ablation.FLOW_DRIVE_ONLY:
+            composer_behaviors.append(self.pdm_closed_behavior)
+        if self.parameters.pdm_closed_first:
+            composer_behaviors.reverse()
+        for behavior in composer_behaviors:
             self.cost_arbitrator.add_option(
-                self.pdm_closed_behavior,
-                CostArbitrator.Option.Flags.INTERRUPTABLE,
+                behavior, CostArbitrator.Option.Flags.INTERRUPTABLE
             )
 
         self.root_arbitrator.add_option(
